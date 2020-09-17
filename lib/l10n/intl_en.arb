@@ -1,3 +1,18 @@
 {
-  "@@locale": "en"
+  "@@locale": "en",
+
+  "welcome": "Welcome",
+  "sign_in_to_continue": "Sign in to continue",
+  "email": "Email",
+  "password": "Password",
+  "name": "Name",
+  "forgot_password": "Forgot Password?",
+  "sign_in": "SIGN IN",
+  "sign_up": "Sign up",
+  "sign_in_facebook": "Sign In with Facebook",
+  "sign_in_google": "Sign In with Google",
+  "or": "-OR-",
+  "explore": "Explore",
+  "cart": "Cart",
+  "account": "Account"
 }

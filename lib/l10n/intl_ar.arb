@@ -1,3 +1,17 @@
 {
-  "@@locale": "ar"
+  "@@locale": "ar",
+  "welcome": "اهلا",
+  "sign_in_to_continue": "قم بتسجيل الدخول",
+  "email": "البريد الإلكتروني",
+  "password": "كلمة السر",
+  "sign_up": "تسجيل حساب جديد",
+  "name": "الاسم",
+  "forgot_password": "هل نسيت كلمة السر؟",
+    "sign_in": "تسجيل الدخول",
+  "sign_in_facebook": "تسجيل الدخول بـ Facebook",
+  "sign_in_google": "تسجيل الدخول بـ Google",
+  "or": "-او-",
+  "explore": "تصفح",
+  "cart": "السلة",
+  "account": "حسابي"
 }

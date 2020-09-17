@@ -21,6 +21,19 @@ class MessageLookup extends MessageLookupByLibrary {
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
-
+    "account" : MessageLookupByLibrary.simpleMessage("حسابي"),
+    "cart" : MessageLookupByLibrary.simpleMessage("السلة"),
+    "email" : MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+    "explore" : MessageLookupByLibrary.simpleMessage("تصفح"),
+    "forgot_password" : MessageLookupByLibrary.simpleMessage("هل نسيت كلمة السر؟"),
+    "name" : MessageLookupByLibrary.simpleMessage("الاسم"),
+    "or" : MessageLookupByLibrary.simpleMessage("-او-"),
+    "password" : MessageLookupByLibrary.simpleMessage("كلمة السر"),
+    "sign_in" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
+    "sign_in_facebook" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Facebook"),
+    "sign_in_google" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Google"),
+    "sign_in_to_continue" : MessageLookupByLibrary.simpleMessage("قم بتسجيل الدخول"),
+    "sign_up" : MessageLookupByLibrary.simpleMessage("تسجيل حساب جديد"),
+    "welcome" : MessageLookupByLibrary.simpleMessage("اهلا")
   };
 }
