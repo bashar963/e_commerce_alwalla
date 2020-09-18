@@ -18,7 +18,6 @@ const subTextColor = Color(0xFFA2A2A2);
 final appTheme = ThemeData(
     fontFamily: "Tajawal",
     accentColor: colorAccent,
-    highlightColor: colorAccent,
     primaryColor: colorPrimary,
     visualDensity: VisualDensity.adaptivePlatformDensity,
     primaryColorDark: colorPrimaryDark,

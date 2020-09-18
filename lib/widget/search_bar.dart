@@ -4,8 +4,14 @@ import 'package:flutter/material.dart';
 class SearchBar extends StatelessWidget {
   final TextEditingController textController;
   final Function onComplete;
+  final Function onTap;
+  final Function onClose;
   const SearchBar(
-      {Key key, @required this.textController, @required this.onComplete})
+      {Key key,
+      @required this.textController,
+      this.onTap,
+      this.onClose,
+      @required this.onComplete})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -15,22 +21,35 @@ class SearchBar extends StatelessWidget {
       height: 46,
       decoration: BoxDecoration(
           color: Color(0xFFf7f7f7), borderRadius: BorderRadius.circular(24)),
-      child: TextFormField(
-        controller: textController,
-        keyboardType: TextInputType.text,
-        cursorWidth: 1,
-        autofocus: false,
-        onEditingComplete: onComplete,
-        style: TextStyle(
-            color: mainTextColor, fontWeight: FontWeight.w600, fontSize: 16),
-        decoration: InputDecoration(
-          icon: Image.asset("assets/icons/icon_search.png"),
-          hintText: "",
-          hintStyle: TextStyle(
-            color: subTextColor,
-            fontWeight: FontWeight.w200,
+      child: Material(
+        color: Colors.transparent,
+        child: TextFormField(
+          controller: textController,
+          onTap: onTap,
+          keyboardType: TextInputType.text,
+          cursorWidth: 1,
+          autofocus: onClose != null,
+          onEditingComplete: onComplete,
+          style: TextStyle(
+              color: mainTextColor, fontWeight: FontWeight.w600, fontSize: 16),
+          decoration: InputDecoration(
+            icon: Image.asset("assets/icons/icon_search.png"),
+            suffixIcon: onClose != null
+                ? GestureDetector(
+                    onTap: onClose,
+                    child: Icon(
+                      Icons.close,
+                      color: blackColor,
+                    ),
+                  )
+                : null,
+            hintText: "",
+            hintStyle: TextStyle(
+              color: subTextColor,
+              fontWeight: FontWeight.w200,
+            ),
+            border: InputBorder.none,
           ),
-          border: InputBorder.none,
         ),
       ),
     );

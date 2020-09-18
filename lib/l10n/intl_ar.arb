@@ -13,5 +13,11 @@
   "or": "-او-",
   "explore": "تصفح",
   "cart": "السلة",
-  "account": "حسابي"
+  "account": "حسابي",
+  "categories": "التصنيفات",
+  "best_selling": "أفضل مبيعات",
+  "see_all": "اظهار الكل",
+  "featured_brands": "ماركات مميزة",
+  "recommended": "موصى به",
+  "products": "{count} منتجات"
 }

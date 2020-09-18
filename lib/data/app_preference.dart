@@ -19,7 +19,7 @@ abstract class AppPreference {
   static set token(String val) => _sharedPreferences.setString(_authToken, val);
 
   static String get appLanguage =>
-      _sharedPreferences.getString(_appLanguage) ?? "ar";
+      _sharedPreferences.getString(_appLanguage) ?? "en";
   static set appLanguage(String val) =>
       _sharedPreferences.setString(_appLanguage, val);
 }

@@ -14,5 +14,11 @@
   "or": "-OR-",
   "explore": "Explore",
   "cart": "Cart",
-  "account": "Account"
+  "account": "Account",
+  "categories": "Categories",
+  "best_selling": "Best Selling",
+  "see_all": "See All",
+  "featured_brands": "Featured Brands",
+  "recommended": "Recommended",
+  "products": "{count} Products"
 }

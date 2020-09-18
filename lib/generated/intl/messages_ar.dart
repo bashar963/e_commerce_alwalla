@@ -19,16 +19,24 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'ar';
 
+  static m0(count) => "${count} منتجات";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "account" : MessageLookupByLibrary.simpleMessage("حسابي"),
+    "best_selling" : MessageLookupByLibrary.simpleMessage("أفضل مبيعات"),
     "cart" : MessageLookupByLibrary.simpleMessage("السلة"),
+    "categories" : MessageLookupByLibrary.simpleMessage("التصنيفات"),
     "email" : MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
     "explore" : MessageLookupByLibrary.simpleMessage("تصفح"),
+    "featured_brands" : MessageLookupByLibrary.simpleMessage("ماركات مميزة"),
     "forgot_password" : MessageLookupByLibrary.simpleMessage("هل نسيت كلمة السر؟"),
     "name" : MessageLookupByLibrary.simpleMessage("الاسم"),
     "or" : MessageLookupByLibrary.simpleMessage("-او-"),
     "password" : MessageLookupByLibrary.simpleMessage("كلمة السر"),
+    "products" : m0,
+    "recommended" : MessageLookupByLibrary.simpleMessage("موصى به"),
+    "see_all" : MessageLookupByLibrary.simpleMessage("اظهار الكل"),
     "sign_in" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "sign_in_facebook" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Facebook"),
     "sign_in_google" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Google"),
