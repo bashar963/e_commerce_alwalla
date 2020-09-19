@@ -64,7 +64,7 @@ class _FilterScreenState extends State<FilterScreen> {
           children: [
             Expanded(
               child: OutlineButton(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 color: redColor,
                 onPressed: () {
                   Navigator.pop(context);
@@ -80,7 +80,7 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             Expanded(
               child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 color: redColor,
                 onPressed: () {
                   Navigator.pop(context);

@@ -29,6 +29,10 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        brightness: Brightness.light,
+      ),
       body: BlocProvider(
         create: (BuildContext context) {
           return _loginBloc;
@@ -192,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ModalRoute.withName('/home'));
                         },
                         padding:
-                            EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                         color: redColor,
                         child: Text(
                           S.of(context).sign_in,

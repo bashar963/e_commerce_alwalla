@@ -87,7 +87,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
             Expanded(
                 child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               color: redColor,
               onPressed: () {},
               child: Text(

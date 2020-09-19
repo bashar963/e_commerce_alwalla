@@ -58,11 +58,11 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
           ? SvgPicture.asset(
               image,
               width: 24,
-              color: mainTextColor,
             )
           : const SizedBox.shrink(),
       title: _selectedIndex == index
           ? Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   title,

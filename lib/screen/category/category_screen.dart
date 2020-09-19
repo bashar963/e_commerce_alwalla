@@ -120,7 +120,7 @@ class _CategoryScreenState extends State<CategoryScreen>
             ),
             Expanded(
                 child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
               color: redColor,
               onPressed: () {
                 Navigator.push(

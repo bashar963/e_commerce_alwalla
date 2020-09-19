@@ -33,7 +33,7 @@ class SearchBar extends StatelessWidget {
           style: TextStyle(
               color: mainTextColor, fontWeight: FontWeight.w600, fontSize: 16),
           decoration: InputDecoration(
-            icon: Image.asset("assets/icons/icon_search.png"),
+            icon: Icon(Icons.search),
             suffixIcon: onClose != null
                 ? GestureDetector(
                     onTap: onClose,

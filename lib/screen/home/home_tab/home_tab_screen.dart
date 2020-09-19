@@ -177,9 +177,15 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         ),
         space(12),
         SliverToBoxAdapter(
-          child: ClipRRect(
-              borderRadius: BorderRadius.circular(6),
-              child: Image.asset("assets/images/promo_image.png")),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: Image.asset(
+                  "assets/images/promo_image.png",
+                  fit: BoxFit.fill,
+                )),
+          ),
         ),
         space(32),
         SliverPadding(

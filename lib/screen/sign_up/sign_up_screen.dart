@@ -172,7 +172,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     RaisedButton(
                       onPressed: () {},
                       padding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                          EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                       color: redColor,
                       child: Text(
                         S.of(context).sign_up,
