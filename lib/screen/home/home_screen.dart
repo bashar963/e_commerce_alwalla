@@ -15,14 +15,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: IndexedStack(
-        children: <Widget>[
-          HomeTabScreen(),
-          CartTabScreen(),
-          AccountTabScreen(),
-        ],
-        index: _selectedIndex,
-      ),
+      body: _selectedIndex == 0
+          ? HomeTabScreen()
+          : _selectedIndex == 1 ? CartTabScreen() : AccountTabScreen(),
       bottomNavigationBar: AppBottomNavBar(
         selectedIndex: _selectedIndex,
         onTap: (int value) {

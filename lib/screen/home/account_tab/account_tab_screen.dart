@@ -1,6 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:e_commerce_alwalla/screen/addresses/addresses_screen.dart';
+import 'package:e_commerce_alwalla/screen/cards/cards_screen.dart';
 import 'package:e_commerce_alwalla/screen/home/account_tab/account_bloc.dart';
 import 'package:e_commerce_alwalla/screen/order_history/orders_history_screen.dart';
+import 'package:e_commerce_alwalla/screen/wishlist/wishlist_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +24,14 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
     super.initState();
     _settings = [
       Setting("assets/icons/edit.svg", "Edit Profile", () {}),
-      Setting("assets/icons/location.svg", "Shipping Address", () {}),
-      Setting("assets/icons/fav.svg", "Wishlist", () {}),
+      Setting("assets/icons/location.svg", "Shipping Address", () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => AddressesScreen()));
+      }),
+      Setting("assets/icons/fav.svg", "WishList", () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => WishListScreen()));
+      }),
       Setting("assets/icons/history.svg", "Order History", () {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => OrdersHistory()));
@@ -31,7 +40,10 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => OrdersHistory()));
       }),
-      Setting("assets/icons/cards.svg", "Cards", () {}),
+      Setting("assets/icons/cards.svg", "Cards", () {
+        Navigator.push(
+            context, MaterialPageRoute(builder: (c) => CardsScreen()));
+      }),
       Setting("assets/icons/bill.svg", "Notification", () {}),
       Setting("assets/icons/exit.svg", "Log Out", () {}),
     ];
@@ -46,9 +58,11 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
         elevation: 0,
         brightness: Brightness.light,
+        backgroundColor: whiteColor,
       ),
       body: BlocProvider(
         create: (BuildContext context) {
@@ -89,13 +103,17 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 55,
-                  backgroundColor: whiteColor,
-                  child: Center(
-                    child: Text(
-                      "B",
-                      style: mainTextStyle.copyWith(fontSize: 22),
+                Material(
+                  elevation: 1,
+                  shape: CircleBorder(),
+                  child: CircleAvatar(
+                    radius: 55,
+                    backgroundColor: whiteColor,
+                    child: Center(
+                      child: Text(
+                        "B",
+                        style: mainTextStyle.copyWith(fontSize: 22),
+                      ),
                     ),
                   ),
                 ),

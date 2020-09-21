@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
 import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
@@ -209,7 +210,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: SizedBox(
-                    height: 150,
+                    height: 140,
                     child: Hero(
                       tag: "product${product.id}",
                       child: Image.asset(
@@ -220,12 +221,15 @@ class _SummaryScreenState extends State<SummaryScreen> {
             const SizedBox(
               height: 6,
             ),
-            Text(
+            AutoSizeText(
               product.title,
+              maxFontSize: 18,
+              minFontSize: 12,
               style: mainTextStyle,
+              maxLines: 1,
             ),
             const SizedBox(
-              height: 6,
+              height: 3,
             ),
             Text(
               product.price,

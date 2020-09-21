@@ -401,6 +401,7 @@ class Brand {
 
 class Product {
   final String id, image, title, brand, price;
-
-  Product(this.id, this.image, this.title, this.brand, this.price);
+  bool inStock;
+  Product(this.id, this.image, this.title, this.brand, this.price,
+      {this.inStock = true});
 }
