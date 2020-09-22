@@ -49,7 +49,9 @@ class _OrdersHistoryState extends State<OrdersHistory> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
+        backgroundColor: whiteColor,
         elevation: 0,
         title: Text("Orders"),
         centerTitle: true,

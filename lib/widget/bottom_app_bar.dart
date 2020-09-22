@@ -42,11 +42,9 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
             }, // new
             currentIndex: _selectedIndex, // new
             items: [
-              tabBarItem(
-                  0, S.of(context).explore, "assets/icons/icon_home.svg"),
-              tabBarItem(1, S.of(context).cart, "assets/icons/icon_cart.svg"),
-              tabBarItem(
-                  2, S.of(context).account, "assets/icons/icon_user.svg"),
+              tabBarItem(0, S.of(context).explore, "assets/icons/home.svg"),
+              tabBarItem(1, S.of(context).cart, "assets/icons/cart.svg"),
+              tabBarItem(2, S.of(context).account, "assets/icons/account.svg"),
             ]),
       ),
     );

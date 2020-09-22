@@ -161,6 +161,9 @@ class _CartTabScreenState extends State<CartTabScreen> {
                       "SubTotal",
                       style: subTextStyle.copyWith(fontSize: 16),
                     ),
+                    const SizedBox(
+                      width: 12,
+                    ),
                     Expanded(
                         child: Text(
                       "-" * 40,
@@ -170,6 +173,9 @@ class _CartTabScreenState extends State<CartTabScreen> {
                       style: mainTextStyle.copyWith(
                           letterSpacing: 2, color: subTextColor),
                     )),
+                    const SizedBox(
+                      width: 12,
+                    ),
                     Text(
                       cart.subTotal + "\$",
                       style: mainTextStyle,
@@ -185,6 +191,9 @@ class _CartTabScreenState extends State<CartTabScreen> {
                       "TAX",
                       style: subTextStyle.copyWith(fontSize: 16),
                     ),
+                    const SizedBox(
+                      width: 12,
+                    ),
                     Expanded(
                         child: Text(
                       "-" * 40,
@@ -194,6 +203,9 @@ class _CartTabScreenState extends State<CartTabScreen> {
                       style: mainTextStyle.copyWith(
                           letterSpacing: 2, color: subTextColor),
                     )),
+                    const SizedBox(
+                      width: 12,
+                    ),
                     Text(
                       cart.tax + "\$",
                       style: mainTextStyle,

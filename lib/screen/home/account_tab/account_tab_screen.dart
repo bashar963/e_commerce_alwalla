@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_commerce_alwalla/screen/addresses/addresses_screen.dart';
 import 'package:e_commerce_alwalla/screen/cards/cards_screen.dart';
 import 'package:e_commerce_alwalla/screen/home/account_tab/account_bloc.dart';
+import 'package:e_commerce_alwalla/screen/loyalty/loyalty_screen.dart';
 import 'package:e_commerce_alwalla/screen/order_history/orders_history_screen.dart';
 import 'package:e_commerce_alwalla/screen/wishlist/wishlist_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
@@ -40,7 +41,7 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => OrdersHistory()));
       }),
-      Setting("assets/icons/cards.svg", "Cards", () {
+      Setting("assets/icons/card.svg", "Cards", () {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => CardsScreen()));
       }),
@@ -134,11 +135,50 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
                       style: mainTextStyle.copyWith(fontSize: 22),
                     ),
                     const SizedBox(
-                      height: 16,
+                      height: 4,
                     ),
                     Text(
                       "basharqaddah@gmail.com",
                       style: subTextStyle,
+                    ),
+                    const SizedBox(
+                      height: 4,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (c) => LoyaltyScreen(),
+                          ),
+                        );
+                      },
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset("assets/icons/wallaa.svg"),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: Text(
+                              "VIP0",
+                              style: mainTextStyle.copyWith(fontSize: 14),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 2,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 6),
+                            child: Icon(
+                              Icons.chevron_right,
+                              color: blackColor,
+                            ),
+                          )
+                        ],
+                      ),
                     )
                   ],
                 ))
@@ -172,7 +212,6 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         child: Center(
           child: SvgPicture.asset(
             setting.icon,
-            color: mainTextColor,
           ),
         ),
       ),

@@ -18,9 +18,20 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   final street1Controller = TextEditingController();
   final street2Controller = TextEditingController();
   final cityController = TextEditingController();
+  final numberController = TextEditingController();
   final stateController = TextEditingController();
   final countryController = TextEditingController();
-  String street1Error, street2Error, cityError, stateError, countryError;
+  final _numberController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _expController = TextEditingController();
+  final _cvvController = TextEditingController();
+  String _numberError, nameError, expError, cvvError;
+  String street1Error,
+      street2Error,
+      cityError,
+      numberError,
+      stateError,
+      countryError;
   @override
   void dispose() {
     _checkoutBloc.close();
@@ -215,6 +226,30 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: TextFormField(
+              controller: numberController,
+              keyboardType: TextInputType.number,
+              cursorWidth: 1,
+              autofocus: false,
+              style: TextStyle(
+                  color: mainTextColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16),
+              decoration: InputDecoration(
+                labelText: "Phone Number",
+                errorText: numberError,
+                labelStyle: TextStyle(
+                  color: subTextColor,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: TextFormField(
               controller: cityController,
               keyboardType: TextInputType.text,
               cursorWidth: 1,
@@ -293,8 +328,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   List<Payment> _payments = [
-    Payment("id", "Cash on Delivery", isSelected: true),
-    Payment("id", "Credit Card")
+    Payment("1", "Cash on Delivery", isSelected: true),
+    Payment("2", "Credit Card")
   ];
   List<Delivery> _deliveries = [
     Delivery("id", "Standard Delivery",
@@ -305,12 +340,133 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     Delivery("id", "Nominated Delivery",
         "Pick a particular date from the calendar and order will be delivered on selected date"),
   ];
+  bool cardSelected = false;
   Widget payment() {
-    return ListView.builder(
-        itemCount: _payments.length,
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (c, i) => paymentItem(_payments[i]));
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: _payments.length,
+            shrinkWrap: true,
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (c, i) => paymentItem(
+              _payments[i],
+            ),
+          ),
+        ),
+        if (cardSelected)
+          const SizedBox(
+            height: 32,
+          ),
+        if (cardSelected)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: TextFormField(
+              controller: _nameController,
+              keyboardType: TextInputType.text,
+              cursorWidth: 1,
+              autofocus: false,
+              style: TextStyle(
+                  color: mainTextColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16),
+              decoration: InputDecoration(
+                labelText: "Card Holder",
+                errorText: nameError,
+                labelStyle: TextStyle(
+                  color: subTextColor,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+            ),
+          ),
+        if (cardSelected)
+          const SizedBox(
+            height: 24,
+          ),
+        if (cardSelected)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: TextFormField(
+              controller: _numberController,
+              keyboardType: TextInputType.number,
+              cursorWidth: 1,
+              autofocus: false,
+              style: TextStyle(
+                  color: mainTextColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 16),
+              decoration: InputDecoration(
+                labelText: "Card Number",
+                errorText: _numberError,
+                labelStyle: TextStyle(
+                  color: subTextColor,
+                  fontWeight: FontWeight.w200,
+                ),
+              ),
+            ),
+          ),
+        if (cardSelected)
+          const SizedBox(
+            height: 24,
+          ),
+        if (cardSelected)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Expanded(
+                    child: TextFormField(
+                  controller: _expController,
+                  keyboardType: TextInputType.datetime,
+                  cursorWidth: 1,
+                  autofocus: false,
+                  maxLength: 5,
+                  style: TextStyle(
+                      color: mainTextColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                  decoration: InputDecoration(
+                    labelText: "Expiry Date",
+                    errorText: expError,
+                    labelStyle: TextStyle(
+                      color: subTextColor,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                )),
+                const SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                    child: TextFormField(
+                  controller: _cvvController,
+                  keyboardType: TextInputType.number,
+                  maxLength: 4,
+                  cursorWidth: 1,
+                  autofocus: false,
+                  style: TextStyle(
+                      color: mainTextColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                  decoration: InputDecoration(
+                    labelText: "CVV",
+                    errorText: cvvError,
+                    labelStyle: TextStyle(
+                      color: subTextColor,
+                      fontWeight: FontWeight.w200,
+                    ),
+                  ),
+                )),
+              ],
+            ),
+          ),
+        if (cardSelected)
+          const SizedBox(
+            height: 64,
+          ),
+      ],
+    );
   }
 
   paymentItem(Payment payment) {
@@ -325,6 +481,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           _payments.forEach((element) {
             element.isSelected = false;
           });
+
+          cardSelected = payment.id == "2";
+
           payment.isSelected = true;
         });
       },

@@ -167,23 +167,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     decoration: BoxDecoration(
                         border: Border.all(color: lightGrey),
                         borderRadius: BorderRadius.circular(24)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Size",
-                          style: subTextStyle,
-                        ),
-                        Text(
-                          "XL",
-                          style: mainTextStyle.copyWith(fontSize: 14),
-                        )
-                      ],
+                    child: Center(
+                      child: Text(
+                        "Size",
+                        style: subTextStyle,
+                      ),
                     ),
                   ),
                 ),
                 const SizedBox(
-                  width: 24,
+                  width: 12,
+                ),
+                Expanded(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: lightGrey),
+                        borderRadius: BorderRadius.circular(24)),
+                    child: Center(
+                      child: Text(
+                        "Size Chart",
+                        style: subTextStyle,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 12,
                 ),
                 Expanded(
                   child: Container(
@@ -192,18 +202,80 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         border: Border.all(color: lightGrey),
                         borderRadius: BorderRadius.circular(24)),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Color",
-                          style: subTextStyle,
+                        Center(
+                          child: Text(
+                            "Color",
+                            style: subTextStyle,
+                          ),
                         ),
-                        CircleAvatar(
-                          radius: 9,
-                          backgroundColor: Color(0xFF33427D),
-                        )
                       ],
                     ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        space(12),
+        SliverPadding(
+          padding: EdgeInsets.symmetric(horizontal: 24),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 8,
+                    runSpacing: 2,
+                    children: [
+                      Text(
+                        "S",
+                        style: mainTextStyle.copyWith(fontSize: 14),
+                      ),
+                      Text(
+                        "L",
+                        style: mainTextStyle.copyWith(fontSize: 14),
+                      ),
+                      Text(
+                        "XL",
+                        style: mainTextStyle.copyWith(fontSize: 14),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Expanded(
+                  child: const SizedBox(),
+                ),
+                const SizedBox(
+                  width: 12,
+                ),
+                Expanded(
+                  child: Wrap(
+                    alignment: WrapAlignment.center,
+                    spacing: 2,
+                    runSpacing: 2,
+                    children: [
+                      CircleAvatar(
+                        radius: 9,
+                        backgroundColor: Color(0xFF33427D),
+                      ),
+                      CircleAvatar(
+                        radius: 9,
+                        backgroundColor: redColor,
+                      ),
+                      CircleAvatar(
+                        radius: 9,
+                        backgroundColor: greenColor,
+                      ),
+                      CircleAvatar(
+                        radius: 9,
+                        backgroundColor: orangeColor,
+                      )
+                    ],
                   ),
                 )
               ],
@@ -239,10 +311,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ),
         ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          sliver: SliverToBoxAdapter(
+              child: FlatButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Write your review",
+                    style: subTextStyle.copyWith(color: redColor),
+                  ))),
+        ),
         SliverToBoxAdapter(
           child: ListView.builder(
             itemBuilder: (c, i) => reviewItem(_reviews[i]),
             itemCount: _reviews.length,
+            padding: EdgeInsets.zero,
             shrinkWrap: true,
             physics: NeverScrollableScrollPhysics(),
           ),

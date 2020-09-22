@@ -32,7 +32,9 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: whiteColor,
       appBar: AppBar(
+        backgroundColor: whiteColor,
         elevation: 0,
         title: Text(widget.order.title),
         centerTitle: true,

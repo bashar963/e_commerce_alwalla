@@ -126,90 +126,87 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
           const SizedBox(
             height: 24,
           ),
-          Hero(
-            tag: "card${widget.card != null ? widget.card.id : 1}",
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-              child: Container(
-                height: 170,
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  gradient: LinearGradient(
-                      colors: widget.card != null
-                          ? widget.card.type == "visa" ? _visa : _master
-                          : _visa,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: SvgPicture.asset(widget.card != null
-                          ? widget.card.type == "visa"
-                              ? "assets/icons/icon_visa.svg"
-                              : "assets/icons/icon_mastercard.svg"
-                          : "assets/icons/icon_visa.svg"),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Text(
-                      widget.card != null
-                          ? widget.card.number
-                          : _numberController.text,
-                      maxLines: 1,
-                      style: mainTextStyle.copyWith(
-                          color: whiteColor, fontSize: 20, letterSpacing: 3),
-                    ),
-                    const SizedBox(
-                      height: 24,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Card Holder",
-                              style: subTextStyle.copyWith(color: whiteColor),
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              widget.card != null
-                                  ? widget.card.name
-                                  : _nameController.text,
-                              style: mainTextStyle.copyWith(color: whiteColor),
-                            )
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Expiry",
-                              style: subTextStyle.copyWith(color: whiteColor),
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              widget.card != null
-                                  ? widget.card.expDate
-                                  : _expController.text,
-                              style: mainTextStyle.copyWith(color: whiteColor),
-                            )
-                          ],
-                        )
-                      ],
-                    )
-                  ],
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            child: Container(
+              height: 170,
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                gradient: LinearGradient(
+                    colors: widget.card != null
+                        ? widget.card.type == "visa" ? _visa : _master
+                        : _visa,
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: SvgPicture.asset(widget.card != null
+                        ? widget.card.type == "visa"
+                            ? "assets/icons/icon_visa.svg"
+                            : "assets/icons/icon_mastercard.svg"
+                        : "assets/icons/icon_visa.svg"),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Text(
+                    widget.card != null
+                        ? widget.card.number
+                        : _numberController.text,
+                    maxLines: 1,
+                    style: mainTextStyle.copyWith(
+                        color: whiteColor, fontSize: 20, letterSpacing: 3),
+                  ),
+                  const SizedBox(
+                    height: 24,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Card Holder",
+                            style: subTextStyle.copyWith(color: whiteColor),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            widget.card != null
+                                ? widget.card.name
+                                : _nameController.text,
+                            style: mainTextStyle.copyWith(color: whiteColor),
+                          )
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Expiry",
+                            style: subTextStyle.copyWith(color: whiteColor),
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            widget.card != null
+                                ? widget.card.expDate
+                                : _expController.text,
+                            style: mainTextStyle.copyWith(color: whiteColor),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
           ),

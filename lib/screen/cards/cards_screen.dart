@@ -118,80 +118,77 @@ class _CardsScreenState extends State<CardsScreen> {
                       card: card,
                     )));
       },
-      child: Hero(
-        tag: "card${card.id}",
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-          child: Container(
-            height: 170,
-            padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              gradient: LinearGradient(
-                  colors: card.type == "visa" ? _visa : _master,
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: SvgPicture.asset(card.type == "visa"
-                      ? "assets/icons/icon_visa.svg"
-                      : "assets/icons/icon_mastercard.svg"),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Text(
-                  card.number,
-                  maxLines: 1,
-                  style: mainTextStyle.copyWith(
-                      color: whiteColor, fontSize: 20, letterSpacing: 3),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Card Holder",
-                          style: subTextStyle.copyWith(color: whiteColor),
-                        ),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        Text(
-                          card.name,
-                          style: mainTextStyle.copyWith(color: whiteColor),
-                        )
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Expiry",
-                          style: subTextStyle.copyWith(color: whiteColor),
-                        ),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        Text(
-                          card.expDate,
-                          style: mainTextStyle.copyWith(color: whiteColor),
-                        )
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+        child: Container(
+          height: 170,
+          padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            gradient: LinearGradient(
+                colors: card.type == "visa" ? _visa : _master,
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Align(
+                alignment: Alignment.centerRight,
+                child: SvgPicture.asset(card.type == "visa"
+                    ? "assets/icons/icon_visa.svg"
+                    : "assets/icons/icon_mastercard.svg"),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Text(
+                card.number,
+                maxLines: 1,
+                style: mainTextStyle.copyWith(
+                    color: whiteColor, fontSize: 20, letterSpacing: 3),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Card Holder",
+                        style: subTextStyle.copyWith(color: whiteColor),
+                      ),
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        card.name,
+                        style: mainTextStyle.copyWith(color: whiteColor),
+                      )
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Expiry",
+                        style: subTextStyle.copyWith(color: whiteColor),
+                      ),
+                      const SizedBox(
+                        height: 2,
+                      ),
+                      Text(
+                        card.expDate,
+                        style: mainTextStyle.copyWith(color: whiteColor),
+                      )
+                    ],
+                  )
+                ],
+              )
+            ],
           ),
         ),
       ),
