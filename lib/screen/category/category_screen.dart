@@ -6,6 +6,7 @@ import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -108,30 +109,35 @@ class _CategoryScreenState extends State<CategoryScreen>
         ),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+        padding: EdgeInsets.symmetric(vertical: 16),
         color: whiteColor,
         child: Row(
           children: [
             Expanded(
               child: Text(
-                "No filter applied",
-                style: mainTextStyle.copyWith(fontSize: 14),
+                "No filters applied",
+                textAlign: TextAlign.center,
+                style: mainTextStyle.copyWith(fontSize: 15),
               ),
             ),
             Expanded(
-                child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              color: redColor,
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (c) => FilterScreen(),
-                        fullscreenDialog: true));
-              },
-              child: Text(
-                "FILTER",
-                style: subTextStyle.copyWith(color: whiteColor),
+                child: Container(
+              height: 50,
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: RaisedButton(
+                elevation: 0,
+                color: redColor,
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (c) => FilterScreen(),
+                          fullscreenDialog: true));
+                },
+                child: Text(
+                  "FILTER",
+                  style: subTextStyle.copyWith(color: whiteColor),
+                ),
               ),
             ))
           ],
@@ -141,7 +147,7 @@ class _CategoryScreenState extends State<CategoryScreen>
   }
 
   Widget body(BuildContext context) {
-    double width = (MediaQuery.of(context).size.width - 48) / 2;
+    double width = (MediaQuery.of(context).size.width) / 2;
     double height = 380;
     double aspect = width / height;
     return CustomScrollView(
@@ -154,7 +160,7 @@ class _CategoryScreenState extends State<CategoryScreen>
                 sliver: SliverToBoxAdapter(
                   child: Text(
                     "Top Brands",
-                    style: mainTextStyle.copyWith(fontSize: 24),
+                    style: mainTextStyle.copyWith(fontSize: 18),
                   ),
                 ),
               )
@@ -181,15 +187,17 @@ class _CategoryScreenState extends State<CategoryScreen>
                   unselectedLabelColor: mainTextColor.withOpacity(0.2),
                   labelPadding: EdgeInsets.symmetric(horizontal: 16),
                   labelStyle: mainTextStyle.copyWith(fontSize: 14),
-                  isScrollable: true,
+                  isScrollable: _tabs.length > 4,
                   controller: _tabController,
                 ),
               ),
         space(32),
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverGrid.count(
             crossAxisCount: 2,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 16,
             childAspectRatio: aspect,
             children: _products.map((e) => productItem(e)).toList(),
           ),
@@ -199,26 +207,46 @@ class _CategoryScreenState extends State<CategoryScreen>
   }
 
   Widget brandItem(Brand brand, bool isFirst) {
-    return Card(
-        elevation: 1,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: isFirst
-            ? EdgeInsets.only(
-                left: AppPreference.appLanguage == "en" ? 24 : 0,
-                bottom: 12,
-                top: 12,
-                right: AppPreference.appLanguage == "en" ? 0 : 24)
-            : EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-        child: Container(
-          width: MediaQuery.of(context).size.width / 2,
-          child: ListTile(
-            leading: CircleAvatar(
-                backgroundColor: Colors.transparent,
-                child: Image.asset(brand.image)),
-            title: Text(brand.title),
-            subtitle: Text(S.of(context).products(brand.productCount)),
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (c) => CategoryScreen(
+              brand: brand,
+            ),
           ),
-        ));
+        );
+      },
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                  color: Color.fromRGBO(36, 36, 36, 0.05),
+                  blurRadius: 10,
+                  offset: Offset(0, 5))
+            ],
+            color: whiteColor,
+          ),
+          margin: isFirst
+              ? EdgeInsets.only(
+                  left: AppPreference.appLanguage == "en" ? 16 : 8,
+                  bottom: 12,
+                  top: 12,
+                  right: AppPreference.appLanguage == "en" ? 8 : 16)
+              : EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          child: Container(
+            width: MediaQuery.of(context).size.width / 2,
+            child: ListTile(
+              leading: CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: Image.asset(brand.image)),
+              title: Text(brand.title),
+              subtitle: Text(S.of(context).products(brand.productCount)),
+            ),
+          )),
+    );
   }
 
   space(double size) {
@@ -240,7 +268,6 @@ class _CategoryScreenState extends State<CategoryScreen>
         );
       },
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 6),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -250,7 +277,10 @@ class _CategoryScreenState extends State<CategoryScreen>
                     height: 240,
                     child: Hero(
                         tag: "product${product.id}",
-                        child: Image.asset(product.image)))),
+                        child: Image.asset(
+                          product.image,
+                          fit: BoxFit.fill,
+                        )))),
             const SizedBox(
               height: 12,
             ),

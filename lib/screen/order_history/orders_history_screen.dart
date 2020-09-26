@@ -15,30 +15,30 @@ class _OrdersHistoryState extends State<OrdersHistory> {
 
   List<OrderSort> _orders = [
     OrderSort([
-      Order("1", "12/09/2020", "OD - 424923192 - N", "4500", "1", [
+      Order("1", "Sept 23, 2020", "OD - 424923192 - N", "4500", "1", [
         "assets/images/image.png",
         "assets/images/image_2.png",
         "assets/images/image_demo.png",
         "assets/images/image.png",
         "assets/images/image.png"
       ])
-    ], "18/09/2020"),
+    ], "Sept 23, 2020"),
     OrderSort([
-      Order("1", "18/09/2020", "OD - 424923192 - N", "4500", "2", [
+      Order("1", "Sept 18, 2020", "OD - 424923192 - N", "4500", "2", [
         "assets/images/image.png",
         "assets/images/image_2.png",
         "assets/images/image_demo.png",
         "assets/images/image.png",
         "assets/images/image.png"
       ]),
-      Order("1", "18/09/2020", "OD - 424923192 - N", "4500", "2", [
+      Order("1", "Sept 18, 2020", "OD - 424923192 - N", "4500", "2", [
         "assets/images/image.png",
         "assets/images/image_2.png",
         "assets/images/image_demo.png",
         "assets/images/image.png",
         "assets/images/image.png"
       ]),
-    ], "12/09/2020")
+    ], "Sept 18, 2020")
   ];
   @override
   void dispose() {
@@ -104,7 +104,8 @@ class _OrdersHistoryState extends State<OrdersHistory> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             order.date,
-            style: mainTextStyle.copyWith(color: subTextColor),
+            style: subTextStyle.copyWith(
+                color: subTextColor, fontWeight: FontWeight.w400),
           ),
         ),
         ListView.builder(
@@ -127,8 +128,18 @@ class _OrdersHistoryState extends State<OrdersHistory> {
                       order: order,
                     )));
       },
-      child: Card(
-        margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      child: Container(
+        decoration: BoxDecoration(
+          color: whiteColor,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+                color: Color.fromRGBO(36, 36, 36, 0.05),
+                blurRadius: 10,
+                offset: Offset(0, 5))
+          ],
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: Row(
@@ -139,29 +150,35 @@ class _OrdersHistoryState extends State<OrdersHistory> {
                 children: [
                   Text(
                     order.title,
-                    style: mainTextStyle,
+                    style: mainTextStyle.copyWith(
+                        fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 8,
                   ),
                   Text(
                     order.total + " \$",
-                    style: mainTextStyle.copyWith(color: redColor),
+                    style: mainTextStyle.copyWith(
+                        color: redColor,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14),
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 36,
                   ),
                   Container(
                     width: 80,
                     height: 30,
                     decoration: BoxDecoration(
                         color: order.status == "1" ? orangeColor : redColor,
-                        borderRadius: BorderRadius.circular(6)),
+                        borderRadius: BorderRadius.circular(2)),
                     child: Center(
                       child: Text(
                         order.status == "1" ? "In Transit" : "Delivered",
                         style: mainTextStyle.copyWith(
-                            color: whiteColor, fontSize: 14),
+                            color: whiteColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600),
                       ),
                     ),
                   )
@@ -183,13 +200,14 @@ class _OrdersHistoryState extends State<OrdersHistory> {
                         child: Center(
                           child: Text(
                             "+" + (order.images.length - 3).toString(),
-                            style: mainTextStyle,
+                            style: mainTextStyle.copyWith(
+                                fontWeight: FontWeight.w400, fontSize: 14),
                           ),
                         ),
                         decoration: BoxDecoration(
                             color: whiteColor,
                             border: Border.all(
-                                width: 2, color: blackColor.withOpacity(0.3)),
+                                width: 1, color: blackColor.withOpacity(0.3)),
                             borderRadius: BorderRadius.circular(6)),
                       );
                     } else {

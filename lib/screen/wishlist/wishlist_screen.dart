@@ -43,6 +43,7 @@ class _WishListScreenState extends State<WishListScreen> {
         elevation: 0,
         backgroundColor: whiteColor,
         title: Text("WishList"),
+        centerTitle: true,
       ),
       body: BlocProvider(
         create: (BuildContext context) {
@@ -94,18 +95,18 @@ class _WishListScreenState extends State<WishListScreen> {
         ),
         space(24),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Text(
               S.of(context).recommended,
-              style: mainTextStyle.copyWith(fontSize: 24),
+              style: mainTextStyle.copyWith(fontSize: 20),
             ),
           ),
         ),
         space(24),
         SliverToBoxAdapter(
           child: Container(
-            height: 370,
+            height: 340,
             child: ListView.builder(
               itemBuilder: (c, i) => productItem(_products[i], i == 0),
               itemCount: _products.length,
@@ -115,6 +116,7 @@ class _WishListScreenState extends State<WishListScreen> {
             ),
           ),
         ),
+        space(24),
       ],
     );
   }
@@ -132,8 +134,8 @@ class _WishListScreenState extends State<WishListScreen> {
       child: Container(
         padding: isFirst
             ? EdgeInsets.only(
-                left: AppPreference.appLanguage == "en" ? 24 : 0,
-                right: AppPreference.appLanguage == "en" ? 0 : 24)
+                left: AppPreference.appLanguage == "en" ? 16 : 12,
+                right: AppPreference.appLanguage == "en" ? 12 : 16)
             : EdgeInsets.symmetric(horizontal: 12),
         width: (MediaQuery.of(context).size.width / 2),
         child: Column(
@@ -142,7 +144,7 @@ class _WishListScreenState extends State<WishListScreen> {
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: SizedBox(
-                    height: 240,
+                    height: 250,
                     child: Hero(
                       tag: "product${product.id}",
                       child: Image.asset(
@@ -155,10 +157,11 @@ class _WishListScreenState extends State<WishListScreen> {
             ),
             Text(
               product.title,
-              style: mainTextStyle,
+              style: mainTextStyle.copyWith(
+                  fontWeight: FontWeight.w600, fontSize: 16),
             ),
             const SizedBox(
-              height: 12,
+              height: 8,
             ),
             Text(
               product.brand,
@@ -170,7 +173,7 @@ class _WishListScreenState extends State<WishListScreen> {
             Text(
               product.price,
               style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+                  color: redColor, fontWeight: FontWeight.w600, fontSize: 16),
             ),
           ],
         ),
@@ -180,7 +183,7 @@ class _WishListScreenState extends State<WishListScreen> {
 
   productItem2(Product product) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
         children: [
           ClipRRect(
@@ -193,7 +196,7 @@ class _WishListScreenState extends State<WishListScreen> {
             ),
           ),
           const SizedBox(
-            width: 16,
+            width: 32,
           ),
           Expanded(
               child: Column(
@@ -202,29 +205,33 @@ class _WishListScreenState extends State<WishListScreen> {
             children: [
               Text(
                 product.title,
-                style: mainTextStyle,
+                style: mainTextStyle.copyWith(
+                    fontSize: 16, fontWeight: FontWeight.w400),
               ),
               const SizedBox(
-                height: 12,
+                height: 6,
               ),
               Text(
                 product.price,
-                style: mainTextStyle.copyWith(color: redColor),
+                style: mainTextStyle.copyWith(
+                    color: redColor, fontSize: 16, fontWeight: FontWeight.w400),
               ),
               const SizedBox(
-                height: 12,
+                height: 24,
               ),
               Container(
                 width: 90,
                 height: 30,
                 decoration: BoxDecoration(
                     color: product.inStock ? greenColor : orangeColor,
-                    borderRadius: BorderRadius.circular(3)),
+                    borderRadius: BorderRadius.circular(2)),
                 child: Center(
                     child: Text(
                   product.inStock ? "In Stock" : "Out of Stock",
-                  style:
-                      mainTextStyle.copyWith(color: whiteColor, fontSize: 14),
+                  style: mainTextStyle.copyWith(
+                      color: whiteColor,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w400),
                 )),
               )
             ],

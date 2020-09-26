@@ -65,12 +65,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 60,
+              height: 32,
             ),
             Card(
-              margin: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               color: whiteColor,
-              elevation: 2,
+              elevation: 0.4,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
               child: Container(
@@ -79,11 +79,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      S.of(context).sign_up,
-                      style: mainTextStyle.copyWith(fontSize: 24),
+                      "Sign Up",
+                      style: mainTextStyle.copyWith(fontSize: 30),
                     ),
                     const SizedBox(
-                      height: 32,
+                      height: 48,
                     ),
                     TextFormField(
                       controller: _nameController,
@@ -112,7 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 12,
+                      height: 32,
                     ),
                     TextFormField(
                       controller: _emailController,
@@ -141,7 +141,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 12,
+                      height: 32,
                     ),
                     TextFormField(
                       controller: _passwordController,
@@ -154,12 +154,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       style: TextStyle(
                           color: blackColor,
                           fontWeight: FontWeight.w800,
-                          letterSpacing: 3,
+                          letterSpacing: 6,
                           fontSize: 16),
                       decoration: InputDecoration(
                         labelText: S.of(context).password,
                         errorText: _passwordError,
-                        labelStyle: subTextStyle,
+                        labelStyle: subTextStyle.copyWith(
+                          letterSpacing: 0.7,
+                        ),
                         focusedBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: colorAccent)),
                         border: UnderlineInputBorder(
@@ -167,17 +169,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 24,
+                      height: 60,
                     ),
-                    RaisedButton(
-                      onPressed: () {},
-                      padding:
-                          EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      color: redColor,
-                      child: Text(
-                        S.of(context).sign_up,
-                        style: subTextStyle.copyWith(
-                            color: whiteColor, fontWeight: FontWeight.w800),
+                    Container(
+                      height: 50,
+                      child: RaisedButton(
+                        elevation: 0,
+                        onPressed: () {},
+                        color: redColor,
+                        child: Text(
+                          "SIGN UP",
+                          style: subTextStyle.copyWith(
+                              color: whiteColor, fontWeight: FontWeight.w400),
+                        ),
                       ),
                     ),
                     const SizedBox(

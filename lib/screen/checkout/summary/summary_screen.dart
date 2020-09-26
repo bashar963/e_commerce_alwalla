@@ -41,34 +41,42 @@ class _SummaryScreenState extends State<SummaryScreen> {
         child: Row(
           children: [
             Expanded(
-                child: OutlineButton(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              color: redColor,
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                "BACK",
-                style: subTextStyle.copyWith(color: redColor),
+                child: Container(
+              height: 50,
+              child: OutlineButton(
+                highlightedBorderColor: redColor,
+                highlightColor: whiteColor,
+                color: redColor,
+                borderSide: BorderSide(color: redColor),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "BACK",
+                  style: subTextStyle.copyWith(color: blackColor),
+                ),
               ),
             )),
             const SizedBox(
               width: 24,
             ),
             Expanded(
-                child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              color: redColor,
-              onPressed: () {
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => HomeScreen()),
-                    ModalRoute.withName('/home'));
-              },
-              child: Text(
-                "PAY",
-                style: subTextStyle.copyWith(color: whiteColor),
+                child: Container(
+              height: 50,
+              child: RaisedButton(
+                elevation: 0,
+                color: redColor,
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => HomeScreen()),
+                      ModalRoute.withName('/home'));
+                },
+                child: Text(
+                  "PAY",
+                  style: subTextStyle.copyWith(color: whiteColor),
+                ),
               ),
             ))
           ],
@@ -102,30 +110,30 @@ class _SummaryScreenState extends State<SummaryScreen> {
             ),
           ),
         ),
-        space(32),
+        space(24),
         SliverToBoxAdapter(
           child: Divider(),
         ),
-        space(32),
+        space(24),
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "Shipping Address",
-                  style: mainTextStyle.copyWith(fontSize: 24),
+                  style: mainTextStyle.copyWith(fontSize: 20),
                 ),
               ),
               const SizedBox(
                 height: 16,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "21, Alex Davidson Avenue, Opposite Omegatron, Vicent Smith Quarters, Victoria Island, Lagos, Nigeria",
-                  style: subTextStyle.copyWith(fontSize: 18),
+                  style: subTextStyle.copyWith(fontSize: 16),
                 ),
               ),
               const SizedBox(
@@ -142,30 +150,30 @@ class _SummaryScreenState extends State<SummaryScreen> {
             ],
           ),
         ),
-        space(32),
+        space(24),
         SliverToBoxAdapter(
           child: Divider(),
         ),
-        space(32),
+        space(24),
         SliverToBoxAdapter(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "Payment",
-                  style: mainTextStyle.copyWith(fontSize: 24),
+                  style: mainTextStyle.copyWith(fontSize: 20),
                 ),
               ),
               const SizedBox(
                 height: 16,
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "Cash on Delivery",
-                  style: subTextStyle.copyWith(fontSize: 18),
+                  style: subTextStyle.copyWith(fontSize: 16),
                 ),
               ),
               const SizedBox(
@@ -177,7 +185,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   },
                   child: Text(
                     "Change",
-                    style: subTextStyle.copyWith(color: redColor, fontSize: 18),
+                    style: subTextStyle.copyWith(
+                        color: redColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400),
                   ))
             ],
           ),
@@ -200,8 +211,8 @@ class _SummaryScreenState extends State<SummaryScreen> {
       child: Container(
         padding: isFirst
             ? EdgeInsets.only(
-                left: AppPreference.appLanguage == "en" ? 24 : 0,
-                right: AppPreference.appLanguage == "en" ? 0 : 24)
+                left: AppPreference.appLanguage == "en" ? 16 : 12,
+                right: AppPreference.appLanguage == "en" ? 12 : 16)
             : EdgeInsets.symmetric(horizontal: 12),
         width: ((MediaQuery.of(context).size.width - 48) / 2),
         child: Column(
@@ -223,9 +234,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
             ),
             AutoSizeText(
               product.title,
-              maxFontSize: 18,
+              maxFontSize: 16,
               minFontSize: 12,
-              style: mainTextStyle,
+              style: mainTextStyle.copyWith(
+                  fontWeight: FontWeight.w400, fontSize: 16),
               maxLines: 1,
             ),
             const SizedBox(
@@ -234,7 +246,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
             Text(
               product.price,
               style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+                  color: redColor, fontWeight: FontWeight.w400, fontSize: 16),
             ),
           ],
         ),

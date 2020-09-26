@@ -3,6 +3,7 @@ import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_xlider/flutter_xlider.dart';
 
 class FilterScreen extends StatefulWidget {
   @override
@@ -25,6 +26,7 @@ class _FilterScreenState extends State<FilterScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
+        centerTitle: true,
         title: Text("Filter"),
         leading: IconButton(
             icon: Icon(Icons.keyboard_arrow_down),
@@ -63,15 +65,20 @@ class _FilterScreenState extends State<FilterScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: OutlineButton(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                color: redColor,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "CANCEL",
-                  style: subTextStyle.copyWith(color: redColor),
+              child: Container(
+                height: 50,
+                child: OutlineButton(
+                  highlightedBorderColor: redColor,
+                  highlightColor: whiteColor,
+                  color: redColor,
+                  borderSide: BorderSide(color: redColor),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "CANCEL",
+                    style: subTextStyle.copyWith(color: blackColor),
+                  ),
                 ),
               ),
             ),
@@ -79,15 +86,18 @@ class _FilterScreenState extends State<FilterScreen> {
               width: 16,
             ),
             Expanded(
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                color: redColor,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "APPLY",
-                  style: subTextStyle.copyWith(color: whiteColor),
+              child: Container(
+                height: 50,
+                child: RaisedButton(
+                  elevation: 0,
+                  color: redColor,
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "APPLY",
+                    style: subTextStyle.copyWith(color: whiteColor),
+                  ),
                 ),
               ),
             )
@@ -97,6 +107,10 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
+  double _lowerValue = 20.0;
+  double _upperValue = 80.0;
+  double _lowerValueFormatter = 20.0;
+  double _upperValueFormatter = 20.0;
   Widget body(BuildContext context) {
     return ListView(
       physics: BouncingScrollPhysics(),
@@ -104,62 +118,322 @@ class _FilterScreenState extends State<FilterScreen> {
         ExpansionTile(
           title: Text(
             "Popularity",
-            style: mainTextStyle,
+            style: mainTextStyle.copyWith(
+                fontWeight: FontWeight.w400, fontSize: 18),
           ),
           subtitle: Text(
             "No Settings",
-            style: subTextStyle,
+            style: subTextStyle.copyWith(fontSize: 12),
           ),
+          children: [
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              spacing: 16,
+              children: [
+                Chip(
+                  label: Text("data 1"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("data 2"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("data 3"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("data 4"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            )
+          ],
         ),
         ExpansionTile(
           title: Text(
             "Brands",
-            style: mainTextStyle,
+            style: mainTextStyle.copyWith(
+                fontWeight: FontWeight.w400, fontSize: 18),
           ),
           subtitle: Text(
             "Apple, Samsung, Huawei ,B&o",
-            style: subTextStyle,
+            style: subTextStyle.copyWith(fontSize: 12),
           ),
+          children: [
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              spacing: 16,
+              children: [
+                Chip(
+                  label: Text("Apple"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("Samsung"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("Huawei"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("B&o"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            )
+          ],
         ),
         ExpansionTile(
           title: Text(
             "Price",
-            style: mainTextStyle,
+            style: mainTextStyle.copyWith(
+                fontWeight: FontWeight.w400, fontSize: 18),
           ),
           subtitle: Text(
-            "30 - 120",
-            style: subTextStyle,
+            "$_lowerValue - $_upperValue",
+            style: subTextStyle.copyWith(fontSize: 12),
           ),
+          children: [
+            const SizedBox(
+              height: 48,
+            ),
+            FlutterSlider(
+              min: 0.0,
+              max: 200.0,
+              rangeSlider: true,
+              tooltip: FlutterSliderTooltip(
+                  format: (String value) {
+                    return value + ' \$ ';
+                  },
+                  alwaysShowTooltip: true,
+                  positionOffset: FlutterSliderTooltipPositionOffset(top: -20),
+                  textStyle: TextStyle(fontSize: 12, color: Colors.white),
+                  boxStyle: FlutterSliderTooltipBox(
+                      decoration: BoxDecoration(
+                          color: redColor,
+                          borderRadius: BorderRadius.circular(4)))),
+              trackBar: FlutterSliderTrackBar(
+                inactiveTrackBar: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  color: Color(0xFFBDC4CC).withOpacity(0.14),
+                ),
+                activeTrackBar: BoxDecoration(
+                  borderRadius: BorderRadius.circular(4),
+                  color: Color(0xFFBDC4CC).withOpacity(0.14),
+                ),
+              ),
+              rightHandler: FlutterSliderHandler(
+                decoration: BoxDecoration(
+                    color: whiteColor,
+                    border: Border.all(color: redColor, width: 1),
+                    borderRadius: BorderRadius.circular(28)),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Material(
+                      type: MaterialType.canvas,
+                      color: redColor,
+                      shape: CircleBorder(),
+                      elevation: 3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: redColor,
+                            borderRadius: BorderRadius.circular(28)),
+                      )),
+                ),
+              ),
+              handler: FlutterSliderHandler(
+                decoration: BoxDecoration(
+                    color: whiteColor,
+                    border: Border.all(color: redColor, width: 1),
+                    borderRadius: BorderRadius.circular(28)),
+                child: Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: Material(
+                      type: MaterialType.canvas,
+                      color: redColor,
+                      shape: CircleBorder(),
+                      elevation: 3,
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: redColor,
+                            borderRadius: BorderRadius.circular(28)),
+                      )),
+                ),
+              ),
+              values: [_lowerValue, _upperValue],
+              onDragging: (handlerIndex, lowerValue, upperValue) {
+                setState(() {
+                  _lowerValue = lowerValue;
+                  _upperValue = upperValue;
+                });
+              },
+            ),
+            const SizedBox(
+              height: 24,
+            )
+          ],
         ),
         ExpansionTile(
           title: Text(
             "Color",
-            style: mainTextStyle,
+            style: mainTextStyle.copyWith(
+                fontWeight: FontWeight.w400, fontSize: 18),
           ),
           subtitle: Text(
             "No Settings",
-            style: subTextStyle,
+            style: subTextStyle.copyWith(fontSize: 12),
           ),
+          children: [
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 24,
+              runSpacing: 2,
+              children: [
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xFF33427D)),
+                ),
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xFFFF7A06)),
+                ),
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xFF7D3333)),
+                ),
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color(0xFF7D3378)),
+                ),
+                Container(
+                  width: 35,
+                  height: 35,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8), color: redColor),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            )
+          ],
         ),
         ExpansionTile(
           title: Text(
             "Rating",
-            style: mainTextStyle,
+            style: mainTextStyle.copyWith(
+                fontWeight: FontWeight.w400, fontSize: 18),
           ),
           subtitle: Text(
             "4 Star",
-            style: subTextStyle,
+            style: subTextStyle.copyWith(fontSize: 12),
           ),
+          children: [
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              spacing: 16,
+              children: [
+                Chip(
+                  label: Text("1"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("2"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("3"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("4"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("5"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            )
+          ],
         ),
         ExpansionTile(
           title: Text(
             "Shipping From",
-            style: mainTextStyle,
+            style: mainTextStyle.copyWith(
+                fontWeight: FontWeight.w400, fontSize: 18),
           ),
           subtitle: Text(
             "No Settings",
-            style: subTextStyle,
+            style: subTextStyle.copyWith(fontSize: 12),
           ),
+          children: [
+            Wrap(
+              alignment: WrapAlignment.spaceEvenly,
+              spacing: 16,
+              children: [
+                Chip(
+                  label: Text("data 1"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("data 2"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("data 3"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+                Chip(
+                  label: Text("data 4"),
+                  backgroundColor: whiteColor,
+                  elevation: 0.6,
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 12,
+            )
+          ],
         )
       ],
     );

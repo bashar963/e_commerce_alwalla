@@ -80,45 +80,52 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             Expanded(
                 child: _selectedIndex == 0
                     ? const SizedBox()
-                    : OutlineButton(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                        color: redColor,
-                        onPressed: () {
-                          setState(() {
-                            if (_selectedIndex > 0) {
-                              _selectedIndex--;
-                            }
-                          });
-                        },
-                        child: Text(
-                          "BACK",
-                          style: subTextStyle.copyWith(color: redColor),
+                    : Container(
+                        height: 50,
+                        child: OutlineButton(
+                          highlightedBorderColor: redColor,
+                          highlightColor: whiteColor,
+                          color: redColor,
+                          borderSide: BorderSide(color: redColor),
+                          onPressed: () {
+                            setState(() {
+                              if (_selectedIndex > 0) {
+                                _selectedIndex--;
+                              }
+                            });
+                          },
+                          child: Text(
+                            "BACK",
+                            style: subTextStyle.copyWith(color: blackColor),
+                          ),
                         ),
                       )),
             const SizedBox(
               width: 24,
             ),
             Expanded(
-                child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              color: redColor,
-              onPressed: () async {
-                if (_selectedIndex < 2) {
-                  setState(() {
-                    _selectedIndex++;
-                  });
-                } else {
-                  int index = await Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => SummaryScreen()));
-                  setState(() {
-                    _selectedIndex = index ?? 2;
-                  });
-                }
-              },
-              child: Text(
-                "NEXT",
-                style: subTextStyle.copyWith(color: whiteColor),
+                child: Container(
+              height: 50,
+              child: RaisedButton(
+                elevation: 0,
+                color: redColor,
+                onPressed: () async {
+                  if (_selectedIndex < 2) {
+                    setState(() {
+                      _selectedIndex++;
+                    });
+                  } else {
+                    int index = await Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => SummaryScreen()));
+                    setState(() {
+                      _selectedIndex = index ?? 2;
+                    });
+                  }
+                },
+                child: Text(
+                  "NEXT",
+                  style: subTextStyle.copyWith(color: whiteColor),
+                ),
               ),
             ))
           ],
@@ -421,7 +428,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   keyboardType: TextInputType.datetime,
                   cursorWidth: 1,
                   autofocus: false,
-                  maxLength: 5,
                   style: TextStyle(
                       color: mainTextColor,
                       fontWeight: FontWeight.w600,
@@ -442,7 +448,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: TextFormField(
                   controller: _cvvController,
                   keyboardType: TextInputType.number,
-                  maxLength: 4,
                   cursorWidth: 1,
                   autofocus: false,
                   style: TextStyle(

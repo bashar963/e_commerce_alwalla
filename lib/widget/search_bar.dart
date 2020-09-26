@@ -1,5 +1,6 @@
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchBar extends StatelessWidget {
   final TextEditingController textController;
@@ -33,8 +34,9 @@ class SearchBar extends StatelessWidget {
           style: TextStyle(
               color: mainTextColor, fontWeight: FontWeight.w600, fontSize: 16),
           decoration: InputDecoration(
-            icon: Icon(
-              Icons.search,
+            icon: FaIcon(
+              FontAwesomeIcons.search,
+              size: 18,
               color: mainTextColor,
             ),
             suffixIcon: onClose != null

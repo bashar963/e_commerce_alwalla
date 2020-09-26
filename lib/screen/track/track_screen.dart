@@ -2,6 +2,7 @@ import 'package:e_commerce_alwalla/screen/order_history/orders_history_screen.da
 import 'package:e_commerce_alwalla/screen/track/track_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -123,44 +124,64 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
   }
 
   Widget stepItem(Track tracker, isLast) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-            width: 100,
-            child: Text(
-              tracker.date,
-              style: subTextStyle.copyWith(fontSize: 18),
-            )),
-        Column(
-          children: [
-            step(
-                tracker.status != "1",
-                tracker.status == "1"
-                    ? notSelectedIcon()
-                    : tracker.status == "2"
-                        ? doneSelectedIcon()
-                        : selectedIcon()),
-            isLast
-                ? const SizedBox.shrink()
-                : Container(
-                    height: 100,
-                    child: VerticalDivider(
-                      color: tracker.status == "2"
-                          ? redColor
-                          : blackColor.withOpacity(0.1),
-                      thickness: 2,
-                    ))
-          ],
-        ),
-        Container(
-            width: 150,
-            child: Text(
-              tracker.title,
-              style: mainTextStyle,
-            ))
-      ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            tracker.date,
+            style: subTextStyle.copyWith(
+                fontSize: 12, fontWeight: FontWeight.w400),
+          ),
+          const SizedBox(
+            width: 30,
+          ),
+          Column(
+            children: [
+              step(
+                  tracker.status != "1",
+                  tracker.status == "1"
+                      ? notSelectedIcon()
+                      : tracker.status == "2"
+                          ? doneSelectedIcon()
+                          : selectedIcon()),
+              isLast
+                  ? const SizedBox.shrink()
+                  : Container(
+                      height: 100,
+                      child: VerticalDivider(
+                        color: tracker.status == "2"
+                            ? redColor
+                            : blackColor.withOpacity(0.1),
+                        thickness: 2,
+                      ))
+            ],
+          ),
+          const SizedBox(
+            width: 40,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                tracker.title,
+                style: mainTextStyle.copyWith(
+                    fontWeight: FontWeight.w400, fontSize: 18),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                "Lagos State, Nigeria",
+                style: mainTextStyle.copyWith(
+                    fontWeight: FontWeight.w400, fontSize: 12),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

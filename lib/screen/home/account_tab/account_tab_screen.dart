@@ -29,7 +29,7 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => AddressesScreen()));
       }),
-      Setting("assets/icons/fav.svg", "WishList", () {
+      Setting("assets/icons/fav.svg", "Wishlist", () {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => WishListScreen()));
       }),
@@ -101,21 +101,15 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
             height: 8,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             child: Row(
               children: [
                 Material(
                   elevation: 1,
                   shape: CircleBorder(),
                   child: CircleAvatar(
-                    radius: 55,
-                    backgroundColor: whiteColor,
-                    child: Center(
-                      child: Text(
-                        "B",
-                        style: mainTextStyle.copyWith(fontSize: 22),
-                      ),
-                    ),
+                    radius: 60,
+                    backgroundImage: AssetImage("assets/icons/image_.png"),
                   ),
                 ),
                 const SizedBox(
@@ -127,18 +121,18 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
-                      "Bashar alkaddah",
+                      "Mr.Rezk",
                       maxLines: 1,
-                      maxFontSize: 22,
+                      maxFontSize: 26,
                       minFontSize: 16,
                       overflow: TextOverflow.ellipsis,
-                      style: mainTextStyle.copyWith(fontSize: 22),
+                      style: mainTextStyle.copyWith(fontSize: 24),
                     ),
                     const SizedBox(
                       height: 4,
                     ),
                     Text(
-                      "basharqaddah@gmail.com",
+                      "Rezk@gmail.com",
                       style: subTextStyle,
                     ),
                     const SizedBox(

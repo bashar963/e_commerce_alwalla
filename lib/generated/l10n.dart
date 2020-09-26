@@ -103,10 +103,10 @@ class S {
     );
   }
 
-  /// `Sign up`
+  /// `Sign`
   String get sign_up {
     return Intl.message(
-      'Sign up',
+      'Sign',
       name: 'sign_up',
       desc: '',
       args: [],

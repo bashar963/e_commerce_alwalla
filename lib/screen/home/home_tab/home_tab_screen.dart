@@ -118,13 +118,13 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 onComplete: () {}),
           ),
         ),
-        space(32),
+        space(50),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Text(
               S.of(context).categories,
-              style: mainTextStyle.copyWith(fontSize: 24),
+              style: mainTextStyle,
             ),
           ),
         ),
@@ -141,23 +141,28 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             ),
           ),
         ),
-        space(32),
+        space(50),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   S.of(context).best_selling,
-                  style: mainTextStyle.copyWith(fontSize: 24),
+                  style: mainTextStyle.copyWith(fontSize: 18),
                 ),
-                FlatButton(
-                    onPressed: () {},
+                InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8, right: 0, top: 8, bottom: 8),
                     child: Text(
                       S.of(context).see_all,
                       style: mainTextStyle.copyWith(fontSize: 14),
-                    ))
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -165,7 +170,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         space(24),
         SliverToBoxAdapter(
           child: Container(
-            height: 370,
+            height: 340,
             child: ListView.builder(
               itemBuilder: (c, i) => productItem(_products2[i], i == 0),
               itemCount: _products2.length,
@@ -175,29 +180,29 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             ),
           ),
         ),
-        space(12),
+        space(16),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(4),
                 child: Image.asset(
                   "assets/images/promo_image.png",
                   fit: BoxFit.fill,
                 )),
           ),
         ),
-        space(32),
+        space(42),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Text(
               S.of(context).featured_brands,
-              style: mainTextStyle.copyWith(fontSize: 24),
+              style: mainTextStyle.copyWith(fontSize: 18),
             ),
           ),
         ),
-        space(24),
+        space(16),
         SliverToBoxAdapter(
           child: Container(
             height: 100,
@@ -212,21 +217,26 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         ),
         space(32),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   S.of(context).recommended,
-                  style: mainTextStyle.copyWith(fontSize: 24),
+                  style: mainTextStyle.copyWith(fontSize: 18),
                 ),
-                FlatButton(
-                    onPressed: () {},
+                InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8, right: 0, top: 8, bottom: 8),
                     child: Text(
                       S.of(context).see_all,
                       style: mainTextStyle.copyWith(fontSize: 14),
-                    ))
+                    ),
+                  ),
+                )
               ],
             ),
           ),
@@ -262,8 +272,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
       child: Container(
         padding: isFirst
             ? EdgeInsets.only(
-                left: AppPreference.appLanguage == "en" ? 24 : 0,
-                right: AppPreference.appLanguage == "en" ? 0 : 24)
+                left: AppPreference.appLanguage == "en" ? 16 : 12,
+                right: AppPreference.appLanguage == "en" ? 12 : 16)
             : EdgeInsets.symmetric(horizontal: 12),
         width: (MediaQuery.of(context).size.width / 2),
         child: Column(
@@ -272,7 +282,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: SizedBox(
-                    height: 240,
+                    height: 250,
                     child: Hero(
                       tag: "product${product.id}",
                       child: Image.asset(
@@ -285,10 +295,11 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             ),
             Text(
               product.title,
-              style: mainTextStyle,
+              style: mainTextStyle.copyWith(
+                  fontWeight: FontWeight.w600, fontSize: 16),
             ),
             const SizedBox(
-              height: 12,
+              height: 8,
             ),
             Text(
               product.brand,
@@ -300,7 +311,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             Text(
               product.price,
               style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+                  color: redColor, fontWeight: FontWeight.w600, fontSize: 16),
             ),
           ],
         ),
@@ -322,9 +333,19 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Column(
           children: [
-            CircleAvatar(
-              radius: 32,
-              backgroundColor: backgroundColor,
+            Container(
+              width: 60,
+              height: 60,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(30),
+                boxShadow: [
+                  BoxShadow(
+                      color: Color.fromRGBO(36, 36, 36, 0.05),
+                      blurRadius: 20,
+                      offset: Offset(0, 5))
+                ],
+                color: whiteColor,
+              ),
               child: Center(
                 child: SvgPicture.asset(category.image),
               ),
@@ -334,7 +355,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             ),
             Text(
               category.title,
-              style: mainTextStyle.copyWith(fontSize: 12),
+              style: mainTextStyle.copyWith(
+                  fontSize: 12, fontWeight: FontWeight.w400),
             )
           ],
         ),
@@ -362,17 +384,24 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
           ),
         );
       },
-      child: Card(
-          elevation: 1,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8),
+            boxShadow: [
+              BoxShadow(
+                  color: Color.fromRGBO(36, 36, 36, 0.05),
+                  blurRadius: 10,
+                  offset: Offset(0, 5))
+            ],
+            color: whiteColor,
+          ),
           margin: isFirst
               ? EdgeInsets.only(
-                  left: AppPreference.appLanguage == "en" ? 24 : 0,
+                  left: AppPreference.appLanguage == "en" ? 16 : 8,
                   bottom: 12,
                   top: 12,
-                  right: AppPreference.appLanguage == "en" ? 0 : 24)
-              : EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                  right: AppPreference.appLanguage == "en" ? 8 : 16)
+              : EdgeInsets.symmetric(vertical: 16, horizontal: 8),
           child: Container(
             width: MediaQuery.of(context).size.width / 2,
             child: ListTile(

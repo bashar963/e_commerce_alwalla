@@ -2,9 +2,10 @@ import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_read_more_text/flutter_read_more_text.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -18,6 +19,14 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final _productBloc = ProductDetailsBloc();
   bool isFav = false;
+  String readMore = "Read More";
+  String readLess = "Read Less";
+  String buttonText;
+  String desc =
+      "Nike Dri-FIT is a polyester fabric designed to help you keep dry so you can more comfortably";
+  String descFull =
+      "Nike Dri-FIT is a polyester fabric designed to help you keep dry so you can more comfortably work harder, longer.";
+  String descTemp;
   List<Review> _reviews = [
     Review("1", "Samuel Smith", "SS",
         "Wonderful jean, perfect gift for my girl for our anniversary!", 5),
@@ -28,6 +37,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     Review("4", "Beth Aida", "BA",
         "Wonderful jean, perfect gift for my girl for our anniversary!", 2),
   ];
+  @override
+  void initState() {
+    super.initState();
+    descTemp = desc;
+    buttonText = readMore;
+  }
+
   @override
   void dispose() {
     _productBloc.close();
@@ -80,19 +96,23 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   Text(
                     "1500\$",
                     style:
-                        mainTextStyle.copyWith(fontSize: 16, color: redColor),
+                        mainTextStyle.copyWith(fontSize: 18, color: redColor),
                   ),
                 ],
               ),
             ),
             Expanded(
-                child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              color: redColor,
-              onPressed: () {},
-              child: Text(
-                "ADD TO CART",
-                style: subTextStyle.copyWith(color: whiteColor),
+                child: Container(
+              height: 50,
+              child: RaisedButton(
+                elevation: 0,
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                color: redColor,
+                onPressed: () {},
+                child: Text(
+                  "ADD",
+                  style: subTextStyle.copyWith(color: whiteColor),
+                ),
               ),
             ))
           ],
@@ -145,10 +165,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ),
         ),
-        space(32),
+        space(24),
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               "Nike Dri-FIT Long Sleeve",
               style: mainTextStyle.copyWith(fontSize: 24),
@@ -157,13 +177,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         space(24),
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Row(
               children: [
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
                     decoration: BoxDecoration(
                         border: Border.all(color: lightGrey),
                         borderRadius: BorderRadius.circular(24)),
@@ -180,7 +200,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
                     decoration: BoxDecoration(
                         border: Border.all(color: lightGrey),
                         borderRadius: BorderRadius.circular(24)),
@@ -197,19 +217,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
                     decoration: BoxDecoration(
                         border: Border.all(color: lightGrey),
                         borderRadius: BorderRadius.circular(24)),
-                    child: Row(
-                      children: [
-                        Center(
-                          child: Text(
-                            "Color",
-                            style: subTextStyle,
-                          ),
-                        ),
-                      ],
+                    child: Center(
+                      child: Text(
+                        "Colours",
+                        style: subTextStyle,
+                      ),
                     ),
                   ),
                 )
@@ -219,7 +235,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         space(12),
         SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Row(
               children: [
@@ -259,22 +275,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     spacing: 2,
                     runSpacing: 2,
                     children: [
-                      CircleAvatar(
-                        radius: 9,
-                        backgroundColor: Color(0xFF33427D),
+                      Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFF33427D)),
                       ),
-                      CircleAvatar(
-                        radius: 9,
-                        backgroundColor: redColor,
+                      Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFFFF7A06)),
                       ),
-                      CircleAvatar(
-                        radius: 9,
-                        backgroundColor: greenColor,
+                      Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFF7D3333)),
                       ),
-                      CircleAvatar(
-                        radius: 9,
-                        backgroundColor: orangeColor,
-                      )
+                      Container(
+                        width: 22,
+                        height: 22,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: Color(0xFF7D3378)),
+                      ),
                     ],
                   ),
                 )
@@ -284,50 +312,83 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         space(24),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Text(
               "Details",
-              style: mainTextStyle.copyWith(fontSize: 24),
+              style: mainTextStyle.copyWith(fontSize: 20),
             ),
           ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
-            child: ReadMoreText(
-              "Nike Dri-FIT is a polyester fabric designed to help you keep dry so you can more comfortably work harder, longer.",
-              expandingButtonColor: redColor,
+            child: Text(
+              descTemp,
+              style: mainTextStyle.copyWith(
+                  fontSize: 14, fontWeight: FontWeight.w400, height: 2),
             ),
           ),
         ),
-        space(24),
+        space(4),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          sliver: SliverToBoxAdapter(
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  if (buttonText == readMore) {
+                    buttonText = readLess;
+                    descTemp = descFull;
+                  } else {
+                    buttonText = readMore;
+                    descTemp = desc;
+                  }
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  buttonText,
+                  style: mainTextStyle.copyWith(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w300,
+                      color: redColor),
+                ),
+              ),
+            ),
+          ),
+        ),
+        space(16),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Text(
               "Reviews",
-              style: mainTextStyle.copyWith(fontSize: 24),
+              style: mainTextStyle.copyWith(fontSize: 20),
             ),
           ),
         ),
+        space(12),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
-              child: FlatButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Write your review",
-                    style: subTextStyle.copyWith(color: redColor),
-                  ))),
+              child: Text(
+            "Write your review",
+            style: subTextStyle.copyWith(color: redColor),
+          )),
         ),
-        SliverToBoxAdapter(
-          child: ListView.builder(
-            itemBuilder: (c, i) => reviewItem(_reviews[i]),
-            itemCount: _reviews.length,
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+        space(12),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          sliver: SliverToBoxAdapter(
+            child: ListView.builder(
+              itemBuilder: (c, i) => reviewItem(_reviews[i]),
+              itemCount: _reviews.length,
+              padding: EdgeInsets.zero,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+            ),
           ),
         )
       ],
@@ -344,35 +405,55 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   Widget reviewItem(Review review) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: ListTile(
-        leading: CircleAvatar(
-          backgroundColor: backgroundColor,
-          child: Center(
-            child: Text(
-              review.image,
-              style: mainTextStyle.copyWith(fontSize: 12),
-            ),
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        children: [
+          CircleAvatar(
+            radius: 26,
+            backgroundImage: AssetImage("assets/icons/image_.png"),
           ),
-        ),
-        title: Text(
-          review.name,
-          style: mainTextStyle,
-        ),
-        subtitle: Text(
-          review.text,
-          style: subTextStyle,
-        ),
-        trailing: SmoothStarRating(
-            allowHalfRating: false,
-            onRated: (v) {},
-            starCount: 5,
-            rating: review.stars.toDouble(),
-            size: 12.0,
-            isReadOnly: true,
-            color: orangeColor,
-            borderColor: orangeColor,
-            spacing: 0.0),
+          const SizedBox(
+            width: 26,
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      review.name,
+                      style: mainTextStyle.copyWith(fontSize: 14),
+                    ),
+                    Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: SmoothStarRating(
+                          allowHalfRating: false,
+                          onRated: (v) {},
+                          starCount: 5,
+                          rating: review.stars.toDouble(),
+                          defaultIconData: null,
+                          filledIconData: FontAwesomeIcons.solidStar,
+                          size: 14.0,
+                          isReadOnly: true,
+                          color: Color(0xFFEBE300),
+                          borderColor: Color(0xFFEBE300),
+                          spacing: 4.0),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Text(
+                  review.text,
+                  style: subTextStyle.copyWith(height: 1.5),
+                )
+              ],
+            ),
+          )
+        ],
       ),
     );
   }

@@ -34,6 +34,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
         elevation: 0,
         brightness: Brightness.light,
         title: Text("Shipping Address"),
+        centerTitle: true,
         backgroundColor: whiteColor,
       ),
       body: BlocProvider(
@@ -73,13 +74,16 @@ class _AddressesScreenState extends State<AddressesScreen> {
               width: 16,
             ),
             Expanded(
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                color: redColor,
-                onPressed: () {},
-                child: Text(
-                  "NEW",
-                  style: subTextStyle.copyWith(color: whiteColor),
+              child: Container(
+                height: 50,
+                child: RaisedButton(
+                  elevation: 0,
+                  color: redColor,
+                  onPressed: () {},
+                  child: Text(
+                    "NEW",
+                    style: subTextStyle.copyWith(color: whiteColor),
+                  ),
                 ),
               ),
             )
@@ -101,7 +105,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       title: Text(
-        address.title,
+        address.title + "\n",
         style: mainTextStyle,
       ),
       subtitle: Text(

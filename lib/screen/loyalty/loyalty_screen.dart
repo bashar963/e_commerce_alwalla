@@ -72,7 +72,7 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
       children: [
         Container(
           width: double.infinity,
-          height: 220,
+          height: 180,
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("assets/icons/bg.png"), fit: BoxFit.fill)),
@@ -80,6 +80,7 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
             child: Row(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SvgPicture.asset(
                   "assets/icons/wallaa_2.svg",
@@ -97,7 +98,8 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
                         children: [
                           TextSpan(
                               text: " pts",
-                              style: mainTextStyle.copyWith(fontSize: 22))
+                              style: mainTextStyle.copyWith(
+                                  fontSize: 22, fontWeight: FontWeight.w400))
                         ]))),
                 const SizedBox(
                   width: 2,
@@ -141,15 +143,14 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
         const SizedBox(
           height: 12,
         ),
-        Divider(),
-        const SizedBox(
-          height: 12,
+        Container(
+          height: 1,
+          color: Color(0xFfF0F0F0),
         ),
         Expanded(
-            child: ListView.separated(
+            child: ListView.builder(
           padding: EdgeInsets.zero,
           itemBuilder: (c, i) => rewardItem(_rewards[i]),
-          separatorBuilder: (c, i) => Divider(),
           itemCount: _rewards.length,
           physics: BouncingScrollPhysics(),
           shrinkWrap: true,
@@ -159,34 +160,42 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
   }
 
   Widget rewardItem(Reward reward) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 8),
-      color: reward.isSelected ? redColor.withOpacity(0.1) : whiteColor,
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              reward.level,
-              textAlign: TextAlign.center,
-              style: mainTextStyle.copyWith(fontSize: 16),
-            ),
+    return Column(
+      children: [
+        Container(
+          height: 50,
+          color: reward.isSelected ? redColor.withOpacity(0.1) : whiteColor,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  reward.level,
+                  textAlign: TextAlign.center,
+                  style: mainTextStyle.copyWith(fontSize: 16),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  reward.points,
+                  textAlign: TextAlign.center,
+                  style: mainTextStyle.copyWith(fontSize: 16),
+                ),
+              ),
+              Expanded(
+                child: Text(
+                  reward.reward,
+                  textAlign: TextAlign.center,
+                  style: mainTextStyle.copyWith(fontSize: 16),
+                ),
+              )
+            ],
           ),
-          Expanded(
-            child: Text(
-              reward.points,
-              textAlign: TextAlign.center,
-              style: mainTextStyle.copyWith(fontSize: 16),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              reward.reward,
-              textAlign: TextAlign.center,
-              style: mainTextStyle.copyWith(fontSize: 16),
-            ),
-          )
-        ],
-      ),
+        ),
+        Container(
+          height: 1,
+          color: Color(0xFfF0F0F0),
+        ),
+      ],
     );
   }
 }

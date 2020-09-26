@@ -34,6 +34,7 @@ class _CardsScreenState extends State<CardsScreen> {
         elevation: 0,
         backgroundColor: whiteColor,
         title: Text("Cards"),
+        centerTitle: true,
       ),
       body: BlocProvider(
         create: (BuildContext context) {
@@ -72,16 +73,19 @@ class _CardsScreenState extends State<CardsScreen> {
               width: 16,
             ),
             Expanded(
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                color: redColor,
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => AddEditCardScreen()));
-                },
-                child: Text(
-                  "NEW",
-                  style: subTextStyle.copyWith(color: whiteColor),
+              child: Container(
+                height: 50,
+                child: RaisedButton(
+                  elevation: 0,
+                  color: redColor,
+                  onPressed: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (c) => AddEditCardScreen()));
+                  },
+                  child: Text(
+                    "NEW",
+                    style: subTextStyle.copyWith(color: whiteColor),
+                  ),
                 ),
               ),
             )
@@ -146,7 +150,9 @@ class _CardsScreenState extends State<CardsScreen> {
                 card.number,
                 maxLines: 1,
                 style: mainTextStyle.copyWith(
-                    color: whiteColor, fontSize: 20, letterSpacing: 3),
+                    color: whiteColor,
+                    fontSize: 20,
+                    wordSpacing: MediaQuery.of(context).size.width / 9),
               ),
               const SizedBox(
                 height: 24,
@@ -159,7 +165,8 @@ class _CardsScreenState extends State<CardsScreen> {
                     children: [
                       Text(
                         "Card Holder",
-                        style: subTextStyle.copyWith(color: whiteColor),
+                        style: subTextStyle.copyWith(
+                            color: whiteColor, fontSize: 12),
                       ),
                       const SizedBox(
                         height: 2,
@@ -175,7 +182,8 @@ class _CardsScreenState extends State<CardsScreen> {
                     children: [
                       Text(
                         "Expiry",
-                        style: subTextStyle.copyWith(color: whiteColor),
+                        style: subTextStyle.copyWith(
+                            color: whiteColor, fontSize: 12),
                       ),
                       const SizedBox(
                         height: 2,

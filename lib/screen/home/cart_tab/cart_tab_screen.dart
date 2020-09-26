@@ -2,9 +2,11 @@ import 'package:e_commerce_alwalla/screen/checkout/checkout_screen.dart';
 import 'package:e_commerce_alwalla/screen/home/cart_tab/cart_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slide_item/slide_item.dart';
 
 class CartTabScreen extends StatefulWidget {
@@ -70,7 +72,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
         ),
       ),
       bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
         color: whiteColor,
         child: Row(
           children: [
@@ -81,31 +83,37 @@ class _CartTabScreenState extends State<CartTabScreen> {
                 children: [
                   Text(
                     "TOTAL",
-                    style: mainTextStyle.copyWith(color: subTextColor),
+                    style: subTextStyle,
+                  ),
+                  const SizedBox(
+                    height: 4,
                   ),
                   Text(
                     "3500\$",
                     style:
-                        mainTextStyle.copyWith(fontSize: 16, color: redColor),
+                        mainTextStyle.copyWith(fontSize: 18, color: redColor),
                   ),
                 ],
               ),
             ),
             Expanded(
-                child: RaisedButton(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-              color: redColor,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (c) => CheckoutScreen(),
-                  ),
-                );
-              },
-              child: Text(
-                "CHECKOUT",
-                style: subTextStyle.copyWith(color: whiteColor),
+                child: Container(
+              height: 50,
+              child: RaisedButton(
+                elevation: 0,
+                color: redColor,
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (c) => CheckoutScreen(),
+                    ),
+                  );
+                },
+                child: Text(
+                  "CHECKOUT",
+                  style: subTextStyle.copyWith(color: whiteColor),
+                ),
               ),
             ))
           ],
@@ -136,7 +144,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
                       backgroundColor: whiteColor),
                   child: ListView.builder(
                     itemBuilder: (c, i) => Padding(
-                      padding: EdgeInsets.only(top: 24),
+                      padding: EdgeInsets.only(top: 16),
                       child: item(cart.items[i], i),
                     ),
                     itemCount: cart.items.length,
@@ -151,7 +159,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
         ),
         space(24),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Column(
               children: [
@@ -159,7 +167,8 @@ class _CartTabScreenState extends State<CartTabScreen> {
                   children: [
                     Text(
                       "SubTotal",
-                      style: subTextStyle.copyWith(fontSize: 16),
+                      style: mainTextStyle.copyWith(
+                          fontSize: 16, fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(
                       width: 12,
@@ -189,7 +198,8 @@ class _CartTabScreenState extends State<CartTabScreen> {
                   children: [
                     Text(
                       "TAX",
-                      style: subTextStyle.copyWith(fontSize: 16),
+                      style: mainTextStyle.copyWith(
+                          fontSize: 16, fontWeight: FontWeight.w400),
                     ),
                     const SizedBox(
                       width: 12,
@@ -222,7 +232,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
         ),
         space(24),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -324,7 +334,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
               })
         ],
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
               ClipRRect(
@@ -337,7 +347,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
                 ),
               ),
               const SizedBox(
-                width: 16,
+                width: 24,
               ),
               Expanded(
                   child: Column(
@@ -346,24 +356,30 @@ class _CartTabScreenState extends State<CartTabScreen> {
                 children: [
                   Text(
                     item.title,
-                    style: mainTextStyle,
+                    style: mainTextStyle.copyWith(
+                        fontSize: 16, fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 8,
                   ),
                   Text(
                     item.total + "\$",
-                    style: mainTextStyle.copyWith(color: redColor),
+                    style: mainTextStyle.copyWith(
+                        color: redColor,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: 16,
                   ),
                   Container(
+                      width: 95,
+                      height: 30,
                       decoration: BoxDecoration(
                           color: Color.fromRGBO(0, 0, 0, 0.06),
-                          borderRadius: BorderRadius.circular(3)),
+                          borderRadius: BorderRadius.circular(4)),
                       child: Row(
-                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           GestureDetector(
                             onTap: () {
@@ -374,7 +390,8 @@ class _CartTabScreenState extends State<CartTabScreen> {
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: Icon(
-                                Icons.add,
+                                FontAwesomeIcons.plus,
+                                size: 10,
                                 color: Color(0xBB343434),
                               ),
                             ),
@@ -384,7 +401,9 @@ class _CartTabScreenState extends State<CartTabScreen> {
                             child: Text(
                               item.quantity.toString(),
                               style: mainTextStyle.copyWith(
-                                color: Color(0xBB343434),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                                color: blackColor,
                               ),
                             ),
                           ),
@@ -401,7 +420,8 @@ class _CartTabScreenState extends State<CartTabScreen> {
                             child: Padding(
                               padding: const EdgeInsets.all(6.0),
                               child: Icon(
-                                Icons.remove,
+                                FontAwesomeIcons.minus,
+                                size: 10,
                                 color: Color(0xBB343434),
                               ),
                             ),

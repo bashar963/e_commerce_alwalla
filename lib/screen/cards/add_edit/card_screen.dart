@@ -45,6 +45,7 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: whiteColor,
+        centerTitle: true,
         title: Text("Edit/Add Cards"),
       ),
       body: BlocProvider(
@@ -78,15 +79,20 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
-              child: OutlineButton(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                color: redColor,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "CANCEL",
-                  style: subTextStyle.copyWith(color: redColor),
+              child: Container(
+                height: 50,
+                child: OutlineButton(
+                  highlightedBorderColor: redColor,
+                  highlightColor: whiteColor,
+                  color: redColor,
+                  borderSide: BorderSide(color: redColor),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "CANCEL",
+                    style: subTextStyle.copyWith(color: blackColor),
+                  ),
                 ),
               ),
             ),
@@ -94,13 +100,16 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
               width: 16,
             ),
             Expanded(
-              child: RaisedButton(
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                color: redColor,
-                onPressed: () {},
-                child: Text(
-                  "SAVE",
-                  style: subTextStyle.copyWith(color: whiteColor),
+              child: Container(
+                height: 50,
+                child: RaisedButton(
+                  elevation: 0,
+                  color: redColor,
+                  onPressed: () {},
+                  child: Text(
+                    "SAVE",
+                    style: subTextStyle.copyWith(color: whiteColor),
+                  ),
                 ),
               ),
             )
@@ -160,7 +169,9 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
                         : _numberController.text,
                     maxLines: 1,
                     style: mainTextStyle.copyWith(
-                        color: whiteColor, fontSize: 20, letterSpacing: 3),
+                        color: whiteColor,
+                        fontSize: 20,
+                        wordSpacing: MediaQuery.of(context).size.width / 9),
                   ),
                   const SizedBox(
                     height: 24,
@@ -173,7 +184,8 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
                         children: [
                           Text(
                             "Card Holder",
-                            style: subTextStyle.copyWith(color: whiteColor),
+                            style: subTextStyle.copyWith(
+                                color: whiteColor, fontSize: 12),
                           ),
                           const SizedBox(
                             height: 2,
@@ -191,7 +203,8 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
                         children: [
                           Text(
                             "Expiry",
-                            style: subTextStyle.copyWith(color: whiteColor),
+                            style: subTextStyle.copyWith(
+                                color: whiteColor, fontSize: 12),
                           ),
                           const SizedBox(
                             height: 2,
@@ -271,7 +284,6 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
                   keyboardType: TextInputType.datetime,
                   cursorWidth: 1,
                   autofocus: false,
-                  maxLength: 5,
                   style: TextStyle(
                       color: mainTextColor,
                       fontWeight: FontWeight.w600,
@@ -292,7 +304,6 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
                     child: TextFormField(
                   controller: _cvvController,
                   keyboardType: TextInputType.number,
-                  maxLength: 4,
                   cursorWidth: 1,
                   autofocus: false,
                   style: TextStyle(

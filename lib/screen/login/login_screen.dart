@@ -72,25 +72,26 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 32,
             ),
             Card(
-              margin: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+              margin: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
               color: whiteColor,
-              elevation: 2,
+              elevation: 0.4,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               S.of(context).welcome,
-                              style: mainTextStyle.copyWith(fontSize: 24),
+                              style: mainTextStyle.copyWith(fontSize: 30),
                             ),
                             const SizedBox(
                               height: 6,
@@ -101,22 +102,26 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ],
                         ),
-                        FlatButton(
-                          onPressed: () {
+                        InkWell(
+                          onTap: () {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (c) => SignUpScreen()));
                           },
-                          child: Text(
-                            S.of(context).sign_up,
-                            style: subTextStyle.copyWith(color: redColor),
+                          child: Padding(
+                            padding: EdgeInsets.only(top: 8, left: 8),
+                            child: Text(
+                              S.of(context).sign_up,
+                              style: subTextStyle.copyWith(
+                                  color: redColor, fontSize: 18),
+                            ),
                           ),
                         )
                       ],
                     ),
                     const SizedBox(
-                      height: 12,
+                      height: 48,
                     ),
                     TextFormField(
                       controller: _emailController,
@@ -145,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 12,
+                      height: 32,
                     ),
                     TextFormField(
                       controller: _passwordController,
@@ -173,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     const SizedBox(
-                      height: 6,
+                      height: 20,
                     ),
                     Align(
                       alignment: AppPreference.appLanguage == "en"
@@ -181,27 +186,32 @@ class _LoginScreenState extends State<LoginScreen> {
                           : Alignment.centerLeft,
                       child: FlatButton(
                           onPressed: () {},
+                          padding: EdgeInsets.only(left: 8),
                           child: Text(S.of(context).forgot_password)),
                     ),
                     const SizedBox(
-                      height: 12,
+                      height: 20,
                     ),
-                    RaisedButton(
-                      onPressed: () {
-                        Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    HomeScreen()),
-                            ModalRoute.withName('/home'));
-                      },
-                      padding:
-                          EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                      color: redColor,
-                      child: Text(
-                        S.of(context).sign_in,
-                        style: subTextStyle.copyWith(
-                            color: whiteColor, fontWeight: FontWeight.w800),
+                    Container(
+                      height: 50,
+                      child: RaisedButton(
+                        elevation: 0,
+                        onPressed: () {
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      HomeScreen()),
+                              ModalRoute.withName('/home'));
+                        },
+                        color: redColor,
+                        child: Text(
+                          S.of(context).sign_in,
+                          style: subTextStyle.copyWith(
+                              color: whiteColor,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14),
+                        ),
                       ),
                     )
                   ],
@@ -209,7 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(
-              height: 18,
+              height: 28,
             ),
             Text(
               S.of(context).or,
@@ -217,36 +227,60 @@ class _LoginScreenState extends State<LoginScreen> {
               style: TextStyle(
                   color: mainTextColor,
                   fontSize: 18,
-                  fontWeight: FontWeight.w800),
+                  fontWeight: FontWeight.w400),
             ),
             const SizedBox(
-              height: 18,
+              height: 42,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: OutlineButton.icon(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: 50,
+              child: OutlineButton(
                   onPressed: () {},
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                  icon: SvgPicture.asset("assets/icons/Icon_facebook.svg"),
-                  label: Text(
-                    S.of(context).sign_in_facebook,
-                    style: subTextStyle.copyWith(
-                        color: mainTextColor, fontSize: 16),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      SvgPicture.asset("assets/icons/Icon_facebook.svg"),
+                      Expanded(
+                        child: Text(
+                          S.of(context).sign_in_facebook,
+                          textAlign: TextAlign.center,
+                          style: subTextStyle.copyWith(
+                              color: mainTextColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ],
                   )),
             ),
             const SizedBox(
-              height: 12,
+              height: 24,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: OutlineButton.icon(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              height: 50,
+              child: OutlineButton(
                   onPressed: () {},
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                  icon: SvgPicture.asset("assets/icons/icons_google.svg"),
-                  label: Text(
-                    S.of(context).sign_in_google,
-                    style: subTextStyle.copyWith(
-                        color: mainTextColor, fontSize: 16),
+                  child: Row(
+                    children: [
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      SvgPicture.asset("assets/icons/icons_google.svg"),
+                      Expanded(
+                        child: Text(
+                          S.of(context).sign_in_google,
+                          textAlign: TextAlign.center,
+                          style: subTextStyle.copyWith(
+                              color: mainTextColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400),
+                        ),
+                      ),
+                    ],
                   )),
             ),
             const SizedBox(
