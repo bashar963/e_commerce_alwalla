@@ -1,11 +1,10 @@
+import 'package:e_commerce_alwalla/controller/card_controller.dart';
 import 'package:e_commerce_alwalla/screen/cards/cards_screen.dart' as car;
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import 'card_bloc.dart';
+import 'package:get/get.dart';
 
 class AddEditCardScreen extends StatefulWidget {
   final car.Card card;
@@ -16,7 +15,7 @@ class AddEditCardScreen extends StatefulWidget {
 }
 
 class _AddEditCardScreenState extends State<AddEditCardScreen> {
-  final _cardBloc = CardBloc();
+  final _cardsController = Get.put(CardController());
   final _numberController = TextEditingController();
   final _nameController = TextEditingController();
   final _expController = TextEditingController();
@@ -33,12 +32,6 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
   }
 
   @override
-  void dispose() {
-    _cardBloc.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
@@ -48,30 +41,11 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
         centerTitle: true,
         title: Text("Edit/Add Cards"),
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _cardBloc;
-        },
-        child: BlocListener(
-          cubit: _cardBloc,
-          listener: (c, CardState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _cardBloc,
-              builder: (c, CardState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: whiteColor,
@@ -144,7 +118,9 @@ class _AddEditCardScreenState extends State<AddEditCardScreen> {
                 borderRadius: BorderRadius.circular(8),
                 gradient: LinearGradient(
                     colors: widget.card != null
-                        ? widget.card.type == "visa" ? _visa : _master
+                        ? widget.card.type == "visa"
+                            ? _visa
+                            : _master
                         : _visa,
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight),

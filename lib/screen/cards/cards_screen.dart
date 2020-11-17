@@ -1,9 +1,9 @@
-import 'package:e_commerce_alwalla/screen/cards/cards_bloc.dart';
+import 'package:e_commerce_alwalla/controller/card_controller.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 import 'add_edit/card_screen.dart';
 
@@ -13,18 +13,12 @@ class CardsScreen extends StatefulWidget {
 }
 
 class _CardsScreenState extends State<CardsScreen> {
-  final _cardsBloc = CardsBloc();
+  final _cardsController = Get.put(CardController());
 
   List<Card> _cards = [
     Card("1", "master", "4512 3213 4243 3213", "09 - 24", "bashar alkaddah"),
     Card("2", "visa", "5214 5432 5324 2421", "02 - 23", "bashar alkaddah"),
   ];
-
-  @override
-  void dispose() {
-    _cardsBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,30 +30,11 @@ class _CardsScreenState extends State<CardsScreen> {
         title: Text("Cards"),
         centerTitle: true,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _cardsBloc;
-        },
-        child: BlocListener(
-          cubit: _cardsBloc,
-          listener: (c, CardsState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _cardsBloc,
-              builder: (c, CardsState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: whiteColor,

@@ -2,13 +2,11 @@ import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
-import 'package:e_commerce_alwalla/screen/search/search_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/widget/search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:get/get.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -16,7 +14,6 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final _searchBloc = SearchBloc();
   List<Tag> _tags = [
     Tag("Denim Jeans", "id"),
     Tag("Mini Skirt", "id"),
@@ -38,11 +35,6 @@ class _SearchScreenState extends State<SearchScreen> {
     Product("5", "assets/images/image.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
   ];
-  @override
-  void dispose() {
-    _searchBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,30 +55,11 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _searchBloc;
-        },
-        child: BlocListener(
-          cubit: _searchBloc,
-          listener: (c, SearchState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _searchBloc,
-              builder: (c, SearchState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
     );
   }
 
@@ -153,11 +126,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget productItem(Product product, bool isFirst) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-            context,
-            PageTransition(
-                type: PageTransitionType.downToUp,
-                child: ProductDetailsScreen()));
+        Get.to(ProductDetailsScreen(), transition: Transition.downToUp);
       },
       child: Container(
         padding: isFirst

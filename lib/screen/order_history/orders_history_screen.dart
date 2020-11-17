@@ -1,9 +1,9 @@
-import 'package:e_commerce_alwalla/screen/order_history/orders_bloc.dart';
+import 'package:e_commerce_alwalla/controller/order_controller.dart';
 import 'package:e_commerce_alwalla/screen/track/track_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class OrdersHistory extends StatefulWidget {
   @override
@@ -11,7 +11,7 @@ class OrdersHistory extends StatefulWidget {
 }
 
 class _OrdersHistoryState extends State<OrdersHistory> {
-  final _ordersBloc = OrdersBloc();
+  final _ordersBloc = Get.put(OrderController());
 
   List<OrderSort> _orders = [
     OrderSort([
@@ -40,11 +40,6 @@ class _OrdersHistoryState extends State<OrdersHistory> {
       ]),
     ], "Sept 18, 2020")
   ];
-  @override
-  void dispose() {
-    _ordersBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,30 +52,11 @@ class _OrdersHistoryState extends State<OrdersHistory> {
         centerTitle: true,
         brightness: Brightness.light,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _ordersBloc;
-        },
-        child: BlocListener(
-          cubit: _ordersBloc,
-          listener: (c, OrdersState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _ordersBloc,
-              builder: (c, OrdersState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
     );
   }
 

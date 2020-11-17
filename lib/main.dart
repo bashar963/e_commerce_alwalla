@@ -4,6 +4,7 @@ import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 import 'data/app_preference.dart';
@@ -41,8 +42,9 @@ class _MyAppState extends State<MyApp> {
       ],
       child: Consumer<AppLanguage>(
         builder: (BuildContext context, value, Widget child) {
-          return MaterialApp(
-            title: 'AlWalla App',
+          return GetMaterialApp(
+            title: 'My Mall',
+            defaultTransition: Transition.cupertino,
             localizationsDelegates: [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,

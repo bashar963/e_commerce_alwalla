@@ -1,6 +1,6 @@
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
-import 'package:e_commerce_alwalla/screen/category/category_bloc.dart';
+
 import 'package:e_commerce_alwalla/screen/filter/filter_screen.dart';
 import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
@@ -8,7 +8,6 @@ import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CategoryScreen extends StatefulWidget {
   final Category category;
@@ -21,7 +20,6 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
-  final _categoryBloc = CategoryBloc();
   List<Brand> _brands = [
     Brand("1", "assets/images/bo.png", "B&o", "5693"),
     Brand("2", "assets/images/beats.png", "beats", "1124"),
@@ -66,12 +64,6 @@ class _CategoryScreenState extends State<CategoryScreen>
   }
 
   @override
-  void dispose() {
-    _categoryBloc.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
@@ -84,30 +76,11 @@ class _CategoryScreenState extends State<CategoryScreen>
         ),
         centerTitle: true,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _categoryBloc;
-        },
-        child: BlocListener(
-          cubit: _categoryBloc,
-          listener: (c, CategoryState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _categoryBloc,
-              builder: (c, CategoryState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 16),
         color: whiteColor,

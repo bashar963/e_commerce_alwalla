@@ -1,5 +1,8 @@
+import 'package:e_commerce_alwalla/controller/login_controller.dart';
+import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/screen/login/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -7,14 +10,17 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final _loginController = Get.put(LoginController());
   @override
   void initState() {
     super.initState();
+
     Future.delayed(Duration(seconds: 1), () {
-      Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (BuildContext context) => LoginScreen()),
-          ModalRoute.withName('/login'));
+      if (AppPreference.token != null) {
+        _loginController.loadUserData();
+      } else {
+        Get.offAll(LoginScreen());
+      }
     });
   }
 

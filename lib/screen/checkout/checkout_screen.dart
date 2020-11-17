@@ -1,10 +1,12 @@
-import 'package:e_commerce_alwalla/screen/checkout/checkout_bloc.dart';
+import 'package:e_commerce_alwalla/controller/checkout_controller.dart';
+
 import 'package:e_commerce_alwalla/screen/checkout/summary/summary_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/widget/my_stepper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:get/get.dart';
 
 class CheckoutScreen extends StatefulWidget {
   @override
@@ -12,7 +14,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final _checkoutBloc = CheckoutBloc();
+  final _checkoutBloc = Get.put(CheckoutController());
   int _selectedIndex = 0;
 
   final street1Controller = TextEditingController();
@@ -32,11 +34,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       numberError,
       stateError,
       countryError;
-  @override
-  void dispose() {
-    _checkoutBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,30 +45,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         centerTitle: true,
         elevation: 0,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _checkoutBloc;
-        },
-        child: BlocListener(
-          cubit: _checkoutBloc,
-          listener: (c, CheckoutState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _checkoutBloc,
-              builder: (c, CheckoutState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: whiteColor,

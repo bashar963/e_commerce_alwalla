@@ -1,9 +1,9 @@
-import 'package:e_commerce_alwalla/screen/filter/filter_bloc.dart';
+import 'package:e_commerce_alwalla/controller/filter_controller.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:get/get.dart';
 
 class FilterScreen extends StatefulWidget {
   @override
@@ -11,13 +11,7 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  final _filterBloc = FilterBloc();
-
-  @override
-  void dispose() {
-    _filterBloc.close();
-    super.dispose();
-  }
+  final _filterBloc = Get.put(FilterController());
 
   @override
   Widget build(BuildContext context) {
@@ -34,30 +28,11 @@ class _FilterScreenState extends State<FilterScreen> {
               Navigator.pop(context);
             }),
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _filterBloc;
-        },
-        child: BlocListener(
-          cubit: _filterBloc,
-          listener: (c, FilterState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _filterBloc,
-              builder: (c, FilterState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: whiteColor,

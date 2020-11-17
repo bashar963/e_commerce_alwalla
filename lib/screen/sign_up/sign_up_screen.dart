@@ -1,9 +1,10 @@
+import 'package:e_commerce_alwalla/controller/login_controller.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
-import 'package:e_commerce_alwalla/screen/sign_up/sign_up_bloc.dart';
+import 'package:e_commerce_alwalla/model/singup/sign_up_request.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -11,17 +12,11 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  final _singBloc = SignUpBloc();
+  final LoginController _loginController = Get.find();
   String _emailError, _passwordError, _nameError;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-
-  @override
-  void dispose() {
-    _singBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,29 +24,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         elevation: 0,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _singBloc;
-        },
-        child: BlocListener(
-          cubit: _singBloc,
-          listener: (c, SignUpState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
-          },
-          child: BlocBuilder(
-              cubit: _singBloc,
-              builder: (c, SignUpState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
+      body: Stack(
+        children: [
+          GestureDetector(
+              onTap: () {
+                hideKeyboard(context);
+              },
+              child: body(context)),
+          Obx(() {
+            return _loginController.loading.value
+                ? Center(child: RefreshProgressIndicator())
+                : SizedBox();
+          })
+        ],
       ),
     );
   }
@@ -175,7 +160,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       height: 50,
                       child: RaisedButton(
                         elevation: 0,
-                        onPressed: () {},
+                        onPressed: signUp,
                         color: redColor,
                         child: Text(
                           "SIGN UP",
@@ -195,5 +180,65 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  void signUp() {
+    if (_nameController.text.isEmpty) {
+      setState(() {
+        _nameError = "Required Filed";
+      });
+      return;
+    }
+    String name = _nameController.text;
+    String lastName = "";
+    String firstName = "";
+    if (name.split(" ").length > 1) {
+      lastName = name.substring(name.lastIndexOf(" ") + 1);
+      firstName = name.substring(0, name.lastIndexOf(' '));
+      if (firstName.isEmpty || lastName.isEmpty) {
+        setState(() {
+          _nameError = "يرجى ادخال الاسم الكامل";
+        });
+        return;
+      } else {
+        setState(() {
+          _nameError = null;
+        });
+      }
+    } else {
+      setState(() {
+        _nameError = "يرجى ادخال الاسم الكامل";
+      });
+      return;
+    }
+    if (!_emailController.text.isEmail) {
+      setState(() {
+        _emailError = "Required Filed";
+      });
+      return;
+    }
+
+    if (_passwordController.text.isEmpty) {
+      setState(() {
+        _passwordError = "هذا الحقل مطلوب";
+      });
+      return;
+    }
+    if (!RegExp(
+            r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
+        .hasMatch(_passwordController.text)) {
+      setState(() {
+        _passwordError =
+            "Minimum eight characters, at least one letter, one number and one special character";
+      });
+      return;
+    }
+
+    _loginController.signUp(SignUpRequest(
+        customer: Customer(
+            lastname: lastName,
+            firstname: firstName,
+            email: _emailController.text),
+        password: _passwordController.text));
   }
 }

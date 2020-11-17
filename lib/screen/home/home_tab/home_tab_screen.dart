@@ -1,16 +1,14 @@
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/screen/category/category_screen.dart';
-import 'package:e_commerce_alwalla/screen/home/home_tab/home_bloc.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/screen/search/search_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/widget/search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:get/get.dart';
 
 class HomeTabScreen extends StatefulWidget {
   @override
@@ -18,7 +16,6 @@ class HomeTabScreen extends StatefulWidget {
 }
 
 class _HomeTabScreenState extends State<HomeTabScreen> {
-  final _homeBloc = HomeBloc();
   List<Category> _categories = [
     Category("1", "assets/icons/cat_1.svg", "Men"),
     Category("2", "assets/icons/cat_2.svg", "Women"),
@@ -58,40 +55,16 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     Brand("1", "assets/images/bo.png", "B&o", "5693"),
     Brand("2", "assets/images/beats.png", "beats", "1124"),
   ];
-  @override
-  void dispose() {
-    _homeBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _homeBloc;
-        },
-        child: BlocListener(
-          cubit: _homeBloc,
-          listener: (c, HomeState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _homeBloc,
-              builder: (c, HomeState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
     );
   }
 
@@ -108,11 +81,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             tag: "Search",
             child: SearchBar(
                 onTap: () {
-                  Navigator.push(
-                      context,
-                      PageTransition(
-                          type: PageTransitionType.downToUp,
-                          child: SearchScreen()));
+                  Get.to(SearchScreen(), transition: Transition.downToUp);
                 },
                 textController: TextEditingController(),
                 onComplete: () {}),

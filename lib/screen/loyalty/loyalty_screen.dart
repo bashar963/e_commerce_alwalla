@@ -1,8 +1,6 @@
-import 'package:e_commerce_alwalla/screen/loyalty/loyalty_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LoyaltyScreen extends StatefulWidget {
@@ -11,8 +9,6 @@ class LoyaltyScreen extends StatefulWidget {
 }
 
 class _LoyaltyScreenState extends State<LoyaltyScreen> {
-  final _loyaltyBloc = LoyaltyBloc();
-
   List<Reward> _rewards = [
     Reward("1", "VIP 0", "<1000 pts", "No reward", isSelected: true),
     Reward("2", "VIP 1", "<3000 pts", "150 LE"),
@@ -22,11 +18,6 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
     Reward("6", "VIP 5", "<100000 pts", "4000 LE"),
     Reward("7", "Master", ">100000 pts", "6000 LE"),
   ];
-  @override
-  void dispose() {
-    _loyaltyBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,30 +30,11 @@ class _LoyaltyScreenState extends State<LoyaltyScreen> {
         centerTitle: true,
         brightness: Brightness.light,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _loyaltyBloc;
-        },
-        child: BlocListener(
-          cubit: _loyaltyBloc,
-          listener: (c, LoyaltyState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _loyaltyBloc,
-              builder: (c, LoyaltyState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
     );
   }
 

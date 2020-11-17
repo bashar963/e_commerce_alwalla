@@ -1,8 +1,8 @@
-import 'package:e_commerce_alwalla/screen/addresses/addresses_bloc.dart';
+import 'package:e_commerce_alwalla/controller/address_controller.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 class AddressesScreen extends StatefulWidget {
   @override
@@ -10,7 +10,7 @@ class AddressesScreen extends StatefulWidget {
 }
 
 class _AddressesScreenState extends State<AddressesScreen> {
-  final _addressesBloc = AddressesBloc();
+  final _addressesController = Get.put(AddressController());
   List<Address> _address = [
     Address(
         "Home Address",
@@ -20,11 +20,6 @@ class _AddressesScreenState extends State<AddressesScreen> {
     Address("Work Address",
         "19, Martins Crescent, Bank of Nigeria, Abuja, Nigeria", "2"),
   ];
-  @override
-  void dispose() {
-    _addressesBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,30 +32,11 @@ class _AddressesScreenState extends State<AddressesScreen> {
         centerTitle: true,
         backgroundColor: whiteColor,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _addressesBloc;
-        },
-        child: BlocListener(
-          cubit: _addressesBloc,
-          listener: (c, AddressesState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _addressesBloc,
-              builder: (c, AddressesState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: whiteColor,

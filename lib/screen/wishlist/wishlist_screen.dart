@@ -2,11 +2,9 @@ import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
-import 'package:e_commerce_alwalla/screen/wishlist/wishlist_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WishListScreen extends StatefulWidget {
   @override
@@ -14,8 +12,6 @@ class WishListScreen extends StatefulWidget {
 }
 
 class _WishListScreenState extends State<WishListScreen> {
-  final _wishListBloc = WishlistBloc();
-
   List<Product> _products = [
     Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
@@ -29,11 +25,6 @@ class _WishListScreenState extends State<WishListScreen> {
     Product("5", "assets/images/image.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
   ];
-  @override
-  void dispose() {
-    _wishListBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,30 +36,11 @@ class _WishListScreenState extends State<WishListScreen> {
         title: Text("WishList"),
         centerTitle: true,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _wishListBloc;
-        },
-        child: BlocListener(
-          cubit: _wishListBloc,
-          listener: (c, WishlistState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _wishListBloc,
-              builder: (c, WishlistState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
     );
   }
 

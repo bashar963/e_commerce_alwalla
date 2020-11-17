@@ -1,13 +1,12 @@
+import 'package:e_commerce_alwalla/controller/login_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
-import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
-import 'package:e_commerce_alwalla/screen/login/login_bloc.dart';
 import 'package:e_commerce_alwalla/screen/sign_up/sign_up_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -15,16 +14,10 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _loginBloc = LoginBloc();
+  final _loginController = Get.put(LoginController());
   String _emailError, _passwordError;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    _loginBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,29 +26,19 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         brightness: Brightness.light,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _loginBloc;
-        },
-        child: BlocListener(
-          cubit: _loginBloc,
-          listener: (c, LoginState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
-          },
-          child: BlocBuilder(
-              cubit: _loginBloc,
-              builder: (c, LoginState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
+      body: Stack(
+        children: [
+          GestureDetector(
+              onTap: () {
+                hideKeyboard(context);
+              },
+              child: body(context)),
+          Obx(() {
+            return _loginController.loading.value
+                ? Center(child: RefreshProgressIndicator())
+                : SizedBox();
+          })
+        ],
       ),
     );
   }
@@ -103,11 +86,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           ],
                         ),
                         InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => SignUpScreen()));
+                          onTap: () async {
+                            var email = await Get.to(SignUpScreen());
+                            if (email != null) {
+                              _emailController.text = email;
+                            }
+                            setState(() {});
                           },
                           child: Padding(
                             padding: EdgeInsets.only(top: 8, left: 8),
@@ -196,14 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: 50,
                       child: RaisedButton(
                         elevation: 0,
-                        onPressed: () {
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      HomeScreen()),
-                              ModalRoute.withName('/home'));
-                        },
+                        onPressed: login,
                         color: redColor,
                         child: Text(
                           S.of(context).sign_in,
@@ -290,5 +267,30 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
+  }
+
+  void login() {
+    if (!_emailController.text.isEmail) {
+      setState(() {
+        _emailError = 'Required Field';
+      });
+      return;
+    }
+    if (_passwordController.text.isEmpty) {
+      setState(() {
+        _passwordError = "هذا الحقل مطلوب";
+      });
+      return;
+    }
+    if (!RegExp(
+            r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
+        .hasMatch(_passwordController.text)) {
+      setState(() {
+        _passwordError =
+            "Minimum eight characters, at least one letter, one number and one special character";
+      });
+      return;
+    }
+    _loginController.login(_emailController.text, _passwordController.text);
   }
 }

@@ -1,10 +1,8 @@
 import 'package:e_commerce_alwalla/screen/order_history/orders_history_screen.dart';
-import 'package:e_commerce_alwalla/screen/track/track_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TrackOrderScreen extends StatefulWidget {
   final Order order;
@@ -15,8 +13,6 @@ class TrackOrderScreen extends StatefulWidget {
 }
 
 class _TrackOrderScreenState extends State<TrackOrderScreen> {
-  final _trackBloc = TrackBloc();
-
   List<Track> _tracker = [
     Track("1", "20/18\n10:00 AM", "Order Signed", "2"),
     Track("2", "20/18\n10:00 AM", "Order Processed", "2"),
@@ -24,11 +20,6 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
     Track("4", "20/18\n10:00 AM", "Out for delivery", "1"),
     Track("5", "20/18\n10:00 AM", "Delivered", "1"),
   ];
-  @override
-  void dispose() {
-    _trackBloc.close();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,30 +32,11 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
         centerTitle: true,
         brightness: Brightness.light,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _trackBloc;
-        },
-        child: BlocListener(
-          cubit: _trackBloc,
-          listener: (c, TrackState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _trackBloc,
-              builder: (c, TrackState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
     );
   }
 

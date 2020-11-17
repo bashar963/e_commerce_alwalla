@@ -1,10 +1,8 @@
 import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
-import 'package:e_commerce_alwalla/screen/product_details/product_details_bloc.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
@@ -17,7 +15,6 @@ class ProductDetailsScreen extends StatefulWidget {
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
-  final _productBloc = ProductDetailsBloc();
   bool isFav = false;
   String readMore = "Read More";
   String readLess = "Read Less";
@@ -45,39 +42,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   @override
-  void dispose() {
-    _productBloc.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _productBloc;
-        },
-        child: BlocListener(
-          cubit: _productBloc,
-          listener: (c, ProductDetailsState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _productBloc,
-              builder: (c, ProductDetailsState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
       bottomNavigationBar: Container(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
         color: whiteColor,

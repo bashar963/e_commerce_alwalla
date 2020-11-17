@@ -1,14 +1,12 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:e_commerce_alwalla/screen/addresses/addresses_screen.dart';
 import 'package:e_commerce_alwalla/screen/cards/cards_screen.dart';
-import 'package:e_commerce_alwalla/screen/home/account_tab/account_bloc.dart';
 import 'package:e_commerce_alwalla/screen/loyalty/loyalty_screen.dart';
 import 'package:e_commerce_alwalla/screen/order_history/orders_history_screen.dart';
 import 'package:e_commerce_alwalla/screen/wishlist/wishlist_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class AccountTabScreen extends StatefulWidget {
@@ -17,8 +15,6 @@ class AccountTabScreen extends StatefulWidget {
 }
 
 class _AccountTabScreenState extends State<AccountTabScreen> {
-  final _accountBloc = AccountBloc();
-
   List<Setting> _settings;
   @override
   void initState() {
@@ -51,12 +47,6 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
   }
 
   @override
-  void dispose() {
-    _accountBloc.close();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
@@ -65,30 +55,11 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         brightness: Brightness.light,
         backgroundColor: whiteColor,
       ),
-      body: BlocProvider(
-        create: (BuildContext context) {
-          return _accountBloc;
-        },
-        child: BlocListener(
-          cubit: _accountBloc,
-          listener: (c, AccountState state) async {
-            if (state is Loading) {}
-            if (state is Success) {}
-            if (state is Failed) {
-              showFailedMessage(context, state.error);
-            }
+      body: GestureDetector(
+          onTap: () {
+            hideKeyboard(context);
           },
-          child: BlocBuilder(
-              cubit: _accountBloc,
-              builder: (c, AccountState state) {
-                return GestureDetector(
-                    onTap: () {
-                      hideKeyboard(context);
-                    },
-                    child: body(c));
-              }),
-        ),
-      ),
+          child: body(context)),
     );
   }
 
