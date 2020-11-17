@@ -1,13 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:e_commerce_alwalla/controller/login_controller.dart';
+import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/screen/addresses/addresses_screen.dart';
 import 'package:e_commerce_alwalla/screen/cards/cards_screen.dart';
-import 'package:e_commerce_alwalla/screen/loyalty/loyalty_screen.dart';
+import 'package:e_commerce_alwalla/screen/login/login_screen.dart';
 import 'package:e_commerce_alwalla/screen/order_history/orders_history_screen.dart';
 import 'package:e_commerce_alwalla/screen/wishlist/wishlist_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class AccountTabScreen extends StatefulWidget {
   @override
@@ -16,6 +19,7 @@ class AccountTabScreen extends StatefulWidget {
 
 class _AccountTabScreenState extends State<AccountTabScreen> {
   List<Setting> _settings;
+  final LoginController _loginController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -42,7 +46,10 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
             context, MaterialPageRoute(builder: (c) => CardsScreen()));
       }),
       Setting("assets/icons/bill.svg", "Notification", () {}),
-      Setting("assets/icons/exit.svg", "Log Out", () {}),
+      Setting("assets/icons/exit.svg", "Log Out", () {
+        AppPreference.token = null;
+        Get.offAll(LoginScreen());
+      }),
     ];
   }
 
@@ -64,104 +71,112 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
   }
 
   Widget body(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 8,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            child: Row(
-              children: [
-                Material(
-                  elevation: 1,
-                  shape: CircleBorder(),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundImage: AssetImage("assets/icons/image_.png"),
-                  ),
-                ),
-                const SizedBox(
-                  width: 24,
-                ),
-                Expanded(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AutoSizeText(
-                      "Mr.Rezk",
-                      maxLines: 1,
-                      maxFontSize: 26,
-                      minFontSize: 16,
-                      overflow: TextOverflow.ellipsis,
-                      style: mainTextStyle.copyWith(fontSize: 24),
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      "Rezk@gmail.com",
-                      style: subTextStyle,
-                    ),
-                    const SizedBox(
-                      height: 4,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (c) => LoyaltyScreen(),
-                          ),
-                        );
-                      },
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset("assets/icons/wallaa.svg"),
-                          const SizedBox(
-                            width: 4,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 10),
-                            child: Text(
-                              "VIP0",
-                              style: mainTextStyle.copyWith(fontSize: 14),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 2,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 6),
-                            child: Icon(
-                              Icons.chevron_right,
-                              color: blackColor,
-                            ),
-                          )
-                        ],
-                      ),
-                    )
-                  ],
-                ))
-              ],
+    return Obx(() {
+      return SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 8,
             ),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          ListView.builder(
-            itemBuilder: (c, i) => settingItem(_settings[i]),
-            itemCount: _settings.length,
-            shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
-          )
-        ],
-      ),
-    );
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              child: Row(
+                children: [
+                  Material(
+                    elevation: 1,
+                    shape: CircleBorder(),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundImage: AssetImage("assets/icons/image_.png"),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 24,
+                  ),
+                  Expanded(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      AutoSizeText(
+                        _loginController.user.value != null
+                            ? (_loginController.user.value.firstname +
+                                " " +
+                                _loginController.user.value.lastname)
+                            : '',
+                        maxLines: 1,
+                        maxFontSize: 26,
+                        minFontSize: 16,
+                        overflow: TextOverflow.ellipsis,
+                        style: mainTextStyle.copyWith(fontSize: 24),
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        _loginController.user.value != null
+                            ? _loginController.user.value.email
+                            : '',
+                        style: subTextStyle,
+                      ),
+                      // const SizedBox(
+                      //   height: 4,
+                      // ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.push(
+                      //       context,
+                      //       MaterialPageRoute(
+                      //         builder: (c) => LoyaltyScreen(),
+                      //       ),
+                      //     );
+                      //   },
+                      //   child: Row(
+                      //     crossAxisAlignment: CrossAxisAlignment.center,
+                      //     children: [
+                      //       SvgPicture.asset("assets/icons/wallaa.svg"),
+                      //       const SizedBox(
+                      //         width: 4,
+                      //       ),
+                      //       Padding(
+                      //         padding: const EdgeInsets.only(top: 10),
+                      //         child: Text(
+                      //           "VIP0",
+                      //           style: mainTextStyle.copyWith(fontSize: 14),
+                      //         ),
+                      //       ),
+                      //       const SizedBox(
+                      //         width: 2,
+                      //       ),
+                      //       Padding(
+                      //         padding: const EdgeInsets.only(top: 6),
+                      //         child: Icon(
+                      //           Icons.chevron_right,
+                      //           color: blackColor,
+                      //         ),
+                      //       )
+                      //     ],
+                      //   ),
+                      // )
+                    ],
+                  ))
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            ListView.builder(
+              itemBuilder: (c, i) => settingItem(_settings[i]),
+              itemCount: _settings.length,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+            )
+          ],
+        ),
+      );
+    });
   }
 
   settingItem(Setting setting) {

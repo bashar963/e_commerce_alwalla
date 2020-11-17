@@ -291,6 +291,10 @@ class _LoginScreenState extends State<LoginScreen> {
       });
       return;
     }
+    setState(() {
+      _passwordError = null;
+      _emailError = null;
+    });
     _loginController.login(_emailController.text, _passwordController.text);
   }
 }

@@ -3,11 +3,14 @@ import 'dart:convert';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/data/main_api/main_api.dart';
 import 'package:e_commerce_alwalla/model/singup/sign_up_request.dart';
+import 'package:e_commerce_alwalla/model/user_model/user_response.dart';
+import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   var loading = false.obs;
+  Rx<UserResponse> user = Rx(null);
   void signUp(SignUpRequest request) async {
     try {
       loading(true);
@@ -40,8 +43,9 @@ class LoginController extends GetxController {
       print(response.body);
       print(response.error);
       if (response.isSuccessful) {
-        AppPreference.token = 'Bearer ' + response.bodyString;
-        AppPreference.customerId = '6';
+        var token = jsonDecode(response.bodyString);
+        AppPreference.token = 'Bearer ' + token.toString();
+
         loadUserData();
       } else {
         var error = jsonDecode(response.error.toString());
@@ -55,12 +59,13 @@ class LoginController extends GetxController {
 
   void loadUserData() async {
     try {
-      var response =
-          await MainApi.create().getUserData(AppPreference.customerId);
-      print(response.body);
+      print(AppPreference.token);
+      var response = await MainApi.create().getUserData(AppPreference.token);
+      print(response.bodyString);
       print(response.error);
       if (response.isSuccessful) {
-        //TODO
+        user.value = UserResponse.fromJson(response.body);
+        Get.offAll(HomeScreen());
       } else {
         var error = jsonDecode(response.error.toString());
         showFailedMessage(Get.context, error['message'] ?? '');
