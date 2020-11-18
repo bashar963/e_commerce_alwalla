@@ -22,4 +22,10 @@ abstract class MainApi extends ChopperService {
 
   @Get(path: '/customers/me')
   Future<Response> getUserData(@Header('Authorization') String token);
+
+  @Get(path: '/customers/isEmailAvailable')
+  Future<Response> isEmailAvailable(@Field('customerEmail') String email);
+
+  @Put(path: '/customers/password')
+  Future<Response> sendPasswordRestore(@Body() Map<String, dynamic> body);
 }

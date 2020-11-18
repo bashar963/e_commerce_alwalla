@@ -1,12 +1,16 @@
 import 'package:e_commerce_alwalla/controller/login_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
+import 'package:e_commerce_alwalla/model/app_language.dart';
+import 'package:e_commerce_alwalla/screen/password_restore/email_screen.dart';
 import 'package:e_commerce_alwalla/screen/sign_up/sign_up_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -25,6 +29,27 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         elevation: 0,
         brightness: Brightness.light,
+        actions: [
+          IconButton(
+              icon: FaIcon(
+                FontAwesomeIcons.language,
+                color: Theme.of(context).accentColor,
+                size: 16,
+              ),
+              onPressed: () {
+                if (AppPreference.appLanguage == 'en') {
+                  Provider.of<AppLanguage>(context, listen: false)
+                      .setAppLanguage('ar');
+                  AppPreference.appLanguage = 'ar';
+                  Get.locale = Locale('ar');
+                } else {
+                  Provider.of<AppLanguage>(context, listen: false)
+                      .setAppLanguage('en');
+                  AppPreference.appLanguage = 'en';
+                  Get.locale = Locale('en');
+                }
+              })
+        ],
       ),
       body: Stack(
         children: [
@@ -169,7 +194,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? Alignment.centerRight
                           : Alignment.centerLeft,
                       child: FlatButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(AddEmailScreen());
+                          },
                           padding: EdgeInsets.only(left: 8),
                           child: Text(S.of(context).forgot_password)),
                     ),
@@ -272,13 +299,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void login() {
     if (!_emailController.text.isEmail) {
       setState(() {
-        _emailError = 'Required Field';
+        _emailError = S.of(context).required_field;
       });
       return;
     }
     if (_passwordController.text.isEmpty) {
       setState(() {
-        _passwordError = "هذا الحقل مطلوب";
+        _passwordError = S.of(context).required_field;
       });
       return;
     }
@@ -286,8 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
             r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
         .hasMatch(_passwordController.text)) {
       setState(() {
-        _passwordError =
-            "Minimum eight characters, at least one letter, one number and one special character";
+        _passwordError = S.of(context).password_requirements;
       });
       return;
     }

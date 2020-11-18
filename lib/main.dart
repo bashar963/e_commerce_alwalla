@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
               S.delegate
             ],
             supportedLocales: AppLocalizationDelegate().supportedLocales,
-            locale: value.getAppLanguage(),
+            locale: Get.deviceLocale,
             debugShowCheckedModeBanner: false,
             theme: appTheme,
             home: SplashScreen(),

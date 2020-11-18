@@ -64,7 +64,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      "Sign Up",
+                      S.of(context).sign_up_page,
                       style: mainTextStyle.copyWith(fontSize: 30),
                     ),
                     const SizedBox(
@@ -163,7 +163,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         onPressed: signUp,
                         color: redColor,
                         child: Text(
-                          "SIGN UP",
+                          S.of(context).sign_up_page,
                           style: subTextStyle.copyWith(
                               color: whiteColor, fontWeight: FontWeight.w400),
                         ),
@@ -185,7 +185,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void signUp() {
     if (_nameController.text.isEmpty) {
       setState(() {
-        _nameError = "Required Filed";
+        _nameError = S.of(context).required_field;
       });
       return;
     }
@@ -197,7 +197,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       firstName = name.substring(0, name.lastIndexOf(' '));
       if (firstName.isEmpty || lastName.isEmpty) {
         setState(() {
-          _nameError = "يرجى ادخال الاسم الكامل";
+          _nameError = S.of(context).full_name_required;
         });
         return;
       } else {
@@ -207,20 +207,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
     } else {
       setState(() {
-        _nameError = "يرجى ادخال الاسم الكامل";
+        _nameError = S.of(context).full_name_required;
       });
       return;
     }
     if (!_emailController.text.isEmail) {
       setState(() {
-        _emailError = "Required Filed";
+        _emailError = S.of(context).required_field;
       });
       return;
     }
 
     if (_passwordController.text.isEmpty) {
       setState(() {
-        _passwordError = "هذا الحقل مطلوب";
+        _passwordError = S.of(context).required_field;
       });
       return;
     }
@@ -228,8 +228,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             r"^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$")
         .hasMatch(_passwordController.text)) {
       setState(() {
-        _passwordError =
-            "Minimum eight characters, at least one letter, one number and one special character";
+        _passwordError = S.of(context).password_requirements;
       });
       return;
     }

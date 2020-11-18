@@ -20,5 +20,14 @@
   "see_all": "See All",
   "featured_brands": "Featured Brands",
   "recommended": "Recommended",
-  "products": "{count} Products"
+  "products": "{count} Products",
+  "sign_up_page": "Sign Up",
+  "account_created": "The account was created successfully,\nyou can now log in.",
+  "password_reset_sent": "Password reset link has been sent to your email address",
+  "account_restore": "Account Restore",
+  "enter_your_email": "Enter Your Email",
+  "restore": "RESTORE",
+  "required_field": "Required Field",
+  "full_name_required": "Please Add Full Name",
+  "password_requirements": "Minimum eight characters, at least one letter, one number and one special character"
 }

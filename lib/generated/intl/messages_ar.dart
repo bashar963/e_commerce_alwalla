@@ -24,24 +24,33 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
     "account" : MessageLookupByLibrary.simpleMessage("حسابي"),
+    "account_created" : MessageLookupByLibrary.simpleMessage("تم انشاء الحساب بنجاح،\nيمكنك الآن تسجيل الدخول."),
+    "account_restore" : MessageLookupByLibrary.simpleMessage("استعادة الحساب"),
     "best_selling" : MessageLookupByLibrary.simpleMessage("أفضل مبيعات"),
     "cart" : MessageLookupByLibrary.simpleMessage("السلة"),
     "categories" : MessageLookupByLibrary.simpleMessage("التصنيفات"),
     "email" : MessageLookupByLibrary.simpleMessage("البريد الإلكتروني"),
+    "enter_your_email" : MessageLookupByLibrary.simpleMessage("أدخل بريدك الإلكتروني"),
     "explore" : MessageLookupByLibrary.simpleMessage("تصفح"),
     "featured_brands" : MessageLookupByLibrary.simpleMessage("ماركات مميزة"),
     "forgot_password" : MessageLookupByLibrary.simpleMessage("هل نسيت كلمة السر؟"),
+    "full_name_required" : MessageLookupByLibrary.simpleMessage("الرجاء إضافة الاسم الكامل"),
     "name" : MessageLookupByLibrary.simpleMessage("الاسم"),
     "or" : MessageLookupByLibrary.simpleMessage("-او-"),
     "password" : MessageLookupByLibrary.simpleMessage("كلمة السر"),
+    "password_requirements" : MessageLookupByLibrary.simpleMessage("ثمانية أحرف على الأقل ، حرف واحد على الأقل ورقم واحد وحرف خاص واحد"),
+    "password_reset_sent" : MessageLookupByLibrary.simpleMessage("تم إرسال رابط إعادة تعيين كلمة المرور إلى عنوان بريدك الإلكتروني"),
     "products" : m0,
     "recommended" : MessageLookupByLibrary.simpleMessage("موصى به"),
+    "required_field" : MessageLookupByLibrary.simpleMessage("هذا الحقل مطلوب"),
+    "restore" : MessageLookupByLibrary.simpleMessage("استعادة"),
     "see_all" : MessageLookupByLibrary.simpleMessage("اظهار الكل"),
     "sign_in" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول"),
     "sign_in_facebook" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Facebook"),
     "sign_in_google" : MessageLookupByLibrary.simpleMessage("تسجيل الدخول بـ Google"),
     "sign_in_to_continue" : MessageLookupByLibrary.simpleMessage("قم بتسجيل الدخول"),
     "sign_up" : MessageLookupByLibrary.simpleMessage("تسجيل حساب جديد"),
+    "sign_up_page" : MessageLookupByLibrary.simpleMessage("تسجيل حساب جديد"),
     "welcome" : MessageLookupByLibrary.simpleMessage("اهلا")
   };
 }

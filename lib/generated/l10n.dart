@@ -234,6 +234,96 @@ class S {
       args: [count],
     );
   }
+
+  /// `Sign Up`
+  String get sign_up_page {
+    return Intl.message(
+      'Sign Up',
+      name: 'sign_up_page',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The account was created successfully,\nyou can now log in.`
+  String get account_created {
+    return Intl.message(
+      'The account was created successfully,\nyou can now log in.',
+      name: 'account_created',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password reset link has been sent to your email address`
+  String get password_reset_sent {
+    return Intl.message(
+      'Password reset link has been sent to your email address',
+      name: 'password_reset_sent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account Restore`
+  String get account_restore {
+    return Intl.message(
+      'Account Restore',
+      name: 'account_restore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter Your Email`
+  String get enter_your_email {
+    return Intl.message(
+      'Enter Your Email',
+      name: 'enter_your_email',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `RESTORE`
+  String get restore {
+    return Intl.message(
+      'RESTORE',
+      name: 'restore',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Required Field`
+  String get required_field {
+    return Intl.message(
+      'Required Field',
+      name: 'required_field',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Please Add Full Name`
+  String get full_name_required {
+    return Intl.message(
+      'Please Add Full Name',
+      name: 'full_name_required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimum eight characters, at least one letter, one number and one special character`
+  String get password_requirements {
+    return Intl.message(
+      'Minimum eight characters, at least one letter, one number and one special character',
+      name: 'password_requirements',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

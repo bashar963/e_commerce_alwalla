@@ -77,17 +77,35 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
           pinned: true,
           elevation: 0,
           floating: true,
-          title: Hero(
-            tag: "Search",
-            child: SearchBar(
-                onTap: () {
-                  Get.to(SearchScreen(), transition: Transition.downToUp);
-                },
-                textController: TextEditingController(),
-                onComplete: () {}),
+          title: Row(
+            children: [
+              SvgPicture.asset(
+                "assets/icons/mymall.svg",
+                width: 36,
+                height: 36,
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: Hero(
+                  tag: "Search",
+                  child: SearchBar(
+                      onTap: () {
+                        Get.to(SearchScreen());
+                      },
+                      textController: TextEditingController(),
+                      onComplete: () {}),
+                ),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              InkWell(child: SvgPicture.asset("assets/icons/camera_image.svg")),
+            ],
           ),
         ),
-        space(50),
+        space(32),
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           sliver: SliverToBoxAdapter(

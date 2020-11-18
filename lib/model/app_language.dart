@@ -2,14 +2,14 @@ import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:flutter/material.dart';
 
 class AppLanguage extends ChangeNotifier {
-  String _appLanguage = AppPreference.appLanguage;
+  Locale _appLanguage = Locale(AppPreference.appLanguage);
 
   void setAppLanguage(String lang) {
-    _appLanguage = lang;
+    _appLanguage = Locale(lang);
     notifyListeners();
   }
 
   Locale getAppLanguage() {
-    return Locale(_appLanguage);
+    return _appLanguage;
   }
 }

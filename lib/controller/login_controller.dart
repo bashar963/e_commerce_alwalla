@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/data/main_api/main_api.dart';
+import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/singup/sign_up_request.dart';
 import 'package:e_commerce_alwalla/model/user_model/user_response.dart';
 import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
@@ -19,8 +20,7 @@ class LoginController extends GetxController {
       print(response.error);
       loading(false);
       if (response.isSuccessful) {
-        showSuccessMessage(
-            Get.context, "Account created successfully,\nyou can now login.");
+        showSuccessMessage(Get.context, S.of(Get.context).account_created);
         Future.delayed(Duration(seconds: 1), () {
           Get.back();
           Get.back(result: request.customer.email);
@@ -71,6 +71,27 @@ class LoginController extends GetxController {
         showFailedMessage(Get.context, error['message'] ?? '');
       }
     } on Exception catch (e) {
+      showFailedMessage(Get.context, e.toString());
+    }
+  }
+
+  void verifyEmail(String email) async {
+    try {
+      loading(true);
+      print(AppPreference.token);
+      var response = await MainApi.create()
+          .sendPasswordRestore({"email": email, "template": "email_reset"});
+      loading(false);
+      print(response.bodyString);
+      print(response.error);
+      if (response.isSuccessful) {
+        showSuccessMessage(Get.context, S.of(Get.context).password_reset_sent);
+      } else {
+        var error = jsonDecode(response.error.toString());
+        showFailedMessage(Get.context, error['message'] ?? '');
+      }
+    } on Exception catch (e) {
+      loading(false);
       showFailedMessage(Get.context, e.toString());
     }
   }

@@ -19,5 +19,14 @@
   "see_all": "اظهار الكل",
   "featured_brands": "ماركات مميزة",
   "recommended": "موصى به",
-  "products": "{count} منتجات"
+  "products": "{count} منتجات",
+  "sign_up_page": "تسجيل حساب جديد",
+  "account_created": "تم انشاء الحساب بنجاح،\nيمكنك الآن تسجيل الدخول.",
+  "password_reset_sent": "تم إرسال رابط إعادة تعيين كلمة المرور إلى عنوان بريدك الإلكتروني",
+  "account_restore": "استعادة الحساب",
+  "enter_your_email": "أدخل بريدك الإلكتروني",
+  "restore": "استعادة",
+  "required_field": "هذا الحقل مطلوب",
+  "full_name_required": "الرجاء إضافة الاسم الكامل",
+  "password_requirements": "ثمانية أحرف على الأقل ، حرف واحد على الأقل ورقم واحد وحرف خاص واحد"
 }

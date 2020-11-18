@@ -40,4 +40,21 @@ class _$MainApi extends MainApi {
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
     return client.send<dynamic, dynamic>($request);
   }
+
+  @override
+  Future<Response<dynamic>> isEmailAvailable(String email) {
+    final $url =
+        'http://mymalleg.com/index.php/rest/V1/customers/isEmailAvailable';
+    final $body = <String, dynamic>{'customerEmail': email};
+    final $request = Request('GET', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> sendPasswordRestore(Map<String, dynamic> body) {
+    final $url = 'http://mymalleg.com/index.php/rest/V1/customers/password';
+    final $body = body;
+    final $request = Request('PUT', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
 }
