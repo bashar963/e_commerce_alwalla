@@ -9,8 +9,6 @@ abstract class AppPreference {
   static final String _appLanguage = "appLanguage";
 
   static Future<void> init() async {
-    // ignore: invalid_use_of_visible_for_testing_member
-    SharedPreferences.setMockInitialValues({});
     _sharedPreferences = await SharedPreferences.getInstance();
   }
 

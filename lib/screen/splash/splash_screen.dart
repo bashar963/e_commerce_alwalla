@@ -17,7 +17,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     Future.delayed(Duration(seconds: 1), () {
       if (AppPreference.token != null) {
-        _loginController.loadUserData();
+        _loginController.loadUserData(true);
       } else {
         Get.offAll(LoginScreen());
       }

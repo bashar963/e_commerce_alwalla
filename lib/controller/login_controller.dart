@@ -6,6 +6,7 @@ import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/singup/sign_up_request.dart';
 import 'package:e_commerce_alwalla/model/user_model/user_response.dart';
 import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
+import 'package:e_commerce_alwalla/screen/login/login_screen.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:get/get.dart';
 
@@ -46,7 +47,7 @@ class LoginController extends GetxController {
         var token = jsonDecode(response.bodyString);
         AppPreference.token = 'Bearer ' + token.toString();
 
-        loadUserData();
+        loadUserData(false);
       } else {
         var error = jsonDecode(response.error.toString());
         showFailedMessage(Get.context, error['message'] ?? '');
@@ -57,9 +58,8 @@ class LoginController extends GetxController {
     }
   }
 
-  void loadUserData() async {
+  void loadUserData(bool fromSplash) async {
     try {
-      print(AppPreference.token);
       var response = await MainApi.create().getUserData(AppPreference.token);
       print(response.bodyString);
       print(response.error);
@@ -68,10 +68,19 @@ class LoginController extends GetxController {
         Get.offAll(HomeScreen());
       } else {
         var error = jsonDecode(response.error.toString());
-        showFailedMessage(Get.context, error['message'] ?? '');
+
+        if (fromSplash) {
+          Get.offAll(LoginScreen());
+        } else {
+          showFailedMessage(Get.context, error['message'] ?? '');
+        }
       }
     } on Exception catch (e) {
-      showFailedMessage(Get.context, e.toString());
+      if (fromSplash) {
+        Get.offAll(LoginScreen());
+      } else {
+        showFailedMessage(Get.context, e.toString() ?? '');
+      }
     }
   }
 
@@ -79,8 +88,9 @@ class LoginController extends GetxController {
     try {
       loading(true);
       print(AppPreference.token);
-      var response = await MainApi.create()
-          .sendPasswordRestore({"email": email, "template": "email_reset"});
+      var response = await MainApi.create().sendPasswordRestore(
+        {"email": email, "template": "email_reset"},
+      );
       loading(false);
       print(response.bodyString);
       print(response.error);
@@ -92,7 +102,7 @@ class LoginController extends GetxController {
       }
     } on Exception catch (e) {
       loading(false);
-      showFailedMessage(Get.context, e.toString());
+      showFailedMessage(Get.context, e.toString() ?? '');
     }
   }
 }

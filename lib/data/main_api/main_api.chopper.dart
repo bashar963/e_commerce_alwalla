@@ -42,6 +42,17 @@ class _$MainApi extends MainApi {
   }
 
   @override
+  Future<Response<dynamic>> updateUserProfile(
+      String token, Map<String, dynamic> body) {
+    final $url = 'http://mymalleg.com/index.php/rest/V1/customers/me';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('PUT', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> isEmailAvailable(String email) {
     final $url =
         'http://mymalleg.com/index.php/rest/V1/customers/isEmailAvailable';

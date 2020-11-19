@@ -14,6 +14,8 @@ class UserResponse {
     this.email,
     this.firstname,
     this.lastname,
+    this.dob,
+    this.gender,
     this.storeId,
     this.websiteId,
     this.addresses,
@@ -29,6 +31,8 @@ class UserResponse {
   String email;
   String firstname;
   String lastname;
+  String dob;
+  String gender;
   int storeId;
   int websiteId;
   List<dynamic> addresses;
@@ -49,6 +53,8 @@ class UserResponse {
         email: json["email"],
         firstname: json["firstname"],
         lastname: json["lastname"],
+        dob: json["dob"],
+        gender: json["gender"],
         storeId: json["store_id"],
         websiteId: json["website_id"],
         addresses: List<dynamic>.from(json["addresses"].map((x) => x)),
@@ -66,6 +72,8 @@ class UserResponse {
         "email": email,
         "firstname": firstname,
         "lastname": lastname,
+        "dob": dob,
+        "gender": gender,
         "store_id": storeId,
         "website_id": websiteId,
         "addresses": List<dynamic>.from(addresses.map((x) => x)),

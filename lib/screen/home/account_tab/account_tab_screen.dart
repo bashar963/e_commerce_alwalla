@@ -5,6 +5,7 @@ import 'package:e_commerce_alwalla/screen/addresses/addresses_screen.dart';
 import 'package:e_commerce_alwalla/screen/cards/cards_screen.dart';
 import 'package:e_commerce_alwalla/screen/login/login_screen.dart';
 import 'package:e_commerce_alwalla/screen/order_history/orders_history_screen.dart';
+import 'package:e_commerce_alwalla/screen/profile/profile.dart';
 import 'package:e_commerce_alwalla/screen/wishlist/wishlist_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
@@ -24,7 +25,9 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
   void initState() {
     super.initState();
     _settings = [
-      Setting("assets/icons/edit.svg", "Edit Profile", () {}),
+      Setting("assets/icons/edit.svg", "Edit Profile", () {
+        Get.to(ProfileScreen());
+      }),
       Setting("assets/icons/location.svg", "Shipping Address", () {
         Navigator.push(
             context, MaterialPageRoute(builder: (c) => AddressesScreen()));

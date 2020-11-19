@@ -255,6 +255,56 @@ class S {
     );
   }
 
+  /// `First name`
+  String get first_name {
+    return Intl.message(
+      'First name',
+      name: 'first_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Last name`
+  String get last_name {
+    return Intl.message(
+      'Last name',
+      name: 'last_name',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `My Profile`
+  String get my_profile {
+    return Intl.message(
+      'My Profile',
+      name: 'my_profile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date of Birth`
+  String get dob {
+    return Intl.message(
+      'Date of Birth',
+      name: 'dob',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Gender`
+  String get gender {
+    return Intl.message(
+      'Gender',
+      name: 'gender',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Password reset link has been sent to your email address`
   String get password_reset_sent {
     return Intl.message(
