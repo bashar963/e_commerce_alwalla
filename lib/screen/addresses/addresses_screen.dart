@@ -1,4 +1,5 @@
 import 'package:e_commerce_alwalla/controller/address_controller.dart';
+import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
@@ -11,15 +12,22 @@ class AddressesScreen extends StatefulWidget {
 
 class _AddressesScreenState extends State<AddressesScreen> {
   final _addressesController = Get.put(AddressController());
-  List<Address> _address = [
-    Address(
-        "Home Address",
-        "21, Alex Davidson Avenue, Opposite Omegatron, Vicent Smith Quarters, Victoria Island, Lagos, Nigeria",
-        "1",
-        isSelected: true),
-    Address("Work Address",
-        "19, Martins Crescent, Bank of Nigeria, Abuja, Nigeria", "2"),
-  ];
+
+  // List<Address> _address = [
+  //   Address(
+  //       "Home Address",
+  //       "21, Alex Davidson Avenue, Opposite Omegatron, Vicent Smith Quarters, Victoria Island, Lagos, Nigeria",
+  //       "1",
+  //       isSelected: true),
+  //   Address("Work Address",
+  //       "19, Martins Crescent, Bank of Nigeria, Abuja, Nigeria", "2"),
+  // ];
+
+  @override
+  void initState() {
+    super.initState();
+    _addressesController.loadAddresses();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,31 +78,47 @@ class _AddressesScreenState extends State<AddressesScreen> {
   }
 
   Widget body(BuildContext context) {
-    return ListView.builder(
-        itemCount: _address.length,
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (c, i) => addressItem(_address[i]));
+    return Obx(() {
+      if (_addressesController.addresses.isEmpty) {
+        return Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'No address found add a new to address now',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            ),
+          ),
+        );
+      }
+      return ListView.builder(
+          itemCount: _addressesController.addresses.length,
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (c, i) =>
+              addressItem(_addressesController.addresses[i]));
+    });
   }
 
   addressItem(Address address) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       title: Text(
-        address.title + "\n",
+        address.prefix + "\n",
         style: mainTextStyle,
       ),
       subtitle: Text(
-        address.address,
+        address.street.first ?? '',
         style: subTextStyle.copyWith(color: mainTextColor),
       ),
       onTap: () {
-        setState(() {
-          _address.forEach((element) {
-            element.isSelected = false;
-          });
-          address.isSelected = true;
-        });
+        _addressesController.selectedAddress.value = address;
+        // setState(() {
+        //   _address.forEach((element) {
+        //     element.isSelected = false;
+        //   });
+        //   address.isSelected = true;
+        // });
       },
       trailing: Container(
         width: 28,
@@ -102,7 +126,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
         decoration: BoxDecoration(
             color: blackColor.withOpacity(0.06),
             borderRadius: BorderRadius.circular(14)),
-        child: address.isSelected
+        child: _addressesController.selectedAddress.value == address
             ? CircleAvatar(
                 backgroundColor: redColor,
                 child: Icon(
@@ -116,8 +140,8 @@ class _AddressesScreenState extends State<AddressesScreen> {
   }
 }
 
-class Address {
-  final String title, address, id;
-  bool isSelected;
-  Address(this.title, this.address, this.id, {this.isSelected = false});
-}
+// class Address {
+//   final String title, address, id;
+//   bool isSelected;
+//   Address(this.title, this.address, this.id, {this.isSelected = false});
+// }

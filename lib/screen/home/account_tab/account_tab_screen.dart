@@ -29,8 +29,7 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         Get.to(ProfileScreen());
       }),
       Setting("assets/icons/location.svg", "Shipping Address", () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => AddressesScreen()));
+        Get.to(AddressesScreen());
       }),
       Setting("assets/icons/fav.svg", "Wishlist", () {
         Navigator.push(
