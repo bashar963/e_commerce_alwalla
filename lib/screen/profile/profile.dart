@@ -1,4 +1,5 @@
 import 'package:e_commerce_alwalla/controller/login_controller.dart';
+import 'package:e_commerce_alwalla/controller/profile_controller.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
@@ -11,7 +12,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final LoginController _loginController = Get.find();
+  final ProfileController _profileController = Get.find();
   String _firstNameError,
       _lastNameError,
       _emailError,
@@ -25,11 +26,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _firstNameController.text = _loginController.user.value.firstname;
-    _lastNameController.text = _loginController.user.value.lastname;
-    _emailController.text = _loginController.user.value.email;
-    _dobController.text = _loginController.user.value.dob;
-    _gender = _loginController.user.value.gender;
+    _firstNameController.text = _profileController.user.value.firstname;
+    _lastNameController.text = _profileController.user.value.lastname;
+    _emailController.text = _profileController.user.value.email;
   }
 
   @override
@@ -40,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         actions: [
           TextButton(
-              onPressed: () {},
+              onPressed: saveDetails,
               child: Text(
                 'Save',
                 style: TextStyle(color: Theme.of(context).accentColor),
@@ -130,6 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               cursorWidth: 1,
               textAlign: TextAlign.start,
               textDirection: TextDirection.ltr,
+              readOnly: true,
               autofocus: false,
               onChanged: (s) {
                 setState(() {
@@ -148,46 +148,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     borderSide: BorderSide(color: lightGrey)),
               ),
             ),
-            const SizedBox(
-              height: 32,
-            ),
-            TextFormField(
-              keyboardType: TextInputType.datetime,
-              cursorWidth: 1,
-              controller: _dobController,
-              textAlign: TextAlign.start,
-              textDirection: TextDirection.ltr,
-              autofocus: false,
-              readOnly: true,
-              onTap: () async {
-                var date = await showDatePicker(
-                    context: Get.context,
-                    initialDate: DateTime(1990),
-                    firstDate: DateTime(1920),
-                    lastDate: DateTime.now());
-                if (date != null) {
-                  setState(() {
-                    _dobController.text = formatDate(date);
-                  });
-                }
-              },
-              onChanged: (s) {
-                setState(() {
-                  _dobError = null;
-                });
-              },
-              style: TextStyle(
-                  color: blackColor, fontWeight: FontWeight.w800, fontSize: 15),
-              decoration: InputDecoration(
-                labelText: S.of(context).dob,
-                errorText: _dobError,
-                labelStyle: subTextStyle,
-                focusedBorder: UnderlineInputBorder(
-                    borderSide: BorderSide(color: colorAccent)),
-                border: UnderlineInputBorder(
-                    borderSide: BorderSide(color: lightGrey)),
-              ),
-            ),
+            // const SizedBox(
+            //   height: 32,
+            // ),
+            // TextFormField(
+            //   keyboardType: TextInputType.datetime,
+            //   cursorWidth: 1,
+            //   controller: _dobController,
+            //   textAlign: TextAlign.start,
+            //   textDirection: TextDirection.ltr,
+            //   autofocus: false,
+            //   readOnly: true,
+            //   onTap: () async {
+            //     var date = await showDatePicker(
+            //         context: Get.context,
+            //         initialDate: DateTime(1990),
+            //         firstDate: DateTime(1920),
+            //         lastDate: DateTime.now());
+            //     if (date != null) {
+            //       setState(() {
+            //         _dobController.text = formatDate(date);
+            //       });
+            //     }
+            //   },
+            //   onChanged: (s) {
+            //     setState(() {
+            //       _dobError = null;
+            //     });
+            //   },
+            //   style: TextStyle(
+            //       color: blackColor, fontWeight: FontWeight.w800, fontSize: 15),
+            //   decoration: InputDecoration(
+            //     labelText: S.of(context).dob,
+            //     errorText: _dobError,
+            //     labelStyle: subTextStyle,
+            //     focusedBorder: UnderlineInputBorder(
+            //         borderSide: BorderSide(color: colorAccent)),
+            //     border: UnderlineInputBorder(
+            //         borderSide: BorderSide(color: lightGrey)),
+            //   ),
+            // ),
             const SizedBox(
               height: 32,
             ),
@@ -199,5 +199,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   String formatDate(DateTime date) {
     return '${date.year}/${date.month}/${date.day}';
+  }
+
+  void saveDetails() {
+    if (_firstNameController.text.isEmpty) {
+      setState(() {
+        _firstNameError = "Required Field";
+      });
+      return;
+    }
+    if (_lastNameController.text.isEmpty) {
+      setState(() {
+        _lastNameError = "Required Field";
+      });
+      return;
+    }
+    if (!_emailController.text.isEmail) {
+      setState(() {
+        _emailError = "Required Field";
+      });
+      return;
+    }
+    _profileController.updateProfile(_firstNameController.text,
+        _lastNameController.text, _emailController.text);
   }
 }

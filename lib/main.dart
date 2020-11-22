@@ -1,3 +1,4 @@
+import 'package:e_commerce_alwalla/controller/address_controller.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/app_language.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import 'controller/products_controller.dart';
 import 'data/app_preference.dart';
 import 'model/user_model.dart';
 import 'screen/splash/splash_screen.dart';
@@ -14,6 +16,8 @@ import 'screen/splash/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreference.init();
+  Get.put(AddressController());
+  Get.put(ProductsController());
   runApp(MyApp());
 }
 

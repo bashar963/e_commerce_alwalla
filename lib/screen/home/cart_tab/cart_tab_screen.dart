@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/screen/checkout/checkout_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:slide_item/slide_item.dart';
 
 class CartTabScreen extends StatefulWidget {
@@ -14,20 +17,12 @@ class CartTabScreen extends StatefulWidget {
 
 class _CartTabScreenState extends State<CartTabScreen> {
   final textController = TextEditingController();
-  Cart cart;
+  final CartController _cartController = Get.find();
 
   @override
   void initState() {
     super.initState();
-    cart = Cart("3950", "50", "4500", [
-      Item("1", "Tag Heuer Wristwatch", "1100", "assets/images/image.png", 1),
-      Item("2", "BeoPlay Speaker", "450", "assets/images/image_2.png", 2),
-      Item("3", "Electric Kettle", "95", "assets/images/image_demo.png", 4),
-      Item("4", "Tag Heuer Wristwatch", "1100", "assets/images/image.png", 1),
-      Item("5", "Tag Heuer Wristwatch", "1100", "assets/images/image_demo.png",
-          5),
-      Item("6", "Tag Heuer Wristwatch", "1100", "assets/images/image_2.png", 7),
-    ]);
+    _cartController.fillCart();
   }
 
   @override
@@ -60,11 +55,15 @@ class _CartTabScreenState extends State<CartTabScreen> {
                   const SizedBox(
                     height: 4,
                   ),
-                  Text(
-                    "3500\$",
-                    style:
-                        mainTextStyle.copyWith(fontSize: 18, color: redColor),
-                  ),
+                  Obx(() {
+                    return Text(
+                      _cartController.carts.value == null
+                          ? ''
+                          : "${_cartController.carts.value.total} EGP",
+                      style:
+                          mainTextStyle.copyWith(fontSize: 18, color: redColor),
+                    );
+                  }),
                 ],
               ),
             ),
@@ -95,162 +94,167 @@ class _CartTabScreenState extends State<CartTabScreen> {
   }
 
   Widget body(BuildContext context) {
-    return CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: [
-        cart.items.isEmpty
-            ? SliverFillRemaining(
-                child: emptyCart(),
-              )
-            : SliverToBoxAdapter(
-                child: SlideConfiguration(
-                  config: SlideConfig(
-                      slideOpenAnimDuration: Duration(milliseconds: 200),
-                      slideCloseAnimDuration: Duration(milliseconds: 400),
-                      deleteStep1AnimDuration: Duration(milliseconds: 250),
-                      deleteStep2AnimDuration: Duration(milliseconds: 300),
-                      supportElasticity: true,
-                      closeOpenedItemOnTouch: true,
-                      slideWidth: 100,
-                      actionOpenCloseThreshold: 0.3,
-                      backgroundColor: whiteColor),
-                  child: ListView.builder(
-                    itemBuilder: (c, i) => Padding(
-                      padding: EdgeInsets.only(top: 16),
-                      child: item(cart.items[i], i),
+    return Obx(() {
+      if (_cartController.carts.value == null) {
+        return Container();
+      }
+      return CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: [
+          _cartController.carts.value.items.isEmpty
+              ? SliverFillRemaining(
+                  child: emptyCart(),
+                )
+              : SliverToBoxAdapter(
+                  child: SlideConfiguration(
+                    config: SlideConfig(
+                        slideOpenAnimDuration: Duration(milliseconds: 200),
+                        slideCloseAnimDuration: Duration(milliseconds: 400),
+                        deleteStep1AnimDuration: Duration(milliseconds: 250),
+                        deleteStep2AnimDuration: Duration(milliseconds: 300),
+                        supportElasticity: true,
+                        closeOpenedItemOnTouch: true,
+                        slideWidth: 100,
+                        actionOpenCloseThreshold: 0.3,
+                        backgroundColor: whiteColor),
+                    child: ListView.builder(
+                      itemBuilder: (c, i) => Padding(
+                        padding: EdgeInsets.only(top: 16),
+                        child: item(_cartController.carts.value.items[i], i),
+                      ),
+                      itemCount: _cartController.carts.value.items.length,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                     ),
-                    itemCount: cart.items.length,
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
                   ),
                 ),
-              ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Divider(),
-        ),
-        space(24),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      "SubTotal",
-                      style: mainTextStyle.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                        child: Text(
-                      "-" * 40,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.fade,
-                      style: mainTextStyle.copyWith(
-                          letterSpacing: 2, color: subTextColor),
-                    )),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                      cart.subTotal + "\$",
-                      style: mainTextStyle,
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  height: 32,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "TAX",
-                      style: mainTextStyle.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Expanded(
-                        child: Text(
-                      "-" * 40,
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.fade,
-                      style: mainTextStyle.copyWith(
-                          letterSpacing: 2, color: subTextColor),
-                    )),
-                    const SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                      cart.tax + "\$",
-                      style: mainTextStyle,
-                    )
-                  ],
-                )
-              ],
-            ),
+          space(24),
+          SliverToBoxAdapter(
+            child: Divider(),
           ),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Divider(),
-        ),
-        space(24),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: blackColor.withOpacity(0.1))),
-              child: Row(
+          space(24),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Column(
                 children: [
-                  Expanded(
-                    child: TextFormField(
-                      controller: textController,
-                      keyboardType: TextInputType.text,
-                      cursorWidth: 1,
-                      autofocus: false,
-                      style: TextStyle(
-                          color: mainTextColor,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
-                      decoration: InputDecoration(
-                        hintText: "Enter Voucher Code",
-                        hintStyle: TextStyle(
-                          color: subTextColor,
-                          fontWeight: FontWeight.w300,
-                        ),
-                        border: InputBorder.none,
+                  Row(
+                    children: [
+                      Text(
+                        "SubTotal",
+                        style: mainTextStyle.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.w400),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Text(
+                        "-" * 40,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        style: mainTextStyle.copyWith(
+                            letterSpacing: 2, color: subTextColor),
+                      )),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        _cartController.carts.value.subTotal + " EGP",
+                        style: mainTextStyle,
+                      )
+                    ],
                   ),
                   const SizedBox(
-                    width: 12,
+                    height: 32,
                   ),
-                  FlatButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Apply",
-                      style: mainTextStyle,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        "TAX",
+                        style: mainTextStyle.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Text(
+                        "-" * 40,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                        overflow: TextOverflow.fade,
+                        style: mainTextStyle.copyWith(
+                            letterSpacing: 2, color: subTextColor),
+                      )),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        _cartController.carts.value.tax + " EGP",
+                        style: mainTextStyle,
+                      )
+                    ],
                   )
                 ],
               ),
             ),
           ),
-        ),
-        space(48),
-      ],
-    );
+          space(24),
+          SliverToBoxAdapter(
+            child: Divider(),
+          ),
+          space(24),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: blackColor.withOpacity(0.1))),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: textController,
+                        keyboardType: TextInputType.text,
+                        cursorWidth: 1,
+                        autofocus: false,
+                        style: TextStyle(
+                            color: mainTextColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16),
+                        decoration: InputDecoration(
+                          hintText: "Enter Voucher Code",
+                          hintStyle: TextStyle(
+                            color: subTextColor,
+                            fontWeight: FontWeight.w300,
+                          ),
+                          border: InputBorder.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 12,
+                    ),
+                    FlatButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Apply",
+                        style: mainTextStyle,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+          space(48),
+        ],
+      );
+    });
   }
 
   space(double size) {
@@ -309,13 +313,17 @@ class _CartTabScreenState extends State<CartTabScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.asset(
-                  item.image,
-                  fit: BoxFit.cover,
-                  width: 120,
-                  height: 120,
+              Container(
+                width: 120,
+                height: 120,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: CachedNetworkImage(
+                    imageUrl: item.image,
+                    fit: BoxFit.contain,
+                    width: 120,
+                    height: 120,
+                  ),
                 ),
               ),
               const SizedBox(
@@ -335,7 +343,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
                     height: 8,
                   ),
                   Text(
-                    item.total + "\$",
+                    item.total + " EGP",
                     style: mainTextStyle.copyWith(
                         color: redColor,
                         fontSize: 16,
@@ -411,7 +419,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
 
   void removeItem(Item item) {
     setState(() {
-      cart.items.remove(item);
+      _cartController.carts.value.items.remove(item);
     });
   }
 
@@ -435,18 +443,4 @@ class _CartTabScreenState extends State<CartTabScreen> {
       ),
     );
   }
-}
-
-class Cart {
-  final String subTotal, tax, total;
-  final List<Item> items;
-
-  Cart(this.subTotal, this.tax, this.total, this.items);
-}
-
-class Item {
-  final String id, title, total, image;
-  int quantity = 1;
-
-  Item(this.id, this.title, this.total, this.image, this.quantity);
 }

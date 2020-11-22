@@ -7,10 +7,16 @@ abstract class AppPreference {
   static final String _customerId = "_customerId";
   static final String _firebaseToken = "_firebaseToken";
   static final String _appLanguage = "appLanguage";
+  static final String _defAddressID = "_defAddressID";
 
   static Future<void> init() async {
     _sharedPreferences = await SharedPreferences.getInstance();
   }
+
+  static String get defAddressID =>
+      _sharedPreferences.getString(_defAddressID) ?? "";
+  static set defAddressID(String val) =>
+      _sharedPreferences.setString(_defAddressID, val);
 
   static String get firebaseToken =>
       _sharedPreferences.getString(_firebaseToken) ?? "";

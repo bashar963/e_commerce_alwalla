@@ -1,5 +1,6 @@
 import 'package:e_commerce_alwalla/controller/address_controller.dart';
 import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
+import 'package:e_commerce_alwalla/screen/addresses/add_address_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,7 @@ class AddressesScreen extends StatefulWidget {
 }
 
 class _AddressesScreenState extends State<AddressesScreen> {
-  final _addressesController = Get.put(AddressController());
+  final AddressController _addressesController = Get.find();
 
   // List<Address> _address = [
   //   Address(
@@ -63,7 +64,9 @@ class _AddressesScreenState extends State<AddressesScreen> {
                 child: RaisedButton(
                   elevation: 0,
                   color: redColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(AddAddressScreen());
+                  },
                   child: Text(
                     "NEW",
                     style: subTextStyle.copyWith(color: whiteColor),
@@ -100,11 +103,13 @@ class _AddressesScreenState extends State<AddressesScreen> {
     });
   }
 
-  addressItem(Address address) {
+  addressItem(Addresses address) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       title: Text(
-        address.prefix + "\n",
+        _addressesController.selectedAddress.value.id == address.id
+            ? 'Default Address'
+            : "Secondary Address",
         style: mainTextStyle,
       ),
       subtitle: Text(
@@ -113,6 +118,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
       ),
       onTap: () {
         _addressesController.selectedAddress.value = address;
+        _addressesController.addresses.refresh();
         // setState(() {
         //   _address.forEach((element) {
         //     element.isSelected = false;

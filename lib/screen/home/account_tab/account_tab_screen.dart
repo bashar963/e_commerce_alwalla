@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:e_commerce_alwalla/controller/login_controller.dart';
+
+import 'package:e_commerce_alwalla/controller/profile_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/screen/addresses/addresses_screen.dart';
 import 'package:e_commerce_alwalla/screen/cards/cards_screen.dart';
@@ -20,7 +21,7 @@ class AccountTabScreen extends StatefulWidget {
 
 class _AccountTabScreenState extends State<AccountTabScreen> {
   List<Setting> _settings;
-  final LoginController _loginController = Get.find();
+  final ProfileController _profileController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -32,8 +33,7 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         Get.to(AddressesScreen());
       }),
       Setting("assets/icons/fav.svg", "Wishlist", () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => WishListScreen()));
+        Get.to(WishListScreen());
       }),
       Setting("assets/icons/history.svg", "Order History", () {
         Navigator.push(
@@ -102,10 +102,10 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AutoSizeText(
-                        _loginController.user.value != null
-                            ? (_loginController.user.value.firstname +
+                        _profileController.user.value != null
+                            ? (_profileController.user.value.firstname +
                                 " " +
-                                _loginController.user.value.lastname)
+                                _profileController.user.value.lastname)
                             : '',
                         maxLines: 1,
                         maxFontSize: 26,
@@ -117,8 +117,8 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
                         height: 4,
                       ),
                       Text(
-                        _loginController.user.value != null
-                            ? _loginController.user.value.email
+                        _profileController.user.value != null
+                            ? _profileController.user.value.email
                             : '',
                         style: subTextStyle,
                       ),

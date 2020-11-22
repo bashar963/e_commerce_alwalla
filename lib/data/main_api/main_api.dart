@@ -22,6 +22,11 @@ abstract class MainApi extends ChopperService {
 
   @Get(path: '/customers/me')
   Future<Response> getUserData(@Header('Authorization') String token);
+  @Get(path: '/carts/mine')
+  Future<Response> getCart(@Header('Authorization') String token);
+
+  @Get(path: '/products?searchCriteria')
+  Future<Response> getProducts();
 
   @Put(path: '/customers/me')
   Future<Response> updateUserProfile(
