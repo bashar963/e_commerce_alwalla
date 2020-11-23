@@ -1,4 +1,8 @@
+import 'package:e_commerce_alwalla/controller/address_controller.dart';
 import 'package:e_commerce_alwalla/controller/checkout_controller.dart';
+import 'package:e_commerce_alwalla/generated/l10n.dart';
+import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
+import 'package:e_commerce_alwalla/model/shipping_methods_response.dart';
 
 import 'package:e_commerce_alwalla/screen/checkout/summary/summary_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
@@ -14,7 +18,8 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final _checkoutBloc = Get.put(CheckoutController());
+  final CheckoutController _checkoutBloc = Get.find();
+  final AddressController _addressesController = Get.find();
   int _selectedIndex = 0;
 
   final street1Controller = TextEditingController();
@@ -34,6 +39,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       numberError,
       stateError,
       countryError;
+
+  @override
+  void initState() {
+    super.initState();
+    _addressesController.loadAddresses();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +103,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     setState(() {
                       _selectedIndex++;
                     });
+                    if (_selectedIndex == 1) {
+                      _checkoutBloc.getShippingMethods(
+                          _addressesController.selectedAddress.value);
+                    }
+                    if (_selectedIndex == 2) {
+                      _checkoutBloc.getPaymentMethods();
+                    }
                   } else {
                     int index = await Navigator.push(context,
                         MaterialPageRoute(builder: (c) => SummaryScreen()));
@@ -126,7 +144,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
         Expanded(
           child: IndexedStack(
-            children: <Widget>[delivery(), address(), payment()],
+            children: <Widget>[address(), delivery(), payment()],
             index: _selectedIndex,
           ),
         )
@@ -157,6 +175,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   });
                 }),
           ),
+          const SizedBox(
+            height: 16,
+          ),
+          userAddresses(),
+          Text(S.of(context).or),
           const SizedBox(
             height: 32,
           ),
@@ -489,22 +512,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   }
 
   Widget delivery() {
-    return ListView.builder(
-        itemCount: _deliveries.length,
-        shrinkWrap: true,
-        physics: BouncingScrollPhysics(),
-        itemBuilder: (c, i) => deliveryItem(_deliveries[i]));
+    return Obx(() {
+      print(_checkoutBloc.shippingMethods.length.toString());
+      return ListView.builder(
+          itemCount: _checkoutBloc.shippingMethods.length,
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (c, i) =>
+              deliveryItem(_checkoutBloc.shippingMethods[i]));
+    });
   }
 
-  deliveryItem(Delivery delivery) {
+  deliveryItem(ShippingMethodResponse delivery) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       title: Text(
-        delivery.title,
+        delivery.carrierTitle,
         style: mainTextStyle,
       ),
       subtitle: Text(
-        delivery.desc,
+        delivery.amount.toStringAsFixed(2) + " EGP",
         style: subTextStyle,
       ),
       onTap: () {
@@ -526,6 +553,53 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 padding: const EdgeInsets.all(6.0),
                 child: CircleAvatar(
                   backgroundColor: redColor,
+                ),
+              )
+            : const SizedBox.shrink(),
+      ),
+    );
+  }
+
+  Widget userAddresses() {
+    return Obx(() {
+      return ListView.builder(
+          itemCount: _addressesController.addresses.length,
+          shrinkWrap: true,
+          physics: BouncingScrollPhysics(),
+          itemBuilder: (c, i) =>
+              addressItem(_addressesController.addresses[i]));
+    });
+  }
+
+  addressItem(Addresses address) {
+    return ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      title: Text(
+        _addressesController.selectedAddress.value.id == address.id
+            ? 'Default Address'
+            : "Secondary Address",
+        style: mainTextStyle,
+      ),
+      subtitle: Text(
+        address.street.first ?? '',
+        style: subTextStyle.copyWith(color: mainTextColor),
+      ),
+      onTap: () {
+        _addressesController.selectedAddress.value = address;
+        _addressesController.addresses.refresh();
+      },
+      trailing: Container(
+        width: 28,
+        height: 28,
+        decoration: BoxDecoration(
+            color: blackColor.withOpacity(0.06),
+            borderRadius: BorderRadius.circular(14)),
+        child: _addressesController.selectedAddress.value == address
+            ? CircleAvatar(
+                backgroundColor: redColor,
+                child: Icon(
+                  Icons.check,
+                  color: whiteColor,
                 ),
               )
             : const SizedBox.shrink(),

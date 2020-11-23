@@ -3,7 +3,6 @@ import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/screen/checkout/checkout_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -22,75 +21,86 @@ class _CartTabScreenState extends State<CartTabScreen> {
   @override
   void initState() {
     super.initState();
-    _cartController.fillCart();
+    _cartController.getCart();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
-      appBar: AppBar(
         backgroundColor: whiteColor,
-        elevation: 0,
-      ),
-      body: GestureDetector(
-          onTap: () {
-            hideKeyboard(context);
-          },
-          child: body(context)),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-        color: whiteColor,
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    "TOTAL",
-                    style: subTextStyle,
-                  ),
-                  const SizedBox(
-                    height: 4,
-                  ),
-                  Obx(() {
-                    return Text(
-                      _cartController.carts.value == null
-                          ? ''
-                          : "${_cartController.carts.value.total} EGP",
-                      style:
-                          mainTextStyle.copyWith(fontSize: 18, color: redColor),
-                    );
-                  }),
-                ],
-              ),
-            ),
-            Expanded(
-                child: Container(
-              height: 50,
-              child: RaisedButton(
-                elevation: 0,
-                color: redColor,
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (c) => CheckoutScreen(),
-                    ),
-                  );
-                },
-                child: Text(
-                  "CHECKOUT",
-                  style: subTextStyle.copyWith(color: whiteColor),
-                ),
-              ),
-            ))
-          ],
+        appBar: AppBar(
+          backgroundColor: whiteColor,
+          elevation: 0,
         ),
-      ),
-    );
+        body: Obx(() {
+          return Stack(
+            children: [
+              GestureDetector(
+                  onTap: () {
+                    hideKeyboard(context);
+                  },
+                  child: body(context)),
+              if (_cartController.isLoading.value)
+                Center(child: RefreshProgressIndicator())
+            ],
+          );
+        }),
+        bottomNavigationBar: Obx(() {
+          if (_cartController.carts.value.items.isEmpty)
+            return SizedBox.shrink();
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+            color: whiteColor,
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        "TOTAL",
+                        style: subTextStyle,
+                      ),
+                      const SizedBox(
+                        height: 4,
+                      ),
+                      Obx(() {
+                        return Text(
+                          _cartController.carts.value == null
+                              ? ''
+                              : "${_cartController.carts.value.total} EGP",
+                          style: mainTextStyle.copyWith(
+                              fontSize: 18, color: redColor),
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+                Expanded(
+                    child: Container(
+                  height: 50,
+                  child: RaisedButton(
+                    elevation: 0,
+                    color: redColor,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (c) => CheckoutScreen(),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      "CHECKOUT",
+                      style: subTextStyle.copyWith(color: whiteColor),
+                    ),
+                  ),
+                ))
+              ],
+            ),
+          );
+        }));
   }
 
   Widget body(BuildContext context) {
@@ -320,6 +330,15 @@ class _CartTabScreenState extends State<CartTabScreen> {
                   borderRadius: BorderRadius.circular(6),
                   child: CachedNetworkImage(
                     imageUrl: item.image,
+                    errorWidget: (c, s, w) {
+                      return CachedNetworkImage(
+                        imageUrl:
+                            'http://mymalleg.com/pub/media/catalog/product/cache/p/r/product_1_2.jpg',
+                        fit: BoxFit.contain,
+                        width: 120,
+                        height: 120,
+                      );
+                    },
                     fit: BoxFit.contain,
                     width: 120,
                     height: 120,
@@ -358,55 +377,62 @@ class _CartTabScreenState extends State<CartTabScreen> {
                       decoration: BoxDecoration(
                           color: Color.fromRGBO(0, 0, 0, 0.06),
                           borderRadius: BorderRadius.circular(4)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                item.quantity++;
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Icon(
-                                FontAwesomeIcons.plus,
-                                size: 10,
-                                color: Color(0xBB343434),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  item.quantity++;
+                                  _cartController.editItemInCart(
+                                      item.itemId, item.quoteId, item.quantity);
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  FontAwesomeIcons.plus,
+                                  size: 10,
+                                  color: Color(0xBB343434),
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Text(
-                              item.quantity.toString(),
-                              style: mainTextStyle.copyWith(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
-                                color: blackColor,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                item.quantity.toString(),
+                                style: mainTextStyle.copyWith(
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                  color: blackColor,
+                                ),
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                if (item.quantity <= 1) {
-                                  removeItem(item);
-                                } else {
-                                  item.quantity--;
-                                }
-                              });
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(6.0),
-                              child: Icon(
-                                FontAwesomeIcons.minus,
-                                size: 10,
-                                color: Color(0xBB343434),
+                            InkWell(
+                              onTap: () {
+                                setState(() {
+                                  if (item.quantity <= 1) {
+                                    removeItem(item);
+                                  } else {
+                                    item.quantity--;
+                                    _cartController.editItemInCart(item.itemId,
+                                        item.quoteId, item.quantity);
+                                  }
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  FontAwesomeIcons.minus,
+                                  size: 10,
+                                  color: Color(0xBB343434),
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ))
                 ],
               ))
@@ -418,9 +444,7 @@ class _CartTabScreenState extends State<CartTabScreen> {
   }
 
   void removeItem(Item item) {
-    setState(() {
-      _cartController.carts.value.items.remove(item);
-    });
+    _cartController.removeItemInCart(item.itemId);
   }
 
   Widget emptyCart() {

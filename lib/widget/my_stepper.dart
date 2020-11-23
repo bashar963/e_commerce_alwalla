@@ -63,7 +63,7 @@ class _MyStepperState extends State<MyStepper> {
             SizedBox(
               height: 12,
             ),
-            Text("Delivery")
+            Text("Address")
           ],
         ),
         Expanded(
@@ -87,7 +87,7 @@ class _MyStepperState extends State<MyStepper> {
             SizedBox(
               height: 12,
             ),
-            Text("Address")
+            Text("Delivery")
           ],
         ),
         Expanded(

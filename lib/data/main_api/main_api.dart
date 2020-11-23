@@ -22,6 +22,22 @@ abstract class MainApi extends ChopperService {
 
   @Get(path: '/customers/me')
   Future<Response> getUserData(@Header('Authorization') String token);
+
+  @Post(path: '/carts/mine/estimate-shipping-methods')
+  Future<Response> getShippingMethods(
+      @Header('Authorization') String token, @Body() Map<String, dynamic> body);
+
+  @Get(path: '/carts/mine/payment-information')
+  Future<Response> getPaymentMethods(@Header('Authorization') String token);
+
+  @Delete(path: '/carts/mine/items/{item_id}')
+  Future<Response> deleteItemInCart(
+      @Header('Authorization') String token, @Path('item_id') String itemId);
+
+  @Put(path: '/carts/mine/items/{item_id}')
+  Future<Response> editItemInCart(@Header('Authorization') String token,
+      @Path('item_id') String itemId, @Body() Map<String, dynamic> body);
+
   @Get(path: '/carts/mine')
   Future<Response> getCart(@Header('Authorization') String token);
 

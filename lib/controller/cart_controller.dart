@@ -40,33 +40,85 @@ class CartController extends GetxController {
     }
   }
 
+  void removeItemInCart(String itemId) async {
+    try {
+      isLoading(true);
+      var response =
+          await MainApi.create().deleteItemInCart(AppPreference.token, itemId);
+      print('--------- delete cart item $itemId -------');
+      print(response.bodyString);
+      print(response.error);
+      isLoading(false);
+      if (response.isSuccessful) {
+        var cartResponse = response.body;
+        getCart();
+      } else {
+        var error = jsonDecode(response.error.toString());
+        showFailedMessage(Get.context, error['message'] ?? '');
+      }
+    } on Exception catch (e) {
+      showFailedMessage(Get.context, e.toString() ?? '');
+    }
+  }
+
+  void editItemInCart(String itemId, String quoteId, int qty) async {
+    try {
+      isLoading(true);
+      var response =
+          await MainApi.create().editItemInCart(AppPreference.token, itemId, {
+        "cartItem": {"item_id": itemId, "qty": qty, "quote_id": quoteId}
+      });
+      print('---------edit cart item $itemId-------');
+      print(response.bodyString);
+      print(response.error);
+      isLoading(false);
+      if (response.isSuccessful) {
+        var cartResponse = response.body;
+        getCart();
+      } else {
+        var error = jsonDecode(response.error.toString());
+        showFailedMessage(Get.context, error['message'] ?? '');
+      }
+    } on Exception catch (e) {
+      showFailedMessage(Get.context, e.toString() ?? '');
+    }
+  }
+
   void fillCart() {
     if (cart.value != null) {
       print('init cart');
       List<Item> items = [];
       var subTotal = 0.0;
+      var total = 0.0;
+      var tax = 0.0;
       cart.value.items.forEach((element) {
-        subTotal += element.price;
+        total += double.tryParse(element.price.toString()) *
+                (int.tryParse(element.qty.toString())) ??
+            1;
         var p = productsController.getProductById(element.sku);
         var image = '';
         if (p != null) {
           if (p.mediaGalleryEntries != null) {
             if (p.mediaGalleryEntries.isNotEmpty) {
+              subTotal += double.tryParse(p.price.toString()) *
+                      (int.tryParse(element.qty.toString())) ??
+                  1;
               image = p.mediaGalleryEntries.first.file;
             }
           }
         }
-        print('link $image');
-        print(baseUrlMedia + image);
         items.add(Item(
             element.sku,
+            element.itemId.toString(),
             element.name,
             p == null ? element.price.toString() : p.price.toString(),
-            'http://mymalleg.com/pub/media/catalog/product' + image,
+            baseUrlMedia + image,
+            element.quoteId,
             element.qty));
       });
-      carts.value = Cart(subTotal.toStringAsFixed(2), '0.0',
-          subTotal.toStringAsFixed(2), items);
+      tax = total - subTotal;
+      carts.value = Cart(subTotal.toStringAsFixed(1), tax.toStringAsFixed(1),
+          total.toStringAsFixed(1), items);
     }
   }
 }
@@ -79,8 +131,9 @@ class Cart {
 }
 
 class Item {
-  final String id, title, total, image;
+  final String id, itemId, title, total, image, quoteId;
   dynamic quantity = 1;
 
-  Item(this.id, this.title, this.total, this.image, this.quantity);
+  Item(this.id, this.itemId, this.title, this.total, this.image, this.quoteId,
+      this.quantity);
 }

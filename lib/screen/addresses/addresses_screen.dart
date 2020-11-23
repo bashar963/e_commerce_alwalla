@@ -119,12 +119,6 @@ class _AddressesScreenState extends State<AddressesScreen> {
       onTap: () {
         _addressesController.selectedAddress.value = address;
         _addressesController.addresses.refresh();
-        // setState(() {
-        //   _address.forEach((element) {
-        //     element.isSelected = false;
-        //   });
-        //   address.isSelected = true;
-        // });
       },
       trailing: Container(
         width: 28,
