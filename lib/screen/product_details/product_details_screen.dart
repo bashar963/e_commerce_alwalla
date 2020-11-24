@@ -1,20 +1,30 @@
-import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_pro/carousel_pro.dart';
+import 'package:e_commerce_alwalla/controller/products_controller.dart';
+import 'package:e_commerce_alwalla/model/products_response.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:e_commerce_alwalla/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final Product product;
-
-  const ProductDetailsScreen({Key key, this.product}) : super(key: key);
+  final dynamic product;
+  final String productId;
+  const ProductDetailsScreen({Key key, this.product, @required this.productId})
+      : super(key: key);
   @override
   _ProductDetailsScreenState createState() => _ProductDetailsScreenState();
 }
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
+  final ProductsController _productsController = Get.find();
+
+  Product _product;
   bool isFav = false;
   String readMore = "Read More";
   String readLess = "Read Less";
@@ -37,6 +47,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   void initState() {
     super.initState();
+
+    _product = _productsController.getProductById(widget.productId);
+    _product.customAttributes.forEach((element) {
+      if (element.attributeCode == "short_description")
+        desc = element.value ?? '';
+    });
+    _product.customAttributes.forEach((element) {
+      if (element.attributeCode == "description")
+        descFull = element.value ?? '';
+    });
     descTemp = desc;
     buttonText = readMore;
   }
@@ -66,7 +86,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         fontSize: 14, color: subTextColor),
                   ),
                   Text(
-                    "1500\$",
+                    _product.price.toString() + " EGP",
                     style:
                         mainTextStyle.copyWith(fontSize: 18, color: redColor),
                   ),
@@ -126,14 +146,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           pinned: true,
           expandedHeight: 450,
           flexibleSpace: FlexibleSpaceBar(
-            background: Hero(
-              tag: widget.product != null ? "product${widget.product.id}" : "p",
-              child: Image.asset(
-                widget.product != null
-                    ? widget.product.image
-                    : "assets/images/image_demo.png",
-                fit: BoxFit.cover,
-              ),
+            background: Carousel(
+              dotBgColor: Colors.transparent,
+              dotColor: Theme.of(context).accentColor,
+              dotIncreasedColor: Theme.of(context).accentColor,
+              autoplay: false,
+              images: _product.mediaGalleryEntries.map((e) {
+                return Hero(
+                  tag: "product${widget.productId}+${e.id.toString()}",
+                  child: CachedNetworkImage(
+                    imageUrl: baseUrlMedia + e.file,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                    errorWidget: (c, s, w) {
+                      return CachedNetworkImage(
+                        imageUrl:
+                            'http://mymalleg.com/pub/media/catalog/product/cache/p/r/product_1_2.jpg',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                  ),
+                );
+              }).toList(),
             ),
           ),
         ),
@@ -141,8 +175,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         SliverToBoxAdapter(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              "Nike Dri-FIT Long Sleeve",
+            child: AutoSizeText(
+              _product.name,
+              maxLines: 2,
+              maxFontSize: 24,
+              minFontSize: 14,
               style: mainTextStyle.copyWith(fontSize: 24),
             ),
           ),

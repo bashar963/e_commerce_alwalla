@@ -36,16 +36,13 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
         Get.to(WishListScreen());
       }),
       Setting("assets/icons/history.svg", "Order History", () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => OrdersHistory()));
+        Get.to(OrdersHistory());
       }),
       Setting("assets/icons/track.svg", "Track Order", () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => OrdersHistory()));
+        Get.to(OrdersHistory());
       }),
       Setting("assets/icons/card.svg", "Cards", () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (c) => CardsScreen()));
+        Get.to(CardsScreen());
       }),
       Setting("assets/icons/bill.svg", "Notification", () {}),
       Setting("assets/icons/exit.svg", "Log Out", () {

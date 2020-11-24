@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final paymentMethodResponse = paymentMethodResponseFromJson(jsonString);
-
 import 'dart:convert';
 
 class PaymentMethodResponse {
@@ -38,6 +34,7 @@ class PaymentMethod {
     this.title,
   });
 
+  bool isSelected = false;
   String code;
   String title;
 

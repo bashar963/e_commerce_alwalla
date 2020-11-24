@@ -2,7 +2,9 @@ import 'package:e_commerce_alwalla/controller/address_controller.dart';
 import 'package:e_commerce_alwalla/controller/checkout_controller.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
+import 'package:e_commerce_alwalla/model/payment_methods_response.dart';
 import 'package:e_commerce_alwalla/model/shipping_methods_response.dart';
+import 'package:e_commerce_alwalla/screen/addresses/add_address_screen.dart';
 
 import 'package:e_commerce_alwalla/screen/checkout/summary/summary_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
@@ -40,6 +42,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       stateError,
       countryError;
 
+  bool _hasSelectedShippingMethod = false;
+  bool _hasSelectedPaymentMethod = false;
   @override
   void initState() {
     super.initState();
@@ -49,85 +53,112 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
-      appBar: AppBar(
         backgroundColor: whiteColor,
-        title: Text("Checkout"),
-        centerTitle: true,
-        elevation: 0,
-      ),
-      body: GestureDetector(
-          onTap: () {
-            hideKeyboard(context);
-          },
-          child: body(context)),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-        color: whiteColor,
-        child: Row(
-          children: [
-            Expanded(
-                child: _selectedIndex == 0
-                    ? const SizedBox()
-                    : Container(
-                        height: 50,
-                        child: OutlineButton(
-                          highlightedBorderColor: redColor,
-                          highlightColor: whiteColor,
-                          color: redColor,
-                          borderSide: BorderSide(color: redColor),
-                          onPressed: () {
-                            setState(() {
-                              if (_selectedIndex > 0) {
-                                _selectedIndex--;
-                              }
-                            });
-                          },
-                          child: Text(
-                            "BACK",
-                            style: subTextStyle.copyWith(color: blackColor),
-                          ),
-                        ),
-                      )),
-            const SizedBox(
-              width: 24,
-            ),
-            Expanded(
-                child: Container(
-              height: 50,
-              child: RaisedButton(
-                elevation: 0,
-                color: redColor,
-                onPressed: () async {
-                  if (_selectedIndex < 2) {
-                    setState(() {
-                      _selectedIndex++;
-                    });
-                    if (_selectedIndex == 1) {
-                      _checkoutBloc.getShippingMethods(
-                          _addressesController.selectedAddress.value);
-                    }
-                    if (_selectedIndex == 2) {
-                      _checkoutBloc.getPaymentMethods();
-                    }
-                  } else {
-                    int index = await Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => SummaryScreen()));
-                    setState(() {
-                      _selectedIndex = index ?? 2;
-                    });
-                  }
-                },
-                child: Text(
-                  "NEXT",
-                  style: subTextStyle.copyWith(color: whiteColor),
-                ),
-              ),
-            ))
-          ],
+        appBar: AppBar(
+          backgroundColor: whiteColor,
+          title: Text("Checkout"),
+          centerTitle: true,
+          elevation: 0,
         ),
-      ),
-    );
+        body: GestureDetector(
+            onTap: () {
+              hideKeyboard(context);
+            },
+            child: body(context)),
+        bottomNavigationBar: Obx(() {
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+            color: whiteColor,
+            child: Row(
+              children: [
+                Expanded(
+                    child: _selectedIndex == 0
+                        ? const SizedBox()
+                        : Container(
+                            height: 50,
+                            child: OutlineButton(
+                              highlightedBorderColor: redColor,
+                              highlightColor: whiteColor,
+                              color: redColor,
+                              borderSide: BorderSide(color: redColor),
+                              onPressed: () {
+                                setState(() {
+                                  if (_selectedIndex > 0) {
+                                    _selectedIndex--;
+                                  }
+                                  if (_selectedIndex == 1) {
+                                    _hasSelectedPaymentMethod = false;
+                                  }
+                                  if (_selectedIndex == 0) {
+                                    _hasSelectedShippingMethod = false;
+                                  }
+                                });
+                              },
+                              child: Text(
+                                "BACK",
+                                style: subTextStyle.copyWith(color: blackColor),
+                              ),
+                            ),
+                          )),
+                const SizedBox(
+                  width: 24,
+                ),
+                Expanded(
+                    child: Container(
+                  height: 50,
+                  child: RaisedButton(
+                    elevation: 0,
+                    color: redColor,
+                    onPressed: _selectedIndex == 0 &&
+                            _addressesController.selectedAddress.value == null
+                        ? null
+                        : _selectedIndex == 1 && !_hasSelectedShippingMethod
+                            ? null
+                            : _selectedIndex == 2 && !_hasSelectedPaymentMethod
+                                ? null
+                                : () async {
+                                    if (_selectedIndex < 2) {
+                                      setState(() {
+                                        _selectedIndex++;
+                                      });
+                                      if (_selectedIndex == 1) {
+                                        _checkoutBloc.getShippingMethods(
+                                            _addressesController
+                                                .selectedAddress.value);
+                                      }
+                                      if (_selectedIndex == 2) {
+                                        ShippingMethodResponse selectedMethod;
+                                        _checkoutBloc.shippingMethods
+                                            .forEach((element) {
+                                          if (element.isSelected)
+                                            selectedMethod = element;
+                                        });
+                                        _checkoutBloc.getPaymentMethods(
+                                            _addressesController
+                                                .selectedAddress.value,
+                                            selectedMethod.carrierCode,
+                                            selectedMethod.methodCode);
+                                      }
+                                    } else {
+                                      int index = await Get.to(SummaryScreen());
+                                      setState(() {
+                                        _selectedIndex = index ?? 2;
+                                        _hasSelectedPaymentMethod = false;
+
+                                        _hasSelectedShippingMethod = false;
+                                      });
+                                    }
+                                  },
+                    child: Text(
+                      "NEXT",
+                      style: subTextStyle.copyWith(color: whiteColor),
+                    ),
+                  ),
+                ))
+              ],
+            ),
+          );
+        }));
   }
 
   Widget body(BuildContext context) {
@@ -183,150 +214,166 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           const SizedBox(
             height: 32,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TextFormField(
-              controller: street1Controller,
-              keyboardType: TextInputType.text,
-              cursorWidth: 1,
-              autofocus: false,
-              style: TextStyle(
-                  color: mainTextColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-              decoration: InputDecoration(
-                labelText: "Street 1",
-                errorText: street1Error,
-                labelStyle: TextStyle(
-                  color: subTextColor,
-                  fontWeight: FontWeight.w200,
-                ),
+          Container(
+            height: 50,
+            width: MediaQuery.of(context).size.width,
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            child: RaisedButton(
+              elevation: 0,
+              color: redColor,
+              onPressed: () {
+                Get.to(AddAddressScreen());
+              },
+              child: Text(
+                "NEW ADDRESS",
+                style: subTextStyle.copyWith(color: whiteColor),
               ),
             ),
           ),
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TextFormField(
-              controller: street2Controller,
-              keyboardType: TextInputType.text,
-              cursorWidth: 1,
-              autofocus: false,
-              style: TextStyle(
-                  color: mainTextColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-              decoration: InputDecoration(
-                labelText: "Street 2",
-                errorText: street2Error,
-                labelStyle: TextStyle(
-                  color: subTextColor,
-                  fontWeight: FontWeight.w200,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TextFormField(
-              controller: numberController,
-              keyboardType: TextInputType.number,
-              cursorWidth: 1,
-              autofocus: false,
-              style: TextStyle(
-                  color: mainTextColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-              decoration: InputDecoration(
-                labelText: "Phone Number",
-                errorText: numberError,
-                labelStyle: TextStyle(
-                  color: subTextColor,
-                  fontWeight: FontWeight.w200,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TextFormField(
-              controller: cityController,
-              keyboardType: TextInputType.text,
-              cursorWidth: 1,
-              autofocus: false,
-              style: TextStyle(
-                  color: mainTextColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-              decoration: InputDecoration(
-                labelText: "City",
-                errorText: cityError,
-                labelStyle: TextStyle(
-                  color: subTextColor,
-                  fontWeight: FontWeight.w200,
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 24,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: [
-                Expanded(
-                    child: TextFormField(
-                  controller: stateController,
-                  keyboardType: TextInputType.text,
-                  cursorWidth: 1,
-                  autofocus: false,
-                  style: TextStyle(
-                      color: mainTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16),
-                  decoration: InputDecoration(
-                    labelText: "State",
-                    errorText: stateError,
-                    labelStyle: TextStyle(
-                      color: subTextColor,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                )),
-                const SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                    child: TextFormField(
-                  controller: countryController,
-                  keyboardType: TextInputType.text,
-                  cursorWidth: 1,
-                  autofocus: false,
-                  style: TextStyle(
-                      color: mainTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16),
-                  decoration: InputDecoration(
-                    labelText: "Country",
-                    errorText: countryError,
-                    labelStyle: TextStyle(
-                      color: subTextColor,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                )),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 24),
+          //   child: TextFormField(
+          //     controller: street1Controller,
+          //     keyboardType: TextInputType.text,
+          //     cursorWidth: 1,
+          //     autofocus: false,
+          //     style: TextStyle(
+          //         color: mainTextColor,
+          //         fontWeight: FontWeight.w600,
+          //         fontSize: 16),
+          //     decoration: InputDecoration(
+          //       labelText: "Street 1",
+          //       errorText: street1Error,
+          //       labelStyle: TextStyle(
+          //         color: subTextColor,
+          //         fontWeight: FontWeight.w200,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(
+          //   height: 24,
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 24),
+          //   child: TextFormField(
+          //     controller: street2Controller,
+          //     keyboardType: TextInputType.text,
+          //     cursorWidth: 1,
+          //     autofocus: false,
+          //     style: TextStyle(
+          //         color: mainTextColor,
+          //         fontWeight: FontWeight.w600,
+          //         fontSize: 16),
+          //     decoration: InputDecoration(
+          //       labelText: "Street 2",
+          //       errorText: street2Error,
+          //       labelStyle: TextStyle(
+          //         color: subTextColor,
+          //         fontWeight: FontWeight.w200,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(
+          //   height: 24,
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 24),
+          //   child: TextFormField(
+          //     controller: numberController,
+          //     keyboardType: TextInputType.number,
+          //     cursorWidth: 1,
+          //     autofocus: false,
+          //     style: TextStyle(
+          //         color: mainTextColor,
+          //         fontWeight: FontWeight.w600,
+          //         fontSize: 16),
+          //     decoration: InputDecoration(
+          //       labelText: "Phone Number",
+          //       errorText: numberError,
+          //       labelStyle: TextStyle(
+          //         color: subTextColor,
+          //         fontWeight: FontWeight.w200,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(
+          //   height: 24,
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 24),
+          //   child: TextFormField(
+          //     controller: cityController,
+          //     keyboardType: TextInputType.text,
+          //     cursorWidth: 1,
+          //     autofocus: false,
+          //     style: TextStyle(
+          //         color: mainTextColor,
+          //         fontWeight: FontWeight.w600,
+          //         fontSize: 16),
+          //     decoration: InputDecoration(
+          //       labelText: "City",
+          //       errorText: cityError,
+          //       labelStyle: TextStyle(
+          //         color: subTextColor,
+          //         fontWeight: FontWeight.w200,
+          //       ),
+          //     ),
+          //   ),
+          // ),
+          // const SizedBox(
+          //   height: 24,
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 24),
+          //   child: Row(
+          //     children: [
+          //       Expanded(
+          //           child: TextFormField(
+          //         controller: stateController,
+          //         keyboardType: TextInputType.text,
+          //         cursorWidth: 1,
+          //         autofocus: false,
+          //         style: TextStyle(
+          //             color: mainTextColor,
+          //             fontWeight: FontWeight.w600,
+          //             fontSize: 16),
+          //         decoration: InputDecoration(
+          //           labelText: "State",
+          //           errorText: stateError,
+          //           labelStyle: TextStyle(
+          //             color: subTextColor,
+          //             fontWeight: FontWeight.w200,
+          //           ),
+          //         ),
+          //       )),
+          //       const SizedBox(
+          //         width: 16,
+          //       ),
+          //       Expanded(
+          //           child: TextFormField(
+          //         controller: countryController,
+          //         keyboardType: TextInputType.text,
+          //         cursorWidth: 1,
+          //         autofocus: false,
+          //         style: TextStyle(
+          //             color: mainTextColor,
+          //             fontWeight: FontWeight.w600,
+          //             fontSize: 16),
+          //         decoration: InputDecoration(
+          //           labelText: "Country",
+          //           errorText: countryError,
+          //           labelStyle: TextStyle(
+          //             color: subTextColor,
+          //             fontWeight: FontWeight.w200,
+          //           ),
+          //         ),
+          //       )),
+          //     ],
+          //   ),
+          // ),
           const SizedBox(
             height: 64,
           ),
@@ -350,132 +397,135 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   ];
   bool cardSelected = false;
   Widget payment() {
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            itemCount: _payments.length,
-            shrinkWrap: true,
-            physics: BouncingScrollPhysics(),
-            itemBuilder: (c, i) => paymentItem(
-              _payments[i],
-            ),
-          ),
-        ),
-        if (cardSelected)
-          const SizedBox(
-            height: 32,
-          ),
-        if (cardSelected)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TextFormField(
-              controller: _nameController,
-              keyboardType: TextInputType.text,
-              cursorWidth: 1,
-              autofocus: false,
-              style: TextStyle(
-                  color: mainTextColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-              decoration: InputDecoration(
-                labelText: "Card Holder",
-                errorText: nameError,
-                labelStyle: TextStyle(
-                  color: subTextColor,
-                  fontWeight: FontWeight.w200,
-                ),
+    return Obx(() {
+      return Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount:
+                  _checkoutBloc.paymentMethods.value.paymentMethods.length,
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              itemBuilder: (c, i) => paymentItem(
+                _checkoutBloc.paymentMethods.value.paymentMethods[i],
               ),
             ),
           ),
-        if (cardSelected)
-          const SizedBox(
-            height: 24,
-          ),
-        if (cardSelected)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: TextFormField(
-              controller: _numberController,
-              keyboardType: TextInputType.number,
-              cursorWidth: 1,
-              autofocus: false,
-              style: TextStyle(
-                  color: mainTextColor,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 16),
-              decoration: InputDecoration(
-                labelText: "Card Number",
-                errorText: _numberError,
-                labelStyle: TextStyle(
-                  color: subTextColor,
-                  fontWeight: FontWeight.w200,
+          if (cardSelected)
+            const SizedBox(
+              height: 32,
+            ),
+          if (cardSelected)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextFormField(
+                controller: _nameController,
+                keyboardType: TextInputType.text,
+                cursorWidth: 1,
+                autofocus: false,
+                style: TextStyle(
+                    color: mainTextColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+                decoration: InputDecoration(
+                  labelText: "Card Holder",
+                  errorText: nameError,
+                  labelStyle: TextStyle(
+                    color: subTextColor,
+                    fontWeight: FontWeight.w200,
+                  ),
                 ),
               ),
             ),
-          ),
-        if (cardSelected)
-          const SizedBox(
-            height: 24,
-          ),
-        if (cardSelected)
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: Row(
-              children: [
-                Expanded(
-                    child: TextFormField(
-                  controller: _expController,
-                  keyboardType: TextInputType.datetime,
-                  cursorWidth: 1,
-                  autofocus: false,
-                  style: TextStyle(
-                      color: mainTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16),
-                  decoration: InputDecoration(
-                    labelText: "Expiry Date",
-                    errorText: expError,
-                    labelStyle: TextStyle(
-                      color: subTextColor,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                )),
-                const SizedBox(
-                  width: 16,
-                ),
-                Expanded(
-                    child: TextFormField(
-                  controller: _cvvController,
-                  keyboardType: TextInputType.number,
-                  cursorWidth: 1,
-                  autofocus: false,
-                  style: TextStyle(
-                      color: mainTextColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16),
-                  decoration: InputDecoration(
-                    labelText: "CVV",
-                    errorText: cvvError,
-                    labelStyle: TextStyle(
-                      color: subTextColor,
-                      fontWeight: FontWeight.w200,
-                    ),
-                  ),
-                )),
-              ],
+          if (cardSelected)
+            const SizedBox(
+              height: 24,
             ),
-          ),
-        if (cardSelected)
-          const SizedBox(
-            height: 64,
-          ),
-      ],
-    );
+          if (cardSelected)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextFormField(
+                controller: _numberController,
+                keyboardType: TextInputType.number,
+                cursorWidth: 1,
+                autofocus: false,
+                style: TextStyle(
+                    color: mainTextColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+                decoration: InputDecoration(
+                  labelText: "Card Number",
+                  errorText: _numberError,
+                  labelStyle: TextStyle(
+                    color: subTextColor,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+            ),
+          if (cardSelected)
+            const SizedBox(
+              height: 24,
+            ),
+          if (cardSelected)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: TextFormField(
+                    controller: _expController,
+                    keyboardType: TextInputType.datetime,
+                    cursorWidth: 1,
+                    autofocus: false,
+                    style: TextStyle(
+                        color: mainTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
+                    decoration: InputDecoration(
+                      labelText: "Expiry Date",
+                      errorText: expError,
+                      labelStyle: TextStyle(
+                        color: subTextColor,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  )),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                      child: TextFormField(
+                    controller: _cvvController,
+                    keyboardType: TextInputType.number,
+                    cursorWidth: 1,
+                    autofocus: false,
+                    style: TextStyle(
+                        color: mainTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
+                    decoration: InputDecoration(
+                      labelText: "CVV",
+                      errorText: cvvError,
+                      labelStyle: TextStyle(
+                        color: subTextColor,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ),
+          if (cardSelected)
+            const SizedBox(
+              height: 64,
+            ),
+        ],
+      );
+    });
   }
 
-  paymentItem(Payment payment) {
+  paymentItem(PaymentMethod payment) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       title: Text(
@@ -487,8 +537,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           _payments.forEach((element) {
             element.isSelected = false;
           });
-
-          cardSelected = payment.id == "2";
+          _hasSelectedPaymentMethod = true;
+          // cardSelected = payment.id == "2";
 
           payment.isSelected = true;
         });
@@ -539,6 +589,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           _deliveries.forEach((element) {
             element.isSelected = false;
           });
+          _hasSelectedShippingMethod = true;
           delivery.isSelected = true;
         });
       },
@@ -581,7 +632,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         style: mainTextStyle,
       ),
       subtitle: Text(
-        address.street.first ?? '',
+        getFullAddress(address),
         style: subTextStyle.copyWith(color: mainTextColor),
       ),
       onTap: () {

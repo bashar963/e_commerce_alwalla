@@ -26,11 +26,12 @@ class CartController extends GetxController {
       print('---------cart-------');
       print(response.bodyString);
       print(response.error);
+      print(response.statusCode);
       isLoading(false);
       if (response.isSuccessful) {
         cart.value = CartResponse.fromJson(response.body);
         fillCart();
-      } else {
+      } else if (response.statusCode != 404) {
         var error = jsonDecode(response.error.toString());
 
         showFailedMessage(Get.context, error['message'] ?? '');
@@ -50,7 +51,7 @@ class CartController extends GetxController {
       print(response.error);
       isLoading(false);
       if (response.isSuccessful) {
-        var cartResponse = response.body;
+        //var cartResponse = response.body;
         getCart();
       } else {
         var error = jsonDecode(response.error.toString());
@@ -73,7 +74,7 @@ class CartController extends GetxController {
       print(response.error);
       isLoading(false);
       if (response.isSuccessful) {
-        var cartResponse = response.body;
+        //var cartResponse = response.body;
         getCart();
       } else {
         var error = jsonDecode(response.error.toString());
@@ -95,14 +96,14 @@ class CartController extends GetxController {
         total += double.tryParse(element.price.toString()) *
                 (int.tryParse(element.qty.toString())) ??
             1;
+        subTotal += double.tryParse(element.price.toString()) *
+                (int.tryParse(element.qty.toString())) ??
+            1;
         var p = productsController.getProductById(element.sku);
         var image = '';
         if (p != null) {
           if (p.mediaGalleryEntries != null) {
             if (p.mediaGalleryEntries.isNotEmpty) {
-              subTotal += double.tryParse(p.price.toString()) *
-                      (int.tryParse(element.qty.toString())) ??
-                  1;
               image = p.mediaGalleryEntries.first.file;
             }
           }
@@ -111,7 +112,7 @@ class CartController extends GetxController {
             element.sku,
             element.itemId.toString(),
             element.name,
-            p == null ? element.price.toString() : p.price.toString(),
+            element.price.toString(),
             baseUrlMedia + image,
             element.quoteId,
             element.qty));

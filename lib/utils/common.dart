@@ -1,3 +1,4 @@
+import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/widget/message_dialog.dart';
 import 'package:flutter/material.dart';
@@ -30,4 +31,8 @@ void showSuccessMessage(BuildContext context, String message) {
             size: 60,
           ),
           iconBackgroundColor: greenColor));
+}
+
+String getFullAddress(Addresses address) {
+  return "${address.street.first} ${address.city} ${address.region.region} ";
 }

@@ -1,10 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/address_controller.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
+import 'package:e_commerce_alwalla/controller/checkout_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
-import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
-import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
+import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class SummaryScreen extends StatefulWidget {
   @override
@@ -12,18 +16,10 @@ class SummaryScreen extends StatefulWidget {
 }
 
 class _SummaryScreenState extends State<SummaryScreen> {
-  List<Product> _products = [
-    Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("2", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
-        "455\$"),
-    Product("3", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("4", "assets/images/image_demo.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("5", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-  ];
+  final CartController _cartController = Get.find();
+  final CheckoutController _checkoutController = Get.find();
+  final AddressController _addressesController = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,11 +63,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 elevation: 0,
                 color: redColor,
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                          builder: (BuildContext context) => HomeScreen()),
-                      ModalRoute.withName('/home'));
+                  _checkoutController.placeOrder();
                 },
                 child: Text(
                   "PAY",
@@ -94,119 +86,131 @@ class _SummaryScreenState extends State<SummaryScreen> {
   }
 
   Widget body(BuildContext context) {
-    return CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: [
-        space(32),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 200,
-            child: ListView.builder(
-              itemBuilder: (c, i) => productItem(_products[i], i == 0),
-              itemCount: _products.length,
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
+    return Obx(() {
+      var paymentMethod = '';
+      _checkoutController.paymentMethods.value.paymentMethods
+          .forEach((element) {
+        if (element.isSelected) paymentMethod = element.title;
+      });
+      return CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: [
+          space(32),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 200,
+              child: ListView.builder(
+                itemBuilder: (c, i) =>
+                    productItem(_cartController.carts.value.items[i], i == 0),
+                itemCount: _cartController.carts.value.items.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
             ),
           ),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Divider(),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Shipping Address",
-                  style: mainTextStyle.copyWith(fontSize: 20),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "21, Alex Davidson Avenue, Opposite Omegatron, Vicent Smith Quarters, Victoria Island, Lagos, Nigeria",
-                  style: subTextStyle.copyWith(fontSize: 16),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context, 1);
-                  },
-                  child: Text(
-                    "Change",
-                    style: subTextStyle.copyWith(color: redColor, fontSize: 18),
-                  ))
-            ],
+          space(24),
+          SliverToBoxAdapter(
+            child: Divider(),
           ),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Divider(),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Payment",
-                  style: mainTextStyle.copyWith(fontSize: 20),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  "Cash on Delivery",
-                  style: subTextStyle.copyWith(fontSize: 16),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context, 2);
-                  },
+          space(24),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Text(
-                    "Change",
-                    style: subTextStyle.copyWith(
-                        color: redColor,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400),
-                  ))
-            ],
+                    "Shipping Address",
+                    style: mainTextStyle.copyWith(fontSize: 20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    getFullAddress(_addressesController.selectedAddress.value),
+                    style: subTextStyle.copyWith(fontSize: 16),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                FlatButton(
+                    onPressed: () {
+                      Get.back(result: 0);
+                    },
+                    child: Text(
+                      "Change",
+                      style:
+                          subTextStyle.copyWith(color: redColor, fontSize: 18),
+                    ))
+              ],
+            ),
           ),
-        ),
-        space(32),
-      ],
-    );
+          space(24),
+          SliverToBoxAdapter(
+            child: Divider(),
+          ),
+          space(24),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    "Payment",
+                    style: mainTextStyle.copyWith(fontSize: 20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    paymentMethod,
+                    style: subTextStyle.copyWith(fontSize: 16),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                FlatButton(
+                    onPressed: () {
+                      Get.back(result: 2);
+                    },
+                    child: Text(
+                      "Change",
+                      style: subTextStyle.copyWith(
+                          color: redColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400),
+                    ))
+              ],
+            ),
+          ),
+          space(32),
+        ],
+      );
+    });
   }
 
-  Widget productItem(Product product, bool isFirst) {
+  Widget productItem(Item product, bool isFirst) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (c) => ProductDetailsScreen(product: product),
-          ),
-        );
+        Get.to(ProductDetailsScreen(
+          productId: product.id,
+        ));
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (c) => ProductDetailsScreen(),
+        //   ),
+        // );
       },
       child: Container(
         padding: isFirst
@@ -219,16 +223,25 @@ class _SummaryScreenState extends State<SummaryScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SizedBox(
-                    height: 140,
-                    child: Hero(
-                      tag: "product${product.id}",
-                      child: Image.asset(
-                        product.image,
-                        fit: BoxFit.cover,
-                      ),
-                    ))),
+              borderRadius: BorderRadius.circular(6),
+              child: Hero(
+                tag: "product${product.id}",
+                child: CachedNetworkImage(
+                  imageUrl: product.image,
+                  errorWidget: (c, s, w) {
+                    return CachedNetworkImage(
+                      imageUrl:
+                          'http://mymalleg.com/pub/media/catalog/product/cache/p/r/product_1_2.jpg',
+                      fit: BoxFit.cover,
+                      height: 140,
+                    );
+                  },
+                  fit: BoxFit.contain,
+                  width: 120,
+                  height: 120,
+                ),
+              ),
+            ),
             const SizedBox(
               height: 6,
             ),
@@ -244,7 +257,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
               height: 3,
             ),
             Text(
-              product.price,
+              product.total + " EGP",
               style: mainTextStyle.copyWith(
                   color: redColor, fontWeight: FontWeight.w400, fontSize: 16),
             ),

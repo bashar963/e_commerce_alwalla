@@ -113,7 +113,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
         style: mainTextStyle,
       ),
       subtitle: Text(
-        address.street.first ?? '',
+        getFullAddress(address),
         style: subTextStyle.copyWith(color: mainTextColor),
       ),
       onTap: () {
