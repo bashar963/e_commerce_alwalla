@@ -36,3 +36,14 @@ void showSuccessMessage(BuildContext context, String message) {
 String getFullAddress(Addresses address) {
   return "${address.street.first} ${address.city} ${address.region.region} ";
 }
+
+Map<String, Color> _colors = {
+  "white": Color(0xFFFFFFFF),
+  "black": Color(0xFF000000),
+  "yellow": Color(0xFFFFFF00),
+};
+Color getColor(String color) {
+  Color c = _colors[color.toLowerCase()];
+  if (c == null) return Color(0xFFFFFFFF);
+  return c;
+}

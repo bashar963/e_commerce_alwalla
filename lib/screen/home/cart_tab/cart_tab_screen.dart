@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/screen/checkout/checkout_screen.dart';
+import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:flutter/material.dart';
@@ -318,124 +319,133 @@ class _CartTabScreenState extends State<CartTabScreen> {
                 _.close();
               })
         ],
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Row(
-            children: [
-              Container(
-                width: 120,
-                height: 120,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(6),
-                  child: CachedNetworkImage(
-                    imageUrl: item.image,
-                    errorWidget: (c, s, w) {
-                      return CachedNetworkImage(
-                        imageUrl:
-                            'http://mymalleg.com/pub/media/catalog/product/cache/p/r/product_1_2.jpg',
-                        fit: BoxFit.contain,
-                        width: 120,
-                        height: 120,
-                      );
-                    },
-                    fit: BoxFit.contain,
-                    width: 120,
-                    height: 120,
+        child: InkWell(
+          onTap: () {
+            Get.to(ProductDetailsScreen(
+              productId: item.id,
+            ));
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              children: [
+                Container(
+                  width: 120,
+                  height: 120,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(6),
+                    child: CachedNetworkImage(
+                      imageUrl: item.image,
+                      errorWidget: (c, s, w) {
+                        return CachedNetworkImage(
+                          imageUrl:
+                              'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
+                          fit: BoxFit.contain,
+                          width: 120,
+                          height: 120,
+                        );
+                      },
+                      fit: BoxFit.contain,
+                      width: 120,
+                      height: 120,
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 24,
-              ),
-              Expanded(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    item.title,
-                    style: mainTextStyle.copyWith(
-                        fontSize: 16, fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  Text(
-                    item.total + " EGP",
-                    style: mainTextStyle.copyWith(
-                        color: redColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400),
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Container(
-                      width: 95,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(0, 0, 0, 0.06),
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  item.quantity++;
-                                  _cartController.editItemInCart(
-                                      item.itemId, item.quoteId, item.quantity);
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  FontAwesomeIcons.plus,
-                                  size: 10,
-                                  color: Color(0xBB343434),
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                item.quantity.toString(),
-                                style: mainTextStyle.copyWith(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: blackColor,
-                                ),
-                              ),
-                            ),
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  if (item.quantity <= 1) {
-                                    removeItem(item);
-                                  } else {
-                                    item.quantity--;
+                const SizedBox(
+                  width: 24,
+                ),
+                Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      style: mainTextStyle.copyWith(
+                          fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(
+                      height: 8,
+                    ),
+                    Text(
+                      item.total + " EGP",
+                      style: mainTextStyle.copyWith(
+                          color: redColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Container(
+                        width: 95,
+                        height: 30,
+                        decoration: BoxDecoration(
+                            color: Color.fromRGBO(0, 0, 0, 0.06),
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    item.quantity++;
                                     _cartController.editItemInCart(item.itemId,
                                         item.quoteId, item.quantity);
-                                  }
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Icon(
-                                  FontAwesomeIcons.minus,
-                                  size: 10,
-                                  color: Color(0xBB343434),
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.plus,
+                                    size: 10,
+                                    color: Color(0xBB343434),
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ))
-                ],
-              ))
-            ],
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  item.quantity.toString(),
+                                  style: mainTextStyle.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                    color: blackColor,
+                                  ),
+                                ),
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    if (item.quantity <= 1) {
+                                      removeItem(item);
+                                    } else {
+                                      item.quantity--;
+                                      _cartController.editItemInCart(
+                                          item.itemId,
+                                          item.quoteId,
+                                          item.quantity);
+                                    }
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    FontAwesomeIcons.minus,
+                                    size: 10,
+                                    color: Color(0xBB343434),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ))
+                  ],
+                ))
+              ],
+            ),
           ),
         ),
       );

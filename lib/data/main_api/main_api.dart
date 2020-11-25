@@ -43,8 +43,15 @@ abstract class MainApi extends ChopperService {
   Future<Response> editItemInCart(@Header('Authorization') String token,
       @Path('item_id') String itemId, @Body() Map<String, dynamic> body);
 
+  @Post(path: '/carts/mine/items')
+  Future<Response> addItemToCart(
+      @Header('Authorization') String token, @Body() Map<String, dynamic> body);
+
   @Get(path: '/carts/mine')
   Future<Response> getCart(@Header('Authorization') String token);
+
+  @Post(path: '/carts/mine')
+  Future<Response> getQuoteId(@Header('Authorization') String token);
 
   @Get(path: '/products?searchCriteria')
   Future<Response> getProducts();

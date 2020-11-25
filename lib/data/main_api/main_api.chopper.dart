@@ -98,10 +98,29 @@ class _$MainApi extends MainApi {
   }
 
   @override
+  Future<Response<dynamic>> addItemToCart(
+      String token, Map<String, dynamic> body) {
+    final $url = 'http://mymalleg.com/index.php/rest/V1/carts/mine/items';
+    final $headers = {'Authorization': token};
+    final $body = body;
+    final $request =
+        Request('POST', $url, client.baseUrl, body: $body, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> getCart(String token) {
     final $url = 'http://mymalleg.com/index.php/rest/V1/carts/mine';
     final $headers = {'Authorization': token};
     final $request = Request('GET', $url, client.baseUrl, headers: $headers);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getQuoteId(String token) {
+    final $url = 'http://mymalleg.com/index.php/rest/V1/carts/mine';
+    final $headers = {'Authorization': token};
+    final $request = Request('POST', $url, client.baseUrl, headers: $headers);
     return client.send<dynamic, dynamic>($request);
   }
 

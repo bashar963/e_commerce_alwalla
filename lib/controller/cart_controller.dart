@@ -13,10 +13,35 @@ class CartController extends GetxController {
   Rx<Cart> carts = Rx(null);
   final ProductsController productsController = Get.find();
   var isLoading = false.obs;
+  var quoteId = ''.obs;
   @override
   void onInit() {
     super.onInit();
     getCart();
+  }
+
+  void getQuoteId() async {
+    if (carts.value != null) {
+      carts.value.items.forEach((element) {
+        quoteId.value = element.quoteId;
+        return;
+      });
+    } else {
+      try {
+        var response = await MainApi.create().getQuoteId(AppPreference.token);
+        print('---------get QuoteId-------');
+        print(response.bodyString);
+        print(response.error);
+        if (response.isSuccessful) {
+          quoteId.value = response.bodyString;
+        } else if (response.statusCode != 404) {
+          var error = jsonDecode(response.error.toString());
+          showFailedMessage(Get.context, error['message'] ?? '');
+        }
+      } on Exception catch (e) {
+        showFailedMessage(Get.context, e.toString() ?? '');
+      }
+    }
   }
 
   void getCart() async {
@@ -31,6 +56,7 @@ class CartController extends GetxController {
       if (response.isSuccessful) {
         cart.value = CartResponse.fromJson(response.body);
         fillCart();
+        getQuoteId();
       } else if (response.statusCode != 404) {
         var error = jsonDecode(response.error.toString());
 
@@ -99,6 +125,7 @@ class CartController extends GetxController {
         subTotal += double.tryParse(element.price.toString()) *
                 (int.tryParse(element.qty.toString())) ??
             1;
+
         var p = productsController.getProductById(element.sku);
         var image = '';
         if (p != null) {
@@ -120,6 +147,53 @@ class CartController extends GetxController {
       tax = total - subTotal;
       carts.value = Cart(subTotal.toStringAsFixed(1), tax.toStringAsFixed(1),
           total.toStringAsFixed(1), items);
+    }
+  }
+
+  void addItemToCar(List<Map<String, dynamic>> itemOptions, String sku) async {
+    try {
+      isLoading(true);
+      print(itemOptions);
+      var response;
+      if (itemOptions == null)
+        response = await MainApi.create().addItemToCart(AppPreference.token, {
+          "cartItem": {
+            "sku": sku,
+            "qty": 1,
+            "quote_id": quoteId.value,
+          }
+        });
+      else
+        response = await MainApi.create().addItemToCart(AppPreference.token, {
+          "cartItem": {
+            "sku": sku,
+            "qty": 1,
+            "quote_id": quoteId.value,
+            "productOption": {
+              "extensionAttributes": {"customOptions": itemOptions}
+            },
+            "extension_attributes": {}
+          }
+        });
+      print('---------cart-------');
+      print(response.bodyString);
+      print(response.error);
+      print(response.statusCode);
+      isLoading(false);
+      if (response.isSuccessful) {
+        getCart();
+        showSuccessMessage(
+            Get.context, 'This item has been added successfully to your cart');
+        Future.delayed(Duration(seconds: 1), () {
+          Get.back();
+        });
+      } else if (response.statusCode != 404) {
+        var error = jsonDecode(response.error.toString());
+
+        showFailedMessage(Get.context, error['message'] ?? '');
+      }
+    } on Exception catch (e) {
+      showFailedMessage(Get.context, e.toString() ?? '');
     }
   }
 }

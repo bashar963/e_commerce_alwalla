@@ -583,7 +583,7 @@ class Option {
   });
 
   String productSku;
-  int optionId;
+  dynamic optionId;
   String title;
   String type;
   int sortOrder;
@@ -633,12 +633,12 @@ class OptionValue {
     this.priceType,
     this.optionTypeId,
   });
-
+  bool isSelected = false;
   String title;
   int sortOrder;
-  int price;
+  dynamic price;
   PriceType priceType;
-  int optionTypeId;
+  dynamic optionTypeId;
 
   factory OptionValue.fromRawJson(String str) =>
       OptionValue.fromJson(json.decode(str));

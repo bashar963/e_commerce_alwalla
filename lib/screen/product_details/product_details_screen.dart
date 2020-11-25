@@ -1,12 +1,14 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_pro/carousel_pro.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/products_controller.dart';
+import 'package:e_commerce_alwalla/data/app_preference.dart';
+import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/products_response.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -23,16 +25,15 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   final ProductsController _productsController = Get.find();
-
+  final CartController _cartController = Get.find();
+  List<Product> _relatedProducts = [];
   Product _product;
   bool isFav = false;
   String readMore = "Read More";
   String readLess = "Read Less";
   String buttonText;
-  String desc =
-      "Nike Dri-FIT is a polyester fabric designed to help you keep dry so you can more comfortably";
-  String descFull =
-      "Nike Dri-FIT is a polyester fabric designed to help you keep dry so you can more comfortably work harder, longer.";
+  String desc = "";
+  String descFull = "";
   String descTemp;
   List<Review> _reviews = [
     Review("1", "Samuel Smith", "SS",
@@ -49,6 +50,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.initState();
 
     _product = _productsController.getProductById(widget.productId);
+    _product.productLinks.forEach((element) {
+      var p = _productsController.getProductById(element.sku);
+      if (p != null) _relatedProducts.add(p);
+    });
+    if (_product.options != null) {
+      _product.options.forEach((element) {
+        element.values.forEach((v) {
+          v.isSelected = false;
+        });
+      });
+    }
     _product.customAttributes.forEach((element) {
       if (element.attributeCode == "short_description")
         desc = element.value ?? '';
@@ -100,7 +112,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 elevation: 0,
                 padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                 color: redColor,
-                onPressed: () {},
+                onPressed: addToCart,
                 child: Text(
                   "ADD",
                   style: subTextStyle.copyWith(color: whiteColor),
@@ -161,7 +173,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     errorWidget: (c, s, w) {
                       return CachedNetworkImage(
                         imageUrl:
-                            'http://mymalleg.com/pub/media/catalog/product/cache/p/r/product_1_2.jpg',
+                            'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                         fit: BoxFit.cover,
                       );
                     },
@@ -185,140 +197,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ),
         space(24),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: lightGrey),
-                        borderRadius: BorderRadius.circular(24)),
-                    child: Center(
-                      child: Text(
-                        "Size",
-                        style: subTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: lightGrey),
-                        borderRadius: BorderRadius.circular(24)),
-                    child: Center(
-                      child: Text(
-                        "Size Chart",
-                        style: subTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: lightGrey),
-                        borderRadius: BorderRadius.circular(24)),
-                    child: Center(
-                      child: Text(
-                        "Colours",
-                        style: subTextStyle,
-                      ),
-                    ),
-                  ),
-                )
-              ],
+        if (_product.options.isNotEmpty)
+          SliverPadding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: productOptions(),
             ),
           ),
-        ),
-        space(12),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              children: [
-                Expanded(
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 8,
-                    runSpacing: 2,
-                    children: [
-                      Text(
-                        "S",
-                        style: mainTextStyle.copyWith(fontSize: 14),
-                      ),
-                      Text(
-                        "L",
-                        style: mainTextStyle.copyWith(fontSize: 14),
-                      ),
-                      Text(
-                        "XL",
-                        style: mainTextStyle.copyWith(fontSize: 14),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: const SizedBox(),
-                ),
-                const SizedBox(
-                  width: 12,
-                ),
-                Expanded(
-                  child: Wrap(
-                    alignment: WrapAlignment.center,
-                    spacing: 2,
-                    runSpacing: 2,
-                    children: [
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color(0xFF33427D)),
-                      ),
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color(0xFFFF7A06)),
-                      ),
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color(0xFF7D3333)),
-                      ),
-                      Container(
-                        width: 22,
-                        height: 22,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: Color(0xFF7D3378)),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
         space(24),
         SliverPadding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -399,8 +284,119 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               physics: NeverScrollableScrollPhysics(),
             ),
           ),
-        )
+        ),
+        space(32),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          sliver: SliverToBoxAdapter(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Releated products',
+                  style: mainTextStyle.copyWith(fontSize: 18),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 8, right: 0, top: 8, bottom: 8),
+                    child: Text(
+                      S.of(context).see_all,
+                      style: mainTextStyle.copyWith(fontSize: 14),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
+        space(24),
+        SliverToBoxAdapter(
+          child: Container(
+            height: 370,
+            child: ListView.builder(
+              itemBuilder: (c, i) => productItem(_relatedProducts[i], i == 0),
+              itemCount: _relatedProducts.length,
+              shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+            ),
+          ),
+        ),
+        space(32),
       ],
+    );
+  }
+
+  Widget productItem(Product product, bool isFirst) {
+    var image = '';
+    if (product != null) {
+      if (product.mediaGalleryEntries != null) {
+        if (product.mediaGalleryEntries.isNotEmpty) {
+          image = product.mediaGalleryEntries.first.file;
+        }
+      }
+    }
+    return GestureDetector(
+      onTap: () {
+        Get.to(ProductDetailsScreen(
+          product: product,
+          productId: product.sku,
+        ));
+      },
+      child: Container(
+        padding: isFirst
+            ? EdgeInsets.only(
+                left: AppPreference.appLanguage == "en" ? 16 : 12,
+                right: AppPreference.appLanguage == "en" ? 12 : 16)
+            : EdgeInsets.symmetric(horizontal: 12),
+        width: (MediaQuery.of(context).size.width / 2),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(6),
+              child: CachedNetworkImage(
+                imageUrl: baseUrlMedia + image,
+                errorWidget: (c, s, w) {
+                  return CachedNetworkImage(
+                    imageUrl:
+                        'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
+                    fit: BoxFit.contain,
+                    height: 250,
+                  );
+                },
+                fit: BoxFit.contain,
+                height: 250,
+              ),
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Text(
+              product.name,
+              style: mainTextStyle.copyWith(
+                  fontWeight: FontWeight.w600, fontSize: 16),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              product.sku,
+              style: subTextStyle,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Text(
+              product.price.toString() + ' EGP',
+              style: mainTextStyle.copyWith(
+                  color: redColor, fontWeight: FontWeight.w600, fontSize: 16),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -465,6 +461,121 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ],
       ),
     );
+  }
+
+  Widget productOptions() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: _product.options.map((e) {
+        return Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: lightGrey),
+                      borderRadius: BorderRadius.circular(24)),
+                  child: Center(
+                    child: Text(
+                      e.title,
+                      style: subTextStyle,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 16,
+                ),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 2,
+                  children: e.values.map((val) {
+                    if (e.title == 'Color' ||
+                        e.title == 'Colors' ||
+                        e.title == 'Colour' ||
+                        e.title == 'Colours')
+                      return InkWell(
+                        onTap: () {
+                          setState(() {
+                            e.values.forEach((element) {
+                              element.isSelected = false;
+                            });
+                            val.isSelected = true;
+                          });
+                        },
+                        child: Container(
+                          width: val.isSelected ? 28 : 26,
+                          height: val.isSelected ? 28 : 26,
+                          decoration: BoxDecoration(
+                              border: val.isSelected
+                                  ? Border.all(color: subTextColor, width: 2)
+                                  : null,
+                              borderRadius: BorderRadius.circular(
+                                  val.isSelected ? 11 : 10),
+                              color: getColor(val.title)),
+                        ),
+                      );
+                    return InkWell(
+                      onTap: () {
+                        setState(() {
+                          e.values.forEach((element) {
+                            element.isSelected = false;
+                          });
+                          val.isSelected = true;
+                        });
+                      },
+                      child: Container(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+                        decoration: val.isSelected
+                            ? BoxDecoration(
+                                border: Border.all(color: lightGrey),
+                                borderRadius: BorderRadius.circular(24))
+                            : null,
+                        child: Text(
+                          val.title,
+                          style: mainTextStyle.copyWith(fontSize: 14),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                )
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  void addToCart() {
+    if (_product.options.isNotEmpty) {
+      List<Map<String, dynamic>> itemOptions = [];
+      int optionsLength = _product.options.length;
+      int selectedOptions = 0;
+      _product.options.forEach((element) {
+        bool hasSelected = false;
+        element.values.forEach((val) {
+          if (val.isSelected) {
+            hasSelected = true;
+            itemOptions.add({
+              "optionValue": val.optionTypeId.toString(),
+              "optionId": element.optionId.toString()
+            });
+          }
+        });
+        if (hasSelected) selectedOptions++;
+      });
+
+      if (selectedOptions == optionsLength)
+        _cartController.addItemToCar(itemOptions, _product.sku);
+      else
+        showFailedMessage(context, 'Please choose option');
+    } else {
+      _cartController.addItemToCar(null, _product.sku);
+    }
   }
 }
 

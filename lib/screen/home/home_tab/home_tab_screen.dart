@@ -241,7 +241,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             ),
           ),
         ),
-        space(32),
+        space(8),
       ],
     );
   }
@@ -249,12 +249,10 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   Widget productItem(Product product, bool isFirst) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (c) => ProductDetailsScreen(product: product),
-          ),
-        );
+        Get.to(ProductDetailsScreen(
+          product: product,
+          productId: 'MG-846905',
+        ));
       },
       child: Container(
         padding: isFirst

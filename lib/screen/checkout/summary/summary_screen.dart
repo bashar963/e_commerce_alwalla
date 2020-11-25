@@ -231,7 +231,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                   errorWidget: (c, s, w) {
                     return CachedNetworkImage(
                       imageUrl:
-                          'http://mymalleg.com/pub/media/catalog/product/cache/p/r/product_1_2.jpg',
+                          'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.cover,
                       height: 140,
                     );
