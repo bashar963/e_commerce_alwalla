@@ -63,6 +63,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
                 elevation: 0,
                 color: redColor,
                 onPressed: () {
+                  _cartController.clearCart();
                   _checkoutController.placeOrder();
                 },
                 child: Text(
@@ -96,19 +97,20 @@ class _SummaryScreenState extends State<SummaryScreen> {
         physics: BouncingScrollPhysics(),
         slivers: [
           space(32),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 200,
-              child: ListView.builder(
-                itemBuilder: (c, i) =>
-                    productItem(_cartController.carts.value.items[i], i == 0),
-                itemCount: _cartController.carts.value.items.length,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
+          if (_cartController.carts.value != null)
+            SliverToBoxAdapter(
+              child: Container(
+                height: 200,
+                child: ListView.builder(
+                  itemBuilder: (c, i) =>
+                      productItem(_cartController.carts.value.items[i], i == 0),
+                  itemCount: _cartController.carts.value.items.length,
+                  shrinkWrap: true,
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                ),
               ),
             ),
-          ),
           space(24),
           SliverToBoxAdapter(
             child: Divider(),

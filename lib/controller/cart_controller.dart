@@ -20,7 +20,13 @@ class CartController extends GetxController {
     getCart();
   }
 
-  void getQuoteId() async {
+  void clearCart() {
+    carts.value = null;
+    cart.value = null;
+    quoteId.value = '';
+  }
+
+  Future getQuoteId() async {
     if (carts.value != null) {
       carts.value.items.forEach((element) {
         quoteId.value = element.quoteId;
@@ -153,6 +159,18 @@ class CartController extends GetxController {
   void addItemToCar(List<Map<String, dynamic>> itemOptions, String sku) async {
     try {
       isLoading(true);
+      if (quoteId.value.isEmpty) {
+        var response = await MainApi.create().getQuoteId(AppPreference.token);
+        print('---------get QuoteId-------');
+        print(response.bodyString);
+        print(response.error);
+        if (response.isSuccessful) {
+          quoteId.value = response.bodyString;
+        } else if (response.statusCode != 404) {
+          var error = jsonDecode(response.error.toString());
+          showFailedMessage(Get.context, error['message'] ?? '');
+        }
+      }
       print(itemOptions);
       var response;
       if (itemOptions == null)

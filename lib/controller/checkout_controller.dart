@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/data/main_api/main_api.dart';
 import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 
 class CheckoutController extends GetxController {
   var isLoading = false.obs;
+
   RxList<ShippingMethodResponse> shippingMethods = RxList();
   Rx<PaymentMethodResponse> paymentMethods =
       Rx(PaymentMethodResponse(paymentMethods: []));
