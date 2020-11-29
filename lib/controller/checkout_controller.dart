@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/data/main_api/main_api.dart';
 import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
@@ -8,9 +7,11 @@ import 'package:e_commerce_alwalla/model/payment_methods_response.dart';
 import 'package:e_commerce_alwalla/model/shipping_methods_response.dart';
 import 'package:get/get.dart';
 
+import 'cart_controller.dart';
+
 class CheckoutController extends GetxController {
   var isLoading = false.obs;
-
+  final CartController _cartController = Get.find();
   RxList<ShippingMethodResponse> shippingMethods = RxList();
   Rx<PaymentMethodResponse> paymentMethods =
       Rx(PaymentMethodResponse(paymentMethods: []));
@@ -45,7 +46,16 @@ class CheckoutController extends GetxController {
   }
 
   void getPaymentMethods(
-      Addresses address, String shippingId, String shippingMethodId) async {
+      Addresses address,
+      String shippingId,
+      String shippingMethodId,
+      bool isSame,
+      String street1,
+      String street2,
+      String number,
+      String city,
+      String state,
+      String country) async {
     try {
       isLoading(true);
       var response =
@@ -65,23 +75,39 @@ class CheckoutController extends GetxController {
             "email": "abc@abc.com",
             "prefix": "address_",
             "region_code": address.region.regionCode ?? '',
-            "sameAsBilling": 1
+            "sameAsBilling": isSame ? 1 : 0
           },
-          "billingAddress": {
-            "region": address.region?.region ?? '',
-            "region_id": address.regionId ?? '',
-            "country_id": address.countryId ?? '',
-            "street": address.street ?? [],
-            "company": address.firstname ?? '',
-            "telephone": address.telephone ?? '',
-            "postcode": address.postcode ?? '',
-            "city": address.city ?? '',
-            "firstname": address.firstname ?? '',
-            "lastname": address.lastname ?? '',
-            "email": "abc@abc.com",
-            "prefix": "address_",
-            "region_code": address.region.regionCode ?? '',
-          },
+          "billingAddress": isSame
+              ? {
+                  "region": address.region?.region ?? '',
+                  "region_id": address.regionId ?? '',
+                  "country_id": address.countryId ?? '',
+                  "street": address.street ?? [],
+                  "company": address.firstname ?? '',
+                  "telephone": address.telephone ?? '',
+                  "postcode": address.postcode ?? '',
+                  "city": address.city ?? '',
+                  "firstname": address.firstname ?? '',
+                  "lastname": address.lastname ?? '',
+                  "email": "abc@abc.com",
+                  "prefix": "address_",
+                  "region_code": address.region.regionCode ?? '',
+                }
+              : {
+                  "region": state,
+                  "region_id": address.regionId ?? '',
+                  "country_id": address.countryId ?? '',
+                  "street": [street1, street2],
+                  "company": address.firstname ?? '',
+                  "telephone": number,
+                  "postcode": address.postcode ?? '',
+                  "city": city,
+                  "firstname": address.firstname ?? '',
+                  "lastname": address.lastname ?? '',
+                  "email": "abc@abc.com",
+                  "prefix": "address_",
+                  "region_code": address.region.regionCode ?? '',
+                },
           "shipping_method_code": shippingMethodId,
           "shipping_carrier_code": shippingId
         }
@@ -116,6 +142,7 @@ class CheckoutController extends GetxController {
       print(response.error);
       isLoading(false);
       if (response.isSuccessful) {
+        _cartController.clearCart();
         Get.close(2);
       } else {
         var error = jsonDecode(response.error.toString());

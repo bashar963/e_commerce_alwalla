@@ -1,5 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/categories_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
+import 'package:e_commerce_alwalla/model/categories_response.dart';
 import 'package:e_commerce_alwalla/screen/category/category_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/screen/search/search_screen.dart';
@@ -16,13 +19,7 @@ class HomeTabScreen extends StatefulWidget {
 }
 
 class _HomeTabScreenState extends State<HomeTabScreen> {
-  List<Category> _categories = [
-    Category("1", "assets/icons/cat_1.svg", "Men"),
-    Category("2", "assets/icons/cat_2.svg", "Women"),
-    Category("3", "assets/icons/cat_3.svg", "Devices"),
-    Category("4", "assets/icons/cat_4.svg", "Gadgets"),
-    Category("5", "assets/icons/cat_5.svg", "Gaming"),
-  ];
+  final CategoriesController _categoriesController = Get.find();
   List<Product> _products = [
     Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
@@ -35,6 +32,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     Product("5", "assets/images/image.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
   ];
+
   List<Product> _products2 = [
     Product("6", "assets/images/image.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
@@ -69,181 +67,185 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   }
 
   Widget body(BuildContext context) {
-    return CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: [
-        SliverAppBar(
-          backgroundColor: whiteColor,
-          pinned: true,
-          elevation: 0,
-          floating: true,
-          title: Row(
-            children: [
-              SvgPicture.asset(
-                "assets/icons/mymall.svg",
-                width: 36,
-                height: 36,
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Expanded(
-                child: Hero(
-                  tag: "Search",
-                  child: SearchBar(
-                      onTap: () {
-                        Get.to(SearchScreen());
-                      },
-                      textController: TextEditingController(),
-                      onComplete: () {}),
-                ),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              InkWell(child: SvgPicture.asset("assets/icons/camera_image.svg")),
-            ],
-          ),
-        ),
-        space(32),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Text(
-              S.of(context).categories,
-              style: mainTextStyle,
-            ),
-          ),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 100,
-            child: ListView.builder(
-              itemBuilder: (c, i) => categoryItem(_categories[i]),
-              itemCount: _categories.length,
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-            ),
-          ),
-        ),
-        space(50),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Obx(() {
+      return CustomScrollView(
+        physics: BouncingScrollPhysics(),
+        slivers: [
+          SliverAppBar(
+            backgroundColor: whiteColor,
+            pinned: true,
+            elevation: 0,
+            floating: true,
+            title: Row(
               children: [
-                Text(
-                  S.of(context).best_selling,
-                  style: mainTextStyle.copyWith(fontSize: 18),
+                SvgPicture.asset(
+                  "assets/icons/mymall.svg",
+                  width: 36,
+                  height: 36,
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Expanded(
+                  child: Hero(
+                    tag: "Search",
+                    child: SearchBar(
+                        onTap: () {
+                          Get.to(SearchScreen());
+                        },
+                        textController: TextEditingController(),
+                        onComplete: () {}),
+                  ),
+                ),
+                const SizedBox(
+                  width: 16,
                 ),
                 InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, right: 0, top: 8, bottom: 8),
-                    child: Text(
-                      S.of(context).see_all,
-                      style: mainTextStyle.copyWith(fontSize: 14),
-                    ),
-                  ),
-                )
+                    child: SvgPicture.asset("assets/icons/camera_image.svg")),
               ],
             ),
           ),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 340,
-            child: ListView.builder(
-              itemBuilder: (c, i) => productItem(_products2[i], i == 0),
-              itemCount: _products2.length,
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
-            ),
-          ),
-        ),
-        space(16),
-        SliverToBoxAdapter(
-          child: Padding(
+          space(32),
+          SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: Image.asset(
-                  "assets/images/promo_image.png",
-                  fit: BoxFit.fill,
-                )),
-          ),
-        ),
-        space(42),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Text(
-              S.of(context).featured_brands,
-              style: mainTextStyle.copyWith(fontSize: 18),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                S.of(context).categories,
+                style: mainTextStyle,
+              ),
             ),
           ),
-        ),
-        space(16),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 100,
-            child: ListView.builder(
-              itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
-              itemCount: _brands.length,
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
+          space(24),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 95,
+              child: ListView.builder(
+                itemBuilder: (c, i) =>
+                    categoryItem(_categoriesController.categoryList[i]),
+                itemCount: _categoriesController.categoryList.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
             ),
           ),
-        ),
-        space(32),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  S.of(context).recommended,
-                  style: mainTextStyle.copyWith(fontSize: 18),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, right: 0, top: 8, bottom: 8),
-                    child: Text(
-                      S.of(context).see_all,
-                      style: mainTextStyle.copyWith(fontSize: 14),
-                    ),
+          space(50),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    S.of(context).best_selling,
+                    style: mainTextStyle.copyWith(fontSize: 18),
                   ),
-                )
-              ],
+                  InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 0, top: 8, bottom: 8),
+                      child: Text(
+                        S.of(context).see_all,
+                        style: mainTextStyle.copyWith(fontSize: 14),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 370,
-            child: ListView.builder(
-              itemBuilder: (c, i) => productItem(_products[i], i == 0),
-              itemCount: _products.length,
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
+          space(24),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 340,
+              child: ListView.builder(
+                itemBuilder: (c, i) => productItem(_products2[i], i == 0),
+                itemCount: _products2.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
             ),
           ),
-        ),
-        space(8),
-      ],
-    );
+          space(16),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: Image.asset(
+                    "assets/images/promo_image.png",
+                    fit: BoxFit.fill,
+                  )),
+            ),
+          ),
+          space(42),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Text(
+                S.of(context).featured_brands,
+                style: mainTextStyle.copyWith(fontSize: 18),
+              ),
+            ),
+          ),
+          space(16),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 100,
+              child: ListView.builder(
+                itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
+                itemCount: _brands.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ),
+          space(32),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    S.of(context).recommended,
+                    style: mainTextStyle.copyWith(fontSize: 18),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 0, top: 8, bottom: 8),
+                      child: Text(
+                        S.of(context).see_all,
+                        style: mainTextStyle.copyWith(fontSize: 14),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          space(24),
+          SliverToBoxAdapter(
+            child: Container(
+              height: 370,
+              child: ListView.builder(
+                itemBuilder: (c, i) => productItem(_products[i], i == 0),
+                itemCount: _products.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ),
+          space(8),
+        ],
+      );
+    });
   }
 
   Widget productItem(Product product, bool isFirst) {
@@ -304,15 +306,16 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     );
   }
 
-  Widget categoryItem(Category category) {
+  Widget categoryItem(CategoryChild category) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (c) => CategoryScreen(category: category),
-          ),
-        );
+        Get.to(CategoryScreen(category: category));
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (c) => CategoryScreen(category: category),
+        //   ),
+        // );
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -332,14 +335,14 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 color: whiteColor,
               ),
               child: Center(
-                child: SvgPicture.asset(category.image),
+                child: CachedNetworkImage(imageUrl: category.image),
               ),
             ),
             const SizedBox(
               height: 16,
             ),
             Text(
-              category.title,
+              category.name,
               style: mainTextStyle.copyWith(
                   fontSize: 12, fontWeight: FontWeight.w400),
             )

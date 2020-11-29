@@ -1,16 +1,23 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/categories_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
-
+import 'package:e_commerce_alwalla/model/categories_response.dart';
+import 'package:e_commerce_alwalla/model/products_response.dart' as p;
 import 'package:e_commerce_alwalla/screen/filter/filter_screen.dart';
 import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:e_commerce_alwalla/utils/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 
 class CategoryScreen extends StatefulWidget {
-  final Category category;
+  final CategoryChild category;
   final Brand brand;
 
   const CategoryScreen({Key key, this.category, this.brand}) : super(key: key);
@@ -20,6 +27,7 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
+  final CategoriesController _categoriesController = Get.find();
   List<Brand> _brands = [
     Brand("1", "assets/images/bo.png", "B&o", "5693"),
     Brand("2", "assets/images/beats.png", "beats", "1124"),
@@ -28,24 +36,16 @@ class _CategoryScreenState extends State<CategoryScreen>
     Brand("1", "assets/images/bo.png", "B&o", "5693"),
     Brand("2", "assets/images/beats.png", "beats", "1124"),
   ];
-  List<Product> _products = [
-    Product("1", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("2", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
-        "455\$"),
-    Product("3", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("4", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("5", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-  ];
 
   TabController _tabController;
   List<Tab> _tabs;
   @override
   void initState() {
     super.initState();
+
+    if (widget.category != null)
+      _categoriesController
+          .getProductsByCategory(widget.category.id.toString());
     _tabs = [
       Tab(
         text: "All",
@@ -71,7 +71,7 @@ class _CategoryScreenState extends State<CategoryScreen>
         backgroundColor: whiteColor,
         elevation: 0,
         title: Text(
-          widget.category == null ? widget.brand.title : widget.category.title,
+          widget.category == null ? widget.brand.title : widget.category.name,
           style: mainTextStyle.copyWith(fontSize: 16),
         ),
         centerTitle: true,
@@ -120,63 +120,81 @@ class _CategoryScreenState extends State<CategoryScreen>
   }
 
   Widget body(BuildContext context) {
-    double width = (MediaQuery.of(context).size.width) / 2;
-    double height = 380;
-    double aspect = width / height;
-    return CustomScrollView(
-      physics: BouncingScrollPhysics(),
-      slivers: [
-        space(32),
-        widget.category != null
-            ? SliverPadding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                sliver: SliverToBoxAdapter(
-                  child: Text(
-                    "Top Brands",
-                    style: mainTextStyle.copyWith(fontSize: 18),
+    return Obx(() {
+      return SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 32,
+            ),
+            widget.category != null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                    child: Text(
+                      "Top Brands",
+                      style: mainTextStyle.copyWith(fontSize: 18),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+            widget.category != null
+                ? const SizedBox(
+                    height: 24,
+                  )
+                : const SizedBox(
+                    height: 0,
                   ),
-                ),
-              )
-            : SliverToBoxAdapter(),
-        widget.category != null ? space(24) : space(0),
-        widget.category != null
-            ? SliverToBoxAdapter(
-                child: Container(
-                  height: 100,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
-                    itemCount: _brands.length,
-                    shrinkWrap: true,
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.horizontal,
+            widget.category != null
+                ? Container(
+                    height: 100,
+                    child: ListView.builder(
+                      itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
+                      itemCount: _brands.length,
+                      shrinkWrap: true,
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                    ),
+                  )
+                : TabBar(
+                    tabs: _tabs,
+                    labelColor: mainTextColor,
+                    indicator: BoxDecoration(),
+                    unselectedLabelColor: mainTextColor.withOpacity(0.2),
+                    labelPadding: EdgeInsets.symmetric(horizontal: 16),
+                    labelStyle: mainTextStyle.copyWith(fontSize: 14),
+                    isScrollable: _tabs.length > 4,
+                    controller: _tabController,
                   ),
-                ),
-              )
-            : SliverToBoxAdapter(
-                child: TabBar(
-                  tabs: _tabs,
-                  labelColor: mainTextColor,
-                  indicator: BoxDecoration(),
-                  unselectedLabelColor: mainTextColor.withOpacity(0.2),
-                  labelPadding: EdgeInsets.symmetric(horizontal: 16),
-                  labelStyle: mainTextStyle.copyWith(fontSize: 14),
-                  isScrollable: _tabs.length > 4,
-                  controller: _tabController,
-                ),
+            const SizedBox(
+              height: 32,
+            ),
+            if (_categoriesController.loading.value)
+              Center(
+                child: RefreshProgressIndicator(),
               ),
-        space(32),
-        SliverPadding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverGrid.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 16,
-            childAspectRatio: aspect,
-            children: _products.map((e) => productItem(e)).toList(),
-          ),
+            _categoriesController.productsEmpty.value
+                ? Center(
+                    child: Text('No Products found'),
+                  )
+                : Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: StaggeredGridView.countBuilder(
+                      crossAxisCount: 2,
+                      itemCount: _categoriesController.products.length,
+                      mainAxisSpacing: 12,
+                      physics: NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      crossAxisSpacing: 16,
+                      staggeredTileBuilder: (int index) =>
+                          new StaggeredTile.fit(1),
+                      itemBuilder: (BuildContext context, int index) =>
+                          productItem(_categoriesController.products[index]),
+                    ),
+                  ),
+          ],
         ),
-      ],
-    );
+      );
+    });
   }
 
   Widget brandItem(Brand brand, bool isFirst) {
@@ -230,15 +248,21 @@ class _CategoryScreenState extends State<CategoryScreen>
     );
   }
 
-  Widget productItem(Product product) {
+  Widget productItem(p.Product product) {
+    var image = '';
+
+    if (product.mediaGalleryEntries != null) {
+      if (product.mediaGalleryEntries.isNotEmpty) {
+        image = product.mediaGalleryEntries.first.file;
+      }
+    }
+
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (c) => ProductDetailsScreen(product: product),
-          ),
-        );
+        Get.to(ProductDetailsScreen(
+          product: product,
+          productId: product.sku,
+        ));
       },
       child: Container(
         child: Column(
@@ -246,33 +270,41 @@ class _CategoryScreenState extends State<CategoryScreen>
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: SizedBox(
-                    height: 240,
-                    child: Hero(
-                        tag: "product${product.id}",
-                        child: Image.asset(
-                          product.image,
-                          fit: BoxFit.fill,
-                        )))),
+                child: CachedNetworkImage(
+                  imageUrl: baseUrlMedia + image,
+                  errorWidget: (c, s, w) {
+                    return CachedNetworkImage(
+                      imageUrl:
+                          'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
+                      fit: BoxFit.fill,
+                      height: 240,
+                    );
+                  },
+                  fit: BoxFit.fill,
+                  height: 240,
+                )),
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.title,
+            AutoSizeText(
+              product.name,
+              maxLines: 1,
+              maxFontSize: 18,
+              minFontSize: 15,
               style: mainTextStyle,
             ),
             const SizedBox(
               height: 12,
             ),
             Text(
-              product.brand,
+              product.sku,
               style: subTextStyle,
             ),
             const SizedBox(
               height: 12,
             ),
             Text(
-              product.price,
+              product.price.toString() + " EGP",
               style: mainTextStyle.copyWith(
                   color: redColor, fontWeight: FontWeight.w400),
             ),

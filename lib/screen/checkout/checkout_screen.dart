@@ -137,7 +137,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             _addressesController
                                                 .selectedAddress.value,
                                             selectedMethod.carrierCode,
-                                            selectedMethod.methodCode);
+                                            selectedMethod.methodCode,
+                                            isSameBilling,
+                                            street1Controller.text,
+                                            street2Controller.text,
+                                            numberController.text,
+                                            cityController.text,
+                                            stateController.text,
+                                            countryController.text);
                                       }
                                     } else {
                                       int index = await Get.to(SummaryScreen());
@@ -206,6 +213,159 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   });
                 }),
           ),
+          if (!isSameBilling)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextFormField(
+                controller: street1Controller,
+                keyboardType: TextInputType.text,
+                cursorWidth: 1,
+                autofocus: false,
+                style: TextStyle(
+                    color: mainTextColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+                decoration: InputDecoration(
+                  labelText: "Street 1",
+                  errorText: street1Error,
+                  labelStyle: TextStyle(
+                    color: subTextColor,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+            ),
+          if (!isSameBilling)
+            const SizedBox(
+              height: 24,
+            ),
+          if (!isSameBilling)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextFormField(
+                controller: street2Controller,
+                keyboardType: TextInputType.text,
+                cursorWidth: 1,
+                autofocus: false,
+                style: TextStyle(
+                    color: mainTextColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+                decoration: InputDecoration(
+                  labelText: "Street 2",
+                  errorText: street2Error,
+                  labelStyle: TextStyle(
+                    color: subTextColor,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+            ),
+          if (!isSameBilling)
+            const SizedBox(
+              height: 24,
+            ),
+          if (!isSameBilling)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextFormField(
+                controller: numberController,
+                keyboardType: TextInputType.number,
+                cursorWidth: 1,
+                autofocus: false,
+                style: TextStyle(
+                    color: mainTextColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+                decoration: InputDecoration(
+                  labelText: "Phone Number",
+                  errorText: numberError,
+                  labelStyle: TextStyle(
+                    color: subTextColor,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+            ),
+          if (!isSameBilling)
+            const SizedBox(
+              height: 24,
+            ),
+          if (!isSameBilling)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: TextFormField(
+                controller: cityController,
+                keyboardType: TextInputType.text,
+                cursorWidth: 1,
+                autofocus: false,
+                style: TextStyle(
+                    color: mainTextColor,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16),
+                decoration: InputDecoration(
+                  labelText: "City",
+                  errorText: cityError,
+                  labelStyle: TextStyle(
+                    color: subTextColor,
+                    fontWeight: FontWeight.w200,
+                  ),
+                ),
+              ),
+            ),
+          if (!isSameBilling)
+            const SizedBox(
+              height: 24,
+            ),
+          if (!isSameBilling)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Row(
+                children: [
+                  Expanded(
+                      child: TextFormField(
+                    controller: stateController,
+                    keyboardType: TextInputType.text,
+                    cursorWidth: 1,
+                    autofocus: false,
+                    style: TextStyle(
+                        color: mainTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
+                    decoration: InputDecoration(
+                      labelText: "State",
+                      errorText: stateError,
+                      labelStyle: TextStyle(
+                        color: subTextColor,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  )),
+                  const SizedBox(
+                    width: 16,
+                  ),
+                  Expanded(
+                      child: TextFormField(
+                    controller: countryController,
+                    keyboardType: TextInputType.text,
+                    cursorWidth: 1,
+                    autofocus: false,
+                    style: TextStyle(
+                        color: mainTextColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16),
+                    decoration: InputDecoration(
+                      labelText: "Country",
+                      errorText: countryError,
+                      labelStyle: TextStyle(
+                        color: subTextColor,
+                        fontWeight: FontWeight.w200,
+                      ),
+                    ),
+                  )),
+                ],
+              ),
+            ),
           const SizedBox(
             height: 16,
           ),
@@ -230,150 +390,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               ),
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 24),
-          //   child: TextFormField(
-          //     controller: street1Controller,
-          //     keyboardType: TextInputType.text,
-          //     cursorWidth: 1,
-          //     autofocus: false,
-          //     style: TextStyle(
-          //         color: mainTextColor,
-          //         fontWeight: FontWeight.w600,
-          //         fontSize: 16),
-          //     decoration: InputDecoration(
-          //       labelText: "Street 1",
-          //       errorText: street1Error,
-          //       labelStyle: TextStyle(
-          //         color: subTextColor,
-          //         fontWeight: FontWeight.w200,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 24,
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 24),
-          //   child: TextFormField(
-          //     controller: street2Controller,
-          //     keyboardType: TextInputType.text,
-          //     cursorWidth: 1,
-          //     autofocus: false,
-          //     style: TextStyle(
-          //         color: mainTextColor,
-          //         fontWeight: FontWeight.w600,
-          //         fontSize: 16),
-          //     decoration: InputDecoration(
-          //       labelText: "Street 2",
-          //       errorText: street2Error,
-          //       labelStyle: TextStyle(
-          //         color: subTextColor,
-          //         fontWeight: FontWeight.w200,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 24,
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 24),
-          //   child: TextFormField(
-          //     controller: numberController,
-          //     keyboardType: TextInputType.number,
-          //     cursorWidth: 1,
-          //     autofocus: false,
-          //     style: TextStyle(
-          //         color: mainTextColor,
-          //         fontWeight: FontWeight.w600,
-          //         fontSize: 16),
-          //     decoration: InputDecoration(
-          //       labelText: "Phone Number",
-          //       errorText: numberError,
-          //       labelStyle: TextStyle(
-          //         color: subTextColor,
-          //         fontWeight: FontWeight.w200,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 24,
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 24),
-          //   child: TextFormField(
-          //     controller: cityController,
-          //     keyboardType: TextInputType.text,
-          //     cursorWidth: 1,
-          //     autofocus: false,
-          //     style: TextStyle(
-          //         color: mainTextColor,
-          //         fontWeight: FontWeight.w600,
-          //         fontSize: 16),
-          //     decoration: InputDecoration(
-          //       labelText: "City",
-          //       errorText: cityError,
-          //       labelStyle: TextStyle(
-          //         color: subTextColor,
-          //         fontWeight: FontWeight.w200,
-          //       ),
-          //     ),
-          //   ),
-          // ),
-          // const SizedBox(
-          //   height: 24,
-          // ),
-          // Padding(
-          //   padding: const EdgeInsets.symmetric(horizontal: 24),
-          //   child: Row(
-          //     children: [
-          //       Expanded(
-          //           child: TextFormField(
-          //         controller: stateController,
-          //         keyboardType: TextInputType.text,
-          //         cursorWidth: 1,
-          //         autofocus: false,
-          //         style: TextStyle(
-          //             color: mainTextColor,
-          //             fontWeight: FontWeight.w600,
-          //             fontSize: 16),
-          //         decoration: InputDecoration(
-          //           labelText: "State",
-          //           errorText: stateError,
-          //           labelStyle: TextStyle(
-          //             color: subTextColor,
-          //             fontWeight: FontWeight.w200,
-          //           ),
-          //         ),
-          //       )),
-          //       const SizedBox(
-          //         width: 16,
-          //       ),
-          //       Expanded(
-          //           child: TextFormField(
-          //         controller: countryController,
-          //         keyboardType: TextInputType.text,
-          //         cursorWidth: 1,
-          //         autofocus: false,
-          //         style: TextStyle(
-          //             color: mainTextColor,
-          //             fontWeight: FontWeight.w600,
-          //             fontSize: 16),
-          //         decoration: InputDecoration(
-          //           labelText: "Country",
-          //           errorText: countryError,
-          //           labelStyle: TextStyle(
-          //             color: subTextColor,
-          //             fontWeight: FontWeight.w200,
-          //           ),
-          //         ),
-          //       )),
-          //     ],
-          //   ),
-          // ),
           const SizedBox(
             height: 64,
           ),
@@ -382,22 +398,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  List<Payment> _payments = [
-    Payment("1", "Cash on Delivery", isSelected: true),
-    Payment("2", "Credit Card")
-  ];
-  List<Delivery> _deliveries = [
-    Delivery("id", "Standard Delivery",
-        "Order will be delivered between 3 - 5 business days",
-        isSelected: true),
-    Delivery("id", "Next Day Delivery",
-        "Place your order before 6pm and your items will be delivered the next day"),
-    Delivery("id", "Nominated Delivery",
-        "Pick a particular date from the calendar and order will be delivered on selected date"),
-  ];
   bool cardSelected = false;
   Widget payment() {
     return Obx(() {
+      if (_checkoutBloc.isLoading.value)
+        return Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Center(
+            child: RefreshProgressIndicator(),
+          ),
+        );
       return Column(
         children: [
           Expanded(
@@ -534,7 +544,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
       onTap: () {
         setState(() {
-          _payments.forEach((element) {
+          _checkoutBloc.paymentMethods.value.paymentMethods.forEach((element) {
             element.isSelected = false;
           });
           _hasSelectedPaymentMethod = true;
@@ -563,7 +573,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   Widget delivery() {
     return Obx(() {
-      print(_checkoutBloc.shippingMethods.length.toString());
+      if (_checkoutBloc.isLoading.value)
+        return Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Center(
+            child: RefreshProgressIndicator(),
+          ),
+        );
       return ListView.builder(
           itemCount: _checkoutBloc.shippingMethods.length,
           shrinkWrap: true,
@@ -586,7 +602,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
       onTap: () {
         setState(() {
-          _deliveries.forEach((element) {
+          _checkoutBloc.shippingMethods.forEach((element) {
             element.isSelected = false;
           });
           _hasSelectedShippingMethod = true;
@@ -613,6 +629,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   Widget userAddresses() {
     return Obx(() {
+      if (_addressesController.loading.value)
+        return Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Center(
+            child: RefreshProgressIndicator(),
+          ),
+        );
       return ListView.builder(
           itemCount: _addressesController.addresses.length,
           shrinkWrap: true,
@@ -626,9 +649,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       title: Text(
-        _addressesController.selectedAddress.value.id == address.id
-            ? 'Default Address'
-            : "Secondary Address",
+        address.city,
         style: mainTextStyle,
       ),
       subtitle: Text(
@@ -657,18 +678,4 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       ),
     );
   }
-}
-
-class Delivery {
-  final String id, title, desc;
-  bool isSelected;
-
-  Delivery(this.id, this.title, this.desc, {this.isSelected = false});
-}
-
-class Payment {
-  final String id, title;
-  bool isSelected;
-
-  Payment(this.id, this.title, {this.isSelected = false});
 }

@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
   var user = Customer().obs;
+  var loading = false.obs;
   @override
   void onInit() {
     super.onInit();
@@ -36,14 +37,16 @@ class ProfileController extends GetxController {
       user.value.firstname = firstName;
       user.value.lastname = lastName;
       user.value.email = email;
-
+      loading(true);
       print(user.toJson());
       var response = await MainApi.create().updateUserProfile(
           AppPreference.token, {"customer": user.value.toJson()});
       print(response.bodyString);
       print(response.error);
+      loading(false);
       if (response.isSuccessful) {
         user.value = Customer.fromJson(response.body);
+        showSuccessMessage(Get.context, 'Profile updated');
       } else {
         var error = jsonDecode(response.error.toString());
 

@@ -8,6 +8,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import 'controller/categories_controller.dart';
 import 'controller/checkout_controller.dart';
 import 'controller/products_controller.dart';
 import 'data/app_preference.dart';
@@ -20,6 +21,7 @@ Future<void> main() async {
   Get.put(CheckoutController());
   Get.put(AddressController());
   Get.put(ProductsController());
+  Get.put(CategoriesController());
   runApp(MyApp());
 }
 

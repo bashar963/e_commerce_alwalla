@@ -36,12 +36,13 @@ class ProductsController extends GetxController {
   Product getProductById(String id) {
     Product p;
     if (products.isNotEmpty) {
-      products.forEach((element) {
-        print('$id => ${element.sku}');
-        if (element.sku == id) {
-          p = element;
+      for (int i = 0; i < products.length; i++) {
+        print('$id => ${products[i].sku}');
+        if (products[i].sku == id) {
+          p = products[i];
+          break;
         }
-      });
+      }
     }
     return p;
   }

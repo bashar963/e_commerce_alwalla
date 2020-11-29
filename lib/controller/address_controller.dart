@@ -9,12 +9,15 @@ import 'package:get/get.dart';
 class AddressController extends GetxController {
   RxList<Addresses> addresses = RxList();
   var user = Customer().obs;
+  var loading = false.obs;
   Rx<Addresses> selectedAddress = Rx(null);
   void loadAddresses() async {
     try {
+      loading(true);
       var response = await MainApi.create().getUserData(AppPreference.token);
       print(response.bodyString);
       print(response.error);
+      loading(false);
       if (response.isSuccessful) {
         user.value = Customer.fromJson(response.body);
         addresses.assignAll(user.value.addresses);

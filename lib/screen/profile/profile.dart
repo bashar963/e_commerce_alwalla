@@ -54,7 +54,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onTap: () {
             hideKeyboard(context);
           },
-          child: body()),
+          child: Stack(
+            children: [
+              body(),
+              Obx(() {
+                if (_profileController.loading.value)
+                  return Center(
+                    child: RefreshProgressIndicator(),
+                  );
+                return SizedBox.shrink();
+              })
+            ],
+          )),
     );
   }
 

@@ -14,16 +14,6 @@ class AddressesScreen extends StatefulWidget {
 class _AddressesScreenState extends State<AddressesScreen> {
   final AddressController _addressesController = Get.find();
 
-  // List<Address> _address = [
-  //   Address(
-  //       "Home Address",
-  //       "21, Alex Davidson Avenue, Opposite Omegatron, Vicent Smith Quarters, Victoria Island, Lagos, Nigeria",
-  //       "1",
-  //       isSelected: true),
-  //   Address("Work Address",
-  //       "19, Martins Crescent, Bank of Nigeria, Abuja, Nigeria", "2"),
-  // ];
-
   @override
   void initState() {
     super.initState();
@@ -82,6 +72,10 @@ class _AddressesScreenState extends State<AddressesScreen> {
 
   Widget body(BuildContext context) {
     return Obx(() {
+      if (_addressesController.loading.value)
+        return Center(
+          child: RefreshProgressIndicator(),
+        );
       if (_addressesController.addresses.isEmpty) {
         return Center(
           child: Padding(
@@ -107,9 +101,7 @@ class _AddressesScreenState extends State<AddressesScreen> {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       title: Text(
-        _addressesController.selectedAddress.value.id == address.id
-            ? 'Default Address'
-            : "Secondary Address",
+        address.city,
         style: mainTextStyle,
       ),
       subtitle: Text(

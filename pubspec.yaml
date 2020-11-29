@@ -37,11 +37,11 @@ dependencies:
   smooth_star_rating: 1.1.1
   page_transition: ^1.1.7+2
   slide_item: ^1.0.8
-  im_stepper: ^0.1.2+6
+  im_stepper: ^0.1.2+8
   font_awesome_flutter: ^8.10.0
   flutter_xlider: 3.4.0
   carousel_pro: ^1.0.0
-
+  flutter_staggered_grid_view: ^0.3.2
 
 
 

@@ -31,50 +31,55 @@ class _SummaryScreenState extends State<SummaryScreen> {
         elevation: 0,
       ),
       body: body(context),
-      bottomNavigationBar: Container(
-        padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
-        color: whiteColor,
-        child: Row(
-          children: [
-            Expanded(
-                child: Container(
-              height: 50,
-              child: OutlineButton(
-                highlightedBorderColor: redColor,
-                highlightColor: whiteColor,
-                color: redColor,
-                borderSide: BorderSide(color: redColor),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text(
-                  "BACK",
-                  style: subTextStyle.copyWith(color: blackColor),
+      bottomNavigationBar: Obx(() {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 24, horizontal: 24),
+          color: whiteColor,
+          child: Row(
+            children: [
+              Expanded(
+                  child: Container(
+                height: 50,
+                child: OutlineButton(
+                  highlightedBorderColor: redColor,
+                  highlightColor: whiteColor,
+                  color: redColor,
+                  borderSide: BorderSide(color: redColor),
+                  onPressed: _checkoutController.isLoading.value
+                      ? null
+                      : () {
+                          Get.back();
+                        },
+                  child: Text(
+                    "BACK",
+                    style: subTextStyle.copyWith(color: blackColor),
+                  ),
                 ),
+              )),
+              const SizedBox(
+                width: 24,
               ),
-            )),
-            const SizedBox(
-              width: 24,
-            ),
-            Expanded(
-                child: Container(
-              height: 50,
-              child: RaisedButton(
-                elevation: 0,
-                color: redColor,
-                onPressed: () {
-                  _cartController.clearCart();
-                  _checkoutController.placeOrder();
-                },
-                child: Text(
-                  "PAY",
-                  style: subTextStyle.copyWith(color: whiteColor),
+              Expanded(
+                  child: Container(
+                height: 50,
+                child: RaisedButton(
+                  elevation: 0,
+                  color: redColor,
+                  onPressed: _checkoutController.isLoading.value
+                      ? null
+                      : () {
+                          _checkoutController.placeOrder();
+                        },
+                  child: Text(
+                    "PAY",
+                    style: subTextStyle.copyWith(color: whiteColor),
+                  ),
                 ),
-              ),
-            ))
-          ],
-        ),
-      ),
+              ))
+            ],
+          ),
+        );
+      }),
     );
   }
 
@@ -88,6 +93,10 @@ class _SummaryScreenState extends State<SummaryScreen> {
 
   Widget body(BuildContext context) {
     return Obx(() {
+      if (_checkoutController.isLoading.value)
+        return Center(
+          child: RefreshProgressIndicator(),
+        );
       var paymentMethod = '';
       _checkoutController.paymentMethods.value.paymentMethods
           .forEach((element) {

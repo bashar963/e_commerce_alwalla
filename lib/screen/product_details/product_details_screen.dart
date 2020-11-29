@@ -50,10 +50,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.initState();
 
     _product = _productsController.getProductById(widget.productId);
-    _product.productLinks.forEach((element) {
-      var p = _productsController.getProductById(element.sku);
-      if (p != null) _relatedProducts.add(p);
-    });
+    if (_product.productLinks != null)
+      _product.productLinks.forEach((element) {
+        var p = _productsController.getProductById(element.sku);
+        if (p != null) _relatedProducts.add(p);
+      });
     if (_product.options != null) {
       _product.options.forEach((element) {
         element.values.forEach((v) {
@@ -293,7 +294,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Releated products',
+                  'Related products',
                   style: mainTextStyle.copyWith(fontSize: 18),
                 ),
                 InkWell(
@@ -363,12 +364,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   return CachedNetworkImage(
                     imageUrl:
                         'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
-                    fit: BoxFit.contain,
-                    height: 250,
+                    fit: BoxFit.fill,
+                    height: 240,
                   );
                 },
-                fit: BoxFit.contain,
-                height: 250,
+                fit: BoxFit.fill,
+                height: 240,
               ),
             ),
             const SizedBox(
