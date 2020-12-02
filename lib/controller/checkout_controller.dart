@@ -11,10 +11,11 @@ import 'cart_controller.dart';
 
 class CheckoutController extends GetxController {
   var isLoading = false.obs;
-  final CartController _cartController = Get.find();
+  CartController _cartController = Get.put(CartController());
   RxList<ShippingMethodResponse> shippingMethods = RxList();
   Rx<PaymentMethodResponse> paymentMethods =
       Rx(PaymentMethodResponse(paymentMethods: []));
+
   void getShippingMethods(Addresses selectedAddress) async {
     try {
       isLoading(true);

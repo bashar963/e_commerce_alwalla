@@ -510,6 +510,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           width: val.isSelected ? 28 : 26,
                           height: val.isSelected ? 28 : 26,
                           decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                    color: Color.fromRGBO(36, 36, 36, 0.9),
+                                    blurRadius: 20,
+                                    offset: Offset(0, 5))
+                              ],
                               border: val.isSelected
                                   ? Border.all(color: subTextColor, width: 2)
                                   : null,

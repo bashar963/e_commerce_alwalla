@@ -58,9 +58,13 @@ class _SearchScreenState extends State<SearchScreen> {
               }
             },
             onClose: () {
-              _searchController.productsEmpty.value = false;
-              _searchEditController.text = '';
-              _searchController.searchedProducts.clear();
+              if (_searchEditController.text.isNotEmpty) {
+                _searchController.productsEmpty.value = false;
+                _searchEditController.text = '';
+                _searchController.searchedProducts.clear();
+              } else {
+                Get.back();
+              }
             },
           ),
         ),

@@ -18,7 +18,7 @@ import 'screen/splash/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await AppPreference.init();
-  Get.put(CheckoutController());
+  if (AppPreference.token != null) Get.put(CheckoutController());
   Get.put(AddressController());
   Get.put(ProductsController());
   Get.put(CategoriesController());

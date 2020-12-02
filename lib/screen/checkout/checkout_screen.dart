@@ -20,7 +20,7 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
-  final CheckoutController _checkoutBloc = Get.find();
+  final CheckoutController _checkoutBloc = Get.put(CheckoutController());
   final AddressController _addressesController = Get.find();
   int _selectedIndex = 0;
 

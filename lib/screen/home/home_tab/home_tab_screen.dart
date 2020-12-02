@@ -1,5 +1,7 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_alwalla/controller/categories_controller.dart';
+import 'package:e_commerce_alwalla/controller/products_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/categories_response.dart';
@@ -8,10 +10,13 @@ import 'package:e_commerce_alwalla/screen/product_details/product_details_screen
 import 'package:e_commerce_alwalla/screen/search/search_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:e_commerce_alwalla/utils/constants.dart';
+import 'package:e_commerce_alwalla/widget/product_dialog.dart';
 import 'package:e_commerce_alwalla/widget/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:e_commerce_alwalla/model/products_response.dart' as p;
 
 class HomeTabScreen extends StatefulWidget {
   @override
@@ -20,6 +25,8 @@ class HomeTabScreen extends StatefulWidget {
 
 class _HomeTabScreenState extends State<HomeTabScreen> {
   final CategoriesController _categoriesController = Get.find();
+
+  final ProductsController _productsController = Get.find();
   List<Product> _products = [
     Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
@@ -129,123 +136,198 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               ),
             ),
           ),
-          space(50),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.of(context).best_selling,
-                    style: mainTextStyle.copyWith(fontSize: 18),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 0, top: 8, bottom: 8),
-                      child: Text(
-                        S.of(context).see_all,
-                        style: mainTextStyle.copyWith(fontSize: 14),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
           space(24),
           SliverToBoxAdapter(
-            child: Container(
-              height: 340,
-              child: ListView.builder(
-                itemBuilder: (c, i) => productItem(_products2[i], i == 0),
-                itemCount: _products2.length,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
+            child: homeCategories(),
           ),
-          space(16),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(4),
-                  child: Image.asset(
-                    "assets/images/promo_image.png",
-                    fit: BoxFit.fill,
-                  )),
-            ),
-          ),
-          space(42),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(
-              child: Text(
-                S.of(context).featured_brands,
-                style: mainTextStyle.copyWith(fontSize: 18),
-              ),
-            ),
-          ),
-          space(16),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 100,
-              child: ListView.builder(
-                itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
-                itemCount: _brands.length,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-          ),
-          space(32),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            sliver: SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    S.of(context).recommended,
-                    style: mainTextStyle.copyWith(fontSize: 18),
-                  ),
-                  InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 0, top: 8, bottom: 8),
-                      child: Text(
-                        S.of(context).see_all,
-                        style: mainTextStyle.copyWith(fontSize: 14),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          space(24),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 370,
-              child: ListView.builder(
-                itemBuilder: (c, i) => productItem(_products[i], i == 0),
-                itemCount: _products.length,
-                shrinkWrap: true,
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
-          ),
+          // SliverPadding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   sliver: SliverToBoxAdapter(
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Text(
+          //           S.of(context).best_selling,
+          //           style: mainTextStyle.copyWith(fontSize: 18),
+          //         ),
+          //         InkWell(
+          //           onTap: () {},
+          //           child: Padding(
+          //             padding: const EdgeInsets.only(
+          //                 left: 8, right: 0, top: 8, bottom: 8),
+          //             child: Text(
+          //               S.of(context).see_all,
+          //               style: mainTextStyle.copyWith(fontSize: 14),
+          //             ),
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // space(24),
+          // SliverToBoxAdapter(
+          //   child: Container(
+          //     height: 340,
+          //     child: ListView.builder(
+          //       itemBuilder: (c, i) => productItem(_products2[i], i == 0),
+          //       itemCount: _products2.length,
+          //       shrinkWrap: true,
+          //       physics: BouncingScrollPhysics(),
+          //       scrollDirection: Axis.horizontal,
+          //     ),
+          //   ),
+          // ),
+          // space(16),
+          // SliverToBoxAdapter(
+          //   child: Padding(
+          //     padding: const EdgeInsets.symmetric(horizontal: 16),
+          //     child: ClipRRect(
+          //         borderRadius: BorderRadius.circular(4),
+          //         child: Image.asset(
+          //           "assets/images/promo_image.png",
+          //           fit: BoxFit.fill,
+          //         )),
+          //   ),
+          // ),
+          // space(42),
+          // SliverPadding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   sliver: SliverToBoxAdapter(
+          //     child: Text(
+          //       S.of(context).featured_brands,
+          //       style: mainTextStyle.copyWith(fontSize: 18),
+          //     ),
+          //   ),
+          // ),
+          // space(16),
+          // SliverToBoxAdapter(
+          //   child: Container(
+          //     height: 100,
+          //     child: ListView.builder(
+          //       itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
+          //       itemCount: _brands.length,
+          //       shrinkWrap: true,
+          //       physics: BouncingScrollPhysics(),
+          //       scrollDirection: Axis.horizontal,
+          //     ),
+          //   ),
+          // ),
+          // space(32),
+          // SliverPadding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   sliver: SliverToBoxAdapter(
+          //     child: Row(
+          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //       children: [
+          //         Text(
+          //           S.of(context).recommended,
+          //           style: mainTextStyle.copyWith(fontSize: 18),
+          //         ),
+          //         InkWell(
+          //           onTap: () {},
+          //           child: Padding(
+          //             padding: const EdgeInsets.only(
+          //                 left: 8, right: 0, top: 8, bottom: 8),
+          //             child: Text(
+          //               S.of(context).see_all,
+          //               style: mainTextStyle.copyWith(fontSize: 14),
+          //             ),
+          //           ),
+          //         )
+          //       ],
+          //     ),
+          //   ),
+          // ),
+          // space(24),
+          // SliverToBoxAdapter(
+          //   child: Container(
+          //     height: 370,
+          //     child: ListView.builder(
+          //       itemBuilder: (c, i) => productItem(_products[i], i == 0),
+          //       itemCount: _products.length,
+          //       shrinkWrap: true,
+          //       physics: BouncingScrollPhysics(),
+          //       scrollDirection: Axis.horizontal,
+          //     ),
+          //   ),
+          // ),
           space(8),
         ],
       );
     });
+  }
+
+  Widget productItem2(p.Product product, bool isFirst) {
+    var image = '';
+
+    if (product.mediaGalleryEntries != null) {
+      if (product.mediaGalleryEntries.isNotEmpty) {
+        image = product.mediaGalleryEntries.first.file;
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        Get.to(ProductDetailsScreen(
+          product: product,
+          productId: product.sku,
+        ));
+      },
+      child: Container(
+        width: (MediaQuery.of(context).size.width / 2),
+        padding: isFirst
+            ? EdgeInsets.only(
+                left: AppPreference.appLanguage == "en" ? 16 : 12,
+                right: AppPreference.appLanguage == "en" ? 12 : 16)
+            : EdgeInsets.symmetric(horizontal: 12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: CachedNetworkImage(
+                  imageUrl: baseUrlMedia + image,
+                  errorWidget: (c, s, w) {
+                    return CachedNetworkImage(
+                      imageUrl:
+                          'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
+                      fit: BoxFit.fill,
+                      height: 240,
+                    );
+                  },
+                  fit: BoxFit.fill,
+                  height: 240,
+                )),
+            const SizedBox(
+              height: 12,
+            ),
+            AutoSizeText(
+              product.name,
+              maxLines: 1,
+              maxFontSize: 18,
+              minFontSize: 15,
+              style: mainTextStyle,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Text(
+              product.sku,
+              style: subTextStyle,
+            ),
+            const SizedBox(
+              height: 12,
+            ),
+            Text(
+              product.price.toString() + " EGP",
+              style: mainTextStyle.copyWith(
+                  color: redColor, fontWeight: FontWeight.w400),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget productItem(Product product, bool isFirst) {
@@ -295,10 +377,23 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price,
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w600, fontSize: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price,
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(
+                          _productsController.getProductById('MG-854693'));
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),
@@ -400,6 +495,61 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               subtitle: Text(S.of(context).products(brand.productCount)),
             ),
           )),
+    );
+  }
+
+  void openDialog(p.Product product) {
+    Get.dialog(ProductDialog(product));
+  }
+
+  homeCategories() {
+    return ListView.builder(
+      itemBuilder: (c, i) {
+        var item = _categoriesController.homeList[i];
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    item.name,
+                    style: mainTextStyle.copyWith(fontSize: 18),
+                  ),
+                  InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 0, top: 8, bottom: 8),
+                      child: Text(
+                        S.of(context).see_all,
+                        style: mainTextStyle.copyWith(fontSize: 14),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 24,
+            ),
+            Container(
+              height: 340,
+              child: ListView.builder(
+                itemBuilder: (c, i) => productItem2(item.products[i], i == 0),
+                itemCount: item.products.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
+          ],
+        );
+      },
+      itemCount: _categoriesController.homeList.length,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
     );
   }
 }

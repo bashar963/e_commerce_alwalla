@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 class CartController extends GetxController {
   Rx<CartResponse> cart = Rx(null);
   Rx<Cart> carts = Rx(null);
-  final ProductsController productsController = Get.find();
+  final ProductsController productsController = Get.put(ProductsController());
   var isLoading = false.obs;
   var quoteId = ''.obs;
   @override
