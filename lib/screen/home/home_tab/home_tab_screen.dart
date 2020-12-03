@@ -320,10 +320,22 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price.toString() + " EGP",
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price.toString() + " EGP",
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(product);
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),
