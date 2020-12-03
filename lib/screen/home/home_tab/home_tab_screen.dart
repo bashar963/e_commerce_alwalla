@@ -8,6 +8,7 @@ import 'package:e_commerce_alwalla/model/categories_response.dart';
 import 'package:e_commerce_alwalla/screen/category/category_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/screen/search/search_screen.dart';
+import 'package:e_commerce_alwalla/screen/view_all/view_all_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
@@ -509,7 +510,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         return Column(
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -518,7 +519,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     style: mainTextStyle.copyWith(fontSize: 18),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      Get.to(ViewAllScreen(
+                        name: item.name,
+                        id: item.id.toString(),
+                      ));
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(
                           left: 8, right: 0, top: 8, bottom: 8),

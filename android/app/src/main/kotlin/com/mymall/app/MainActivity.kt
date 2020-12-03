@@ -1,4 +1,4 @@
-package com.alwalla.e_commerce_alwalla
+package com.mymall.app
 
 import io.flutter.embedding.android.FlutterActivity
 

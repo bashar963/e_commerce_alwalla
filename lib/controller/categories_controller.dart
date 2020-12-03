@@ -63,7 +63,8 @@ class CategoriesController extends GetxController {
             var jsonString = jsonDecode(response.body);
             var cat = ProductsResponse.fromJson(jsonString);
             home.childrenData[i].products = [];
-            home.childrenData[i].products.addAll(cat.items);
+            home.childrenData[i].products.addAll(
+                cat.items.length > 10 ? cat.items.getRange(0, 10) : cat.items);
           } else {
             var error = jsonDecode(response.body);
             print(error['message'] ?? '');

@@ -1,10 +1,16 @@
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/wish_list_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/screen/home/home_tab/home_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
+import 'package:e_commerce_alwalla/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:e_commerce_alwalla/model/products_response.dart' as p;
+import 'package:get/get.dart';
 
 class WishListScreen extends StatefulWidget {
   @override
@@ -12,6 +18,7 @@ class WishListScreen extends StatefulWidget {
 }
 
 class _WishListScreenState extends State<WishListScreen> {
+  final WishListController _wishListController = Get.put(WishListController());
   List<Product> _products = [
     Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
@@ -76,38 +83,45 @@ class _WishListScreenState extends State<WishListScreen> {
           ),
         ),
         space(24),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 340,
-            child: ListView.builder(
-              itemBuilder: (c, i) => productItem(_products[i], i == 0),
-              itemCount: _products.length,
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
+        Obx(() {
+          return SliverToBoxAdapter(
+            child: Container(
+              height: 370,
+              child: ListView.builder(
+                itemBuilder: (c, i) =>
+                    productItem(_wishListController.products[i], i == 0),
+                itemCount: _wishListController.products.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
             ),
-          ),
-        ),
+          );
+        }),
         space(24),
       ],
     );
   }
 
-  Widget productItem(Product product, bool isFirst) {
+  Widget productItem(p.Product product, bool isFirst) {
+    var image = '';
+
+    if (product.mediaGalleryEntries != null) {
+      if (product.mediaGalleryEntries.isNotEmpty) {
+        image = product.mediaGalleryEntries.first.file;
+      }
+    }
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (c) => ProductDetailsScreen(product: product),
-          ),
-        );
+        Get.to(ProductDetailsScreen(
+          productId: product.sku,
+        ));
       },
       child: Container(
         padding: isFirst
             ? EdgeInsets.only(
-                left: AppPreference.appLanguage == "en" ? 16 : 12,
-                right: AppPreference.appLanguage == "en" ? 12 : 16)
+                left: AppPreference.appLanguage == "en" ? 24 : 0,
+                right: AppPreference.appLanguage == "en" ? 0 : 24)
             : EdgeInsets.symmetric(horizontal: 12),
         width: (MediaQuery.of(context).size.width / 2),
         child: Column(
@@ -115,37 +129,43 @@ class _WishListScreenState extends State<WishListScreen> {
           children: [
             ClipRRect(
                 borderRadius: BorderRadius.circular(6),
-                child: SizedBox(
-                    height: 250,
-                    child: Hero(
-                      tag: "product${product.id}",
-                      child: Image.asset(
-                        product.image,
-                        fit: BoxFit.fill,
-                      ),
-                    ))),
+                child: CachedNetworkImage(
+                  imageUrl: baseUrlMedia + image,
+                  errorWidget: (c, s, w) {
+                    return CachedNetworkImage(
+                      imageUrl:
+                          'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
+                      fit: BoxFit.fill,
+                      height: 240,
+                    );
+                  },
+                  fit: BoxFit.fill,
+                  height: 240,
+                )),
+            const SizedBox(
+              height: 12,
+            ),
+            AutoSizeText(
+              product.name,
+              maxLines: 1,
+              maxFontSize: 18,
+              minFontSize: 15,
+              style: mainTextStyle,
+            ),
             const SizedBox(
               height: 12,
             ),
             Text(
-              product.title,
-              style: mainTextStyle.copyWith(
-                  fontWeight: FontWeight.w600, fontSize: 16),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              product.brand,
+              product.sku,
               style: subTextStyle,
             ),
             const SizedBox(
               height: 12,
             ),
             Text(
-              product.price,
+              product.price.toString() + " EGP",
               style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w600, fontSize: 16),
+                  color: redColor, fontWeight: FontWeight.w400),
             ),
           ],
         ),
