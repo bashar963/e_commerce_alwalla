@@ -62,7 +62,7 @@ class _MyAppState extends State<MyApp> {
             supportedLocales: AppLocalizationDelegate().supportedLocales,
             locale: Get.deviceLocale,
             debugShowCheckedModeBanner: false,
-            theme: appTheme,
+            theme: AppPreference.appLanguage == 'en' ? appTheme : appThemeAr,
             home: SplashScreen(),
           );
         },

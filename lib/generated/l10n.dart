@@ -35,6 +35,16 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
+  /// `اللغة العربية`
+  String get go_lang {
+    return Intl.message(
+      'اللغة العربية',
+      name: 'go_lang',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Welcome`
   String get welcome {
     return Intl.message(
@@ -105,11 +115,31 @@ class S {
     );
   }
 
-  /// `Sign`
+  /// `Signup`
   String get sign_up {
     return Intl.message(
-      'Sign',
+      'Signup',
       name: 'sign_up',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm Password`
+  String get re_password {
+    return Intl.message(
+      'Confirm Password',
+      name: 're_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `passwords are not same`
+  String get password_not_same {
+    return Intl.message(
+      'passwords are not same',
+      name: 'password_not_same',
       desc: '',
       args: [],
     );

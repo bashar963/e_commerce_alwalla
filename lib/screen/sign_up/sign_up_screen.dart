@@ -13,9 +13,10 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final LoginController _loginController = Get.find();
-  String _emailError, _passwordError, _nameError;
+  String _emailError, _passwordError, _nameError, _cPasswordError;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _cPasswordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
 
   @override
@@ -144,6 +145,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       decoration: InputDecoration(
                         labelText: S.of(context).password,
                         errorText: _passwordError,
+                        errorMaxLines: 2,
+                        labelStyle: subTextStyle.copyWith(
+                          letterSpacing: 0.7,
+                        ),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: colorAccent)),
+                        border: UnderlineInputBorder(
+                            borderSide: BorderSide(color: lightGrey)),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 32,
+                    ),
+                    TextFormField(
+                      controller: _cPasswordController,
+                      keyboardType: TextInputType.text,
+                      cursorWidth: 1,
+                      obscureText: true,
+                      textAlign: TextAlign.start,
+                      textDirection: TextDirection.ltr,
+                      autofocus: false,
+                      style: TextStyle(
+                          color: blackColor,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 6,
+                          fontSize: 16),
+                      decoration: InputDecoration(
+                        labelText: S.of(context).re_password,
+                        errorText: _cPasswordError,
+                        errorMaxLines: 2,
                         labelStyle: subTextStyle.copyWith(
                           letterSpacing: 0.7,
                         ),
@@ -232,7 +263,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
       });
       return;
     }
-
+    if (_cPasswordController.text.isEmpty) {
+      setState(() {
+        _cPasswordError = S.of(context).required_field;
+      });
+      return;
+    }
+    if (_passwordController.text != _cPasswordController.text) {
+      setState(() {
+        _passwordError = S.of(context).password_not_same;
+        _cPasswordError = S.of(context).password_not_same;
+      });
+      return;
+    }
     _loginController.signUp(SignUpRequest(
         customer: Customer(
             lastname: lastName,

@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/categories_controller.dart';
 import 'package:e_commerce_alwalla/controller/products_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
@@ -26,41 +27,41 @@ class HomeTabScreen extends StatefulWidget {
 
 class _HomeTabScreenState extends State<HomeTabScreen> {
   final CategoriesController _categoriesController = Get.find();
-
+  final CartController _cartController = Get.find();
   final ProductsController _productsController = Get.find();
-  List<Product> _products = [
-    Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("2", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
-        "455\$"),
-    Product("3", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("4", "assets/images/image_demo.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("5", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-  ];
-
-  List<Product> _products2 = [
-    Product("6", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("7", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
-        "455\$"),
-    Product("8", "assets/images/image_demo.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("9", "assets/images/image.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-    Product("10", "assets/images/image_demo.png", "BeoPlay Speaker",
-        "Bang and Olufsen", "755\$"),
-  ];
-  List<Brand> _brands = [
-    Brand("1", "assets/images/bo.png", "B&o", "5693"),
-    Brand("2", "assets/images/beats.png", "beats", "1124"),
-    Brand("1", "assets/images/bo.png", "B&o", "5693"),
-    Brand("2", "assets/images/beats.png", "beats", "1124"),
-    Brand("1", "assets/images/bo.png", "B&o", "5693"),
-    Brand("2", "assets/images/beats.png", "beats", "1124"),
-  ];
+  // List<Product> _products = [
+  //   Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  //   Product("2", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
+  //       "455\$"),
+  //   Product("3", "assets/images/image.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  //   Product("4", "assets/images/image_demo.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  //   Product("5", "assets/images/image.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  // ];
+  //
+  // List<Product> _products2 = [
+  //   Product("6", "assets/images/image.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  //   Product("7", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
+  //       "455\$"),
+  //   Product("8", "assets/images/image_demo.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  //   Product("9", "assets/images/image.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  //   Product("10", "assets/images/image_demo.png", "BeoPlay Speaker",
+  //       "Bang and Olufsen", "755\$"),
+  // ];
+  // List<Brand> _brands = [
+  //   Brand("1", "assets/images/bo.png", "B&o", "5693"),
+  //   Brand("2", "assets/images/beats.png", "beats", "1124"),
+  //   Brand("1", "assets/images/bo.png", "B&o", "5693"),
+  //   Brand("2", "assets/images/beats.png", "beats", "1124"),
+  //   Brand("1", "assets/images/bo.png", "B&o", "5693"),
+  //   Brand("2", "assets/images/beats.png", "beats", "1124"),
+  // ];
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +127,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
           space(24),
           SliverToBoxAdapter(
             child: Container(
-              height: 95,
+              height: 100,
               child: ListView.builder(
                 itemBuilder: (c, i) =>
                     categoryItem(_categoriesController.categoryList[i]),
@@ -137,7 +138,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               ),
             ),
           ),
-          space(24),
+
           SliverToBoxAdapter(
             child: homeCategories(),
           ),
@@ -512,7 +513,10 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   }
 
   void openDialog(p.Product product) {
-    Get.dialog(ProductDialog(product));
+    if (product.options.isEmpty) {
+      _cartController.addItemToCar(null, product.sku);
+    } else
+      Get.dialog(ProductDialog(product));
   }
 
   homeCategories() {
@@ -553,7 +557,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               height: 24,
             ),
             Container(
-              height: 340,
+              height: 370,
               child: ListView.builder(
                 itemBuilder: (c, i) => productItem2(item.products[i], i == 0),
                 itemCount: item.products.length,

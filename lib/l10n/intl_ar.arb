@@ -1,5 +1,6 @@
 {
   "@@locale": "ar",
+  "go_lang": "English",
   "welcome": "اهلا",
   "sign_in_to_continue": "قم بتسجيل الدخول",
   "email": "البريد الإلكتروني",
@@ -11,6 +12,8 @@
   "sign_in_facebook": "تسجيل الدخول بـ Facebook",
   "sign_in_google": "تسجيل الدخول بـ Google",
   "or": "-او-",
+  "re_password": "تأكيد كلمة السر",
+  "password_not_same": "كلمة السر غير متطابقة",
   "explore": "تصفح",
   "cart": "السلة",
   "account": "حسابي",

@@ -30,25 +30,26 @@ class _LoginScreenState extends State<LoginScreen> {
         elevation: 0,
         brightness: Brightness.light,
         actions: [
-          IconButton(
-              icon: FaIcon(
-                FontAwesomeIcons.language,
-                color: Theme.of(context).accentColor,
-                size: 16,
-              ),
-              onPressed: () {
-                if (AppPreference.appLanguage == 'en') {
-                  Provider.of<AppLanguage>(context, listen: false)
-                      .setAppLanguage('ar');
-                  AppPreference.appLanguage = 'ar';
-                  Get.locale = Locale('ar');
-                } else {
-                  Provider.of<AppLanguage>(context, listen: false)
-                      .setAppLanguage('en');
-                  AppPreference.appLanguage = 'en';
-                  Get.locale = Locale('en');
-                }
-              })
+          TextButton(
+            onPressed: () {
+              if (AppPreference.appLanguage == 'en') {
+                Provider.of<AppLanguage>(context, listen: false)
+                    .setAppLanguage('ar');
+                AppPreference.appLanguage = 'ar';
+                Get.locale = Locale('ar');
+              } else {
+                Provider.of<AppLanguage>(context, listen: false)
+                    .setAppLanguage('en');
+                AppPreference.appLanguage = 'en';
+                Get.locale = Locale('en');
+              }
+            },
+            child: Text(
+              S.of(context).go_lang,
+              style: TextStyle(
+                  fontFamily: 'Cairo', color: Theme.of(context).accentColor),
+            ),
+          )
         ],
       ),
       body: Stack(
@@ -177,6 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       decoration: InputDecoration(
                         labelText: S.of(context).password,
                         errorText: _passwordError,
+                        errorMaxLines: 2,
                         labelStyle: subTextStyle.copyWith(
                           letterSpacing: 0.7,
                         ),

@@ -1,6 +1,6 @@
 {
   "@@locale": "en",
-
+  "go_lang": "اللغة العربية",
   "welcome": "Welcome",
   "sign_in_to_continue": "Sign in to continue",
   "email": "Email",
@@ -8,7 +8,9 @@
   "name": "Name",
   "forgot_password": "Forgot Password?",
   "sign_in": "SIGN IN",
-  "sign_up": "Sign",
+  "sign_up": "Signup",
+  "re_password": "Confirm Password",
+  "password_not_same": "passwords are not same",
   "sign_in_facebook": "Sign In with Facebook",
   "sign_in_google": "Sign In with Google",
   "or": "-OR-",

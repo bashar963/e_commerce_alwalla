@@ -24,7 +24,15 @@ final appTheme = ThemeData(
     brightness: Brightness.light,
     canvasColor: whiteColor,
     scaffoldBackgroundColor: backgroundColor);
-
+final appThemeAr = ThemeData(
+    fontFamily: "Cairo",
+    accentColor: colorAccent,
+    primaryColor: colorPrimary,
+    visualDensity: VisualDensity.adaptivePlatformDensity,
+    primaryColorDark: colorPrimaryDark,
+    brightness: Brightness.light,
+    canvasColor: whiteColor,
+    scaffoldBackgroundColor: backgroundColor);
 const mainTextStyle =
     TextStyle(fontWeight: FontWeight.w800, fontSize: 18, color: mainTextColor);
 const subTextStyle =
