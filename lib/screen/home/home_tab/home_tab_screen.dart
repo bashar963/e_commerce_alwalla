@@ -294,11 +294,11 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     return CachedNetworkImage(
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
-                      fit: BoxFit.fill,
+                      fit: BoxFit.scaleDown,
                       height: 240,
                     );
                   },
-                  fit: BoxFit.fill,
+                  fit: BoxFit.scaleDown,
                   height: 240,
                 )),
             const SizedBox(
