@@ -153,6 +153,7 @@ class _ProductDialogState extends State<ProductDialog> {
     } else {
       _cartController.addItemToCar(null, widget.product.sku);
     }
+    Get.back();
   }
 
   Widget productOptions() {

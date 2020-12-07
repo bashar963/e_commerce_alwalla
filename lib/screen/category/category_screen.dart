@@ -38,9 +38,10 @@ class _CategoryScreenState extends State<CategoryScreen>
 
   TabController _tabController;
   List<Tab> _tabs;
+
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     if (widget.category != null)
       _categoriesController
@@ -48,18 +49,14 @@ class _CategoryScreenState extends State<CategoryScreen>
     _tabs = [
       Tab(
         text: "All",
-      ),
-      Tab(
-        text: "HeadPhones",
-      ),
-      Tab(
-        text: "Speakers",
-      ),
-      Tab(
-        text: "Microphones",
-      ),
+      )
     ];
-    _tabController = TabController(length: 4, vsync: this);
+    widget.category.children.forEach((element) {
+      _tabs.add(Tab(
+        text: element.name,
+      ));
+    });
+    _tabController = TabController(length: _tabs.length, vsync: this);
   }
 
   @override
@@ -126,7 +123,39 @@ class _CategoryScreenState extends State<CategoryScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 32,
+              height: 12,
+            ),
+            if (_tabs.length > 1)
+              TabBar(
+                tabs: _tabs,
+                labelColor: mainTextColor,
+                indicator: BoxDecoration(),
+                physics: BouncingScrollPhysics(),
+                onTap: (index) {
+                  if (index == 0) {
+                    _categoriesController
+                        .getProductsByCategory(widget.category.id.toString());
+                  } else {
+                    if (widget.category.children[index - 1].children != null &&
+                        widget
+                            .category.children[index - 1].children.isNotEmpty) {
+                      Get.to(CategoryScreen(
+                        category: widget.category.children[index - 1],
+                      ));
+                    } else {
+                      _categoriesController.getProductsByCategory(
+                          widget.category.children[index - 1].id.toString());
+                    }
+                  }
+                },
+                unselectedLabelColor: mainTextColor.withOpacity(0.2),
+                labelPadding: EdgeInsets.symmetric(horizontal: 16),
+                labelStyle: mainTextStyle.copyWith(fontSize: 14),
+                isScrollable: _tabs.length > 4,
+                controller: _tabController,
+              ),
+            const SizedBox(
+              height: 12,
             ),
             widget.category != null
                 ? Padding(
@@ -144,27 +173,16 @@ class _CategoryScreenState extends State<CategoryScreen>
                 : const SizedBox(
                     height: 0,
                   ),
-            widget.category != null
-                ? Container(
-                    height: 100,
-                    child: ListView.builder(
-                      itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
-                      itemCount: _brands.length,
-                      shrinkWrap: true,
-                      physics: BouncingScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                    ),
-                  )
-                : TabBar(
-                    tabs: _tabs,
-                    labelColor: mainTextColor,
-                    indicator: BoxDecoration(),
-                    unselectedLabelColor: mainTextColor.withOpacity(0.2),
-                    labelPadding: EdgeInsets.symmetric(horizontal: 16),
-                    labelStyle: mainTextStyle.copyWith(fontSize: 14),
-                    isScrollable: _tabs.length > 4,
-                    controller: _tabController,
-                  ),
+            Container(
+              height: 100,
+              child: ListView.builder(
+                itemBuilder: (c, i) => brandItem(_brands[i], i == 0),
+                itemCount: _brands.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
             const SizedBox(
               height: 32,
             ),

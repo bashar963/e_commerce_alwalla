@@ -2,7 +2,6 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/categories_controller.dart';
-import 'package:e_commerce_alwalla/controller/products_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/categories_response.dart';
@@ -28,7 +27,7 @@ class HomeTabScreen extends StatefulWidget {
 class _HomeTabScreenState extends State<HomeTabScreen> {
   final CategoriesController _categoriesController = Get.find();
   final CartController _cartController = Get.find();
-  final ProductsController _productsController = Get.find();
+
   // List<Product> _products = [
   //   Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
   //       "Bang and Olufsen", "755\$"),
@@ -295,11 +294,11 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.scaleDown,
-                      height: 240,
+                      height: 200,
                     );
                   },
                   fit: BoxFit.scaleDown,
-                  height: 240,
+                  height: 200,
                 )),
             const SizedBox(
               height: 12,
@@ -344,77 +343,6 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
     );
   }
 
-  Widget productItem(Product product, bool isFirst) {
-    return GestureDetector(
-      onTap: () {
-        Get.to(ProductDetailsScreen(
-          product: product,
-          productId: 'MG-846905',
-        ));
-      },
-      child: Container(
-        padding: isFirst
-            ? EdgeInsets.only(
-                left: AppPreference.appLanguage == "en" ? 16 : 12,
-                right: AppPreference.appLanguage == "en" ? 12 : 16)
-            : EdgeInsets.symmetric(horizontal: 12),
-        width: (MediaQuery.of(context).size.width / 2),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: SizedBox(
-                    height: 250,
-                    child: Hero(
-                      tag: "product${product.id}",
-                      child: Image.asset(
-                        product.image,
-                        fit: BoxFit.fill,
-                      ),
-                    ))),
-            const SizedBox(
-              height: 12,
-            ),
-            Text(
-              product.title,
-              style: mainTextStyle.copyWith(
-                  fontWeight: FontWeight.w600, fontSize: 16),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              product.brand,
-              style: subTextStyle,
-            ),
-            const SizedBox(
-              height: 12,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  product.price,
-                  style: mainTextStyle.copyWith(
-                      color: redColor,
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16),
-                ),
-                InkWell(
-                    onTap: () {
-                      openDialog(
-                          _productsController.getProductById('MG-854693'));
-                    },
-                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget categoryItem(CategoryChild category) {
     return GestureDetector(
       onTap: () {
@@ -448,7 +376,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               ),
             ),
             const SizedBox(
-              height: 16,
+              height: 12,
             ),
             Text(
               category.name,
@@ -521,12 +449,14 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
 
   homeCategories() {
     return ListView.builder(
+      padding: EdgeInsets.zero,
       itemBuilder: (c, i) {
         var item = _categoriesController.homeList[i];
         return Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -553,11 +483,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 ],
               ),
             ),
-            SizedBox(
-              height: 24,
-            ),
             Container(
-              height: 370,
+              height: 340,
               child: ListView.builder(
                 itemBuilder: (c, i) => productItem2(item.products[i], i == 0),
                 itemCount: item.products.length,

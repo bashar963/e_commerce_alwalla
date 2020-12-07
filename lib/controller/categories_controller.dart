@@ -31,7 +31,8 @@ class CategoriesController extends GetxController {
       if (response.statusCode == 200) {
         var jsonString = jsonDecode(response.body);
         var cat = CategoriesResponse.fromJson(jsonString);
-        categoryList.assignAll(cat.data.categoryList.first.children);
+        if (cat.data.categoryList.isNotEmpty)
+          categoryList.assignAll(cat.data.categoryList.first.children);
       } else {
         var error = jsonDecode(response.body);
         print(error['message'] ?? '');
@@ -87,7 +88,7 @@ class CategoriesController extends GetxController {
 
   void getProductsByCategory(String id) async {
     try {
-      products.assignAll([]);
+      products.clear();
       loading(true);
       productsEmpty.value = false;
       var url =
