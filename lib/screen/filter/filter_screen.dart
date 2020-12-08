@@ -19,6 +19,24 @@ class _FilterScreenState extends State<FilterScreen> {
     _filterController.getBrands();
   }
 
+  List<String> _sizes = [
+    'x-small',
+    'small',
+    'medium',
+    'large',
+    'x-large',
+    'xx-large',
+    'xxx-large',
+  ];
+  List<ColorFilter> _colors = [
+    ColorFilter('white', Color(0xFFFFFFFF)),
+    ColorFilter('black', Color(0xFF000000)),
+    ColorFilter('yellow', Color(0xFFFFFF00)),
+    ColorFilter('dark blue', Color(0xFF33427D)),
+    ColorFilter('orange', Color(0xFFFF7A06)),
+    ColorFilter('brown', Color(0xFF7D3333)),
+    ColorFilter('dark pink', Color(0xFF7D3378)),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,18 +106,21 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  double _lowerValue = 20.0;
-  double _upperValue = 80.0;
+  String _size = '';
+  double _lowerValue = 50.0;
+  double _upperValue = 250.0;
   double _lowerValueFormatter = 20.0;
   double _upperValueFormatter = 20.0;
   List<String> _selectedBrands = [];
+  String _selectedColor = '';
+  int star = 5;
   Widget body(BuildContext context) {
     return Obx(() {
       var selectedBrands = '';
       _selectedBrands.forEach((element) {
         selectedBrands += '$element ,';
       });
-      selectedBrands.substring(0, selectedBrands.length - 4);
+
       return ListView(
         physics: BouncingScrollPhysics(),
         children: [
@@ -110,7 +131,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   fontWeight: FontWeight.w400, fontSize: 18),
             ),
             subtitle: Text(
-              selectedBrands,
+              selectedBrands.isNotEmpty ? selectedBrands : "No Settings",
               style: subTextStyle.copyWith(fontSize: 12),
             ),
             children: [
@@ -153,8 +174,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 height: 48,
               ),
               FlutterSlider(
-                min: 0.0,
-                max: 200.0,
+                min: 10.0,
+                max: 500.0,
                 rangeSlider: true,
                 tooltip: FlutterSliderTooltip(
                     format: (String value) {
@@ -236,7 +257,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   fontWeight: FontWeight.w400, fontSize: 18),
             ),
             subtitle: Text(
-              "No Settings",
+              _selectedColor.isNotEmpty ? _selectedColor : "No Settings",
               style: subTextStyle.copyWith(fontSize: 12),
             ),
             children: [
@@ -244,43 +265,54 @@ class _FilterScreenState extends State<FilterScreen> {
                 alignment: WrapAlignment.center,
                 spacing: 24,
                 runSpacing: 2,
-                children: [
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xFF33427D)),
-                  ),
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xFFFF7A06)),
-                  ),
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xFF7D3333)),
-                  ),
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: Color(0xFF7D3378)),
-                  ),
-                  Container(
-                    width: 35,
-                    height: 35,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8),
-                        color: redColor),
-                  ),
-                ],
+                children: _colors.map((e) {
+                  return InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedColor = e.name;
+                      });
+                    },
+                    child: Container(
+                      width: 35,
+                      height: 35,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: e.color),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(
+                height: 12,
+              )
+            ],
+          ),
+          ExpansionTile(
+            title: Text(
+              "Size",
+              style: mainTextStyle.copyWith(
+                  fontWeight: FontWeight.w400, fontSize: 18),
+            ),
+            subtitle: Text(
+              _size.isEmpty ? 'No Settings' : "$_size",
+              style: subTextStyle.copyWith(fontSize: 12),
+            ),
+            children: [
+              Wrap(
+                alignment: WrapAlignment.spaceEvenly,
+                spacing: 16,
+                children: _sizes.map((e) {
+                  return ActionChip(
+                    label: Text(e),
+                    backgroundColor: whiteColor,
+                    elevation: 0.6,
+                    onPressed: () {
+                      setState(() {
+                        _size = e;
+                      });
+                    },
+                  );
+                }).toList(),
               ),
               const SizedBox(
                 height: 12,
@@ -294,7 +326,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   fontWeight: FontWeight.w400, fontSize: 18),
             ),
             subtitle: Text(
-              "4 Star",
+              "$star Star",
               style: subTextStyle.copyWith(fontSize: 12),
             ),
             children: [
@@ -302,30 +334,55 @@ class _FilterScreenState extends State<FilterScreen> {
                 alignment: WrapAlignment.spaceEvenly,
                 spacing: 16,
                 children: [
-                  Chip(
+                  ActionChip(
                     label: Text("1"),
                     backgroundColor: whiteColor,
                     elevation: 0.6,
+                    onPressed: () {
+                      setState(() {
+                        star = 1;
+                      });
+                    },
                   ),
-                  Chip(
+                  ActionChip(
                     label: Text("2"),
                     backgroundColor: whiteColor,
                     elevation: 0.6,
+                    onPressed: () {
+                      setState(() {
+                        star = 2;
+                      });
+                    },
                   ),
-                  Chip(
+                  ActionChip(
                     label: Text("3"),
                     backgroundColor: whiteColor,
                     elevation: 0.6,
+                    onPressed: () {
+                      setState(() {
+                        star = 3;
+                      });
+                    },
                   ),
-                  Chip(
+                  ActionChip(
                     label: Text("4"),
                     backgroundColor: whiteColor,
                     elevation: 0.6,
+                    onPressed: () {
+                      setState(() {
+                        star = 4;
+                      });
+                    },
                   ),
-                  Chip(
+                  ActionChip(
                     label: Text("5"),
                     backgroundColor: whiteColor,
                     elevation: 0.6,
+                    onPressed: () {
+                      setState(() {
+                        star = 5;
+                      });
+                    },
                   ),
                 ],
               ),
@@ -336,7 +393,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
           ExpansionTile(
             title: Text(
-              "Shipping From",
+              "Seller",
               style: mainTextStyle.copyWith(
                   fontWeight: FontWeight.w400, fontSize: 18),
             ),
@@ -382,6 +439,9 @@ class _FilterScreenState extends State<FilterScreen> {
   }
 }
 
-// class Filter {
-//   final String id;
-// }
+class ColorFilter {
+  final String name;
+  final Color color;
+
+  ColorFilter(this.name, this.color);
+}

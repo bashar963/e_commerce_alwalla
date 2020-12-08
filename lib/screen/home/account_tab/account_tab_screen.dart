@@ -44,7 +44,7 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
       // Setting("assets/icons/card.svg", "Cards", () {
       //   Get.to(CardsScreen());
       // }),
-      Setting("assets/icons/bill.svg", "Notification", () {}),
+      // Setting("assets/icons/bill.svg", "Notification", () {}),
       Setting("assets/icons/exit.svg", "Log Out", () {
         AppPreference.token = null;
         Get.offAll(LoginScreen());

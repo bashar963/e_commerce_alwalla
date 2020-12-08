@@ -52,10 +52,11 @@ class _MyStepperState extends State<MyStepper> {
       children: [
         Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 16,
+              height: 24,
             ),
             widget.selectedIndex == 0
                 ? step(true, selectedIcon())
@@ -68,6 +69,8 @@ class _MyStepperState extends State<MyStepper> {
         ),
         Expanded(
             child: Divider(
+          indent: 0,
+          endIndent: 0,
           color:
               widget.selectedIndex > 0 ? redColor : blackColor.withOpacity(0.1),
           thickness: 2,
@@ -77,7 +80,7 @@ class _MyStepperState extends State<MyStepper> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 16,
+              height: 24,
             ),
             widget.selectedIndex == 1
                 ? step(true, selectedIcon())
@@ -92,6 +95,8 @@ class _MyStepperState extends State<MyStepper> {
         ),
         Expanded(
             child: Divider(
+          indent: 0,
+          endIndent: 0,
           color:
               widget.selectedIndex > 1 ? redColor : blackColor.withOpacity(0.1),
           thickness: 2,
@@ -101,7 +106,7 @@ class _MyStepperState extends State<MyStepper> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(
-              height: 16,
+              height: 24,
             ),
             widget.selectedIndex == 2
                 ? step(true, selectedIcon())

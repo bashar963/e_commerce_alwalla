@@ -29,7 +29,7 @@ class AddressController extends GetxController {
               selectedAddress.value = element;
             }
           });
-          if (AppPreference.defAddressID.isEmpty) {
+          if (AppPreference.defAddressID.isEmpty && addresses.isNotEmpty) {
             selectedAddress.value = addresses.first;
             AppPreference.defAddressID = selectedAddress.value.id.toString();
           }
@@ -70,6 +70,79 @@ class AddressController extends GetxController {
           defaultShipping: true,
           firstname: user.value.firstname,
           lastname: user.value.lastname));
+      print(user.toJson());
+      var response = await MainApi.create().updateUserProfile(
+          AppPreference.token, {"customer": user.value.toJson()});
+      print(response.bodyString);
+      print(response.error);
+      if (response.isSuccessful) {
+        user.value = Customer.fromJson(response.body);
+        addresses.assignAll(user.value.addresses);
+        showSuccessMessage(Get.context, 'Address has ben added successfully');
+        Future.delayed(Duration(seconds: 1), () {
+          Get.back();
+          Get.back();
+        });
+      } else {
+        var error = jsonDecode(response.error.toString());
+
+        showFailedMessage(Get.context, error['message'] ?? '');
+      }
+    } on Exception catch (e) {
+      showFailedMessage(Get.context, e.toString() ?? '');
+    }
+  }
+
+  void editAddress(
+      String addressId,
+      bool asDefault,
+      String street1,
+      String street2,
+      String number,
+      String city,
+      String state,
+      String country,
+      String postcode) async {
+    try {
+      user.value.addresses.forEach((element) {
+        if (element.id.toString() == addressId) {
+          element.street.clear();
+          element.street.addAll([street1, street2]);
+          element.telephone = number;
+          element.region =
+              Region(region: state, regionCode: state, regionId: 0);
+          element.city = city;
+          element.postcode = postcode;
+          selectedAddress.value = element;
+        }
+      });
+      print(user.toJson());
+      var response = await MainApi.create().updateUserProfile(
+          AppPreference.token, {"customer": user.value.toJson()});
+      print(response.bodyString);
+      print(response.error);
+      if (response.isSuccessful) {
+        user.value = Customer.fromJson(response.body);
+        addresses.assignAll(user.value.addresses);
+        showSuccessMessage(Get.context, 'Address has ben Edited successfully');
+        Future.delayed(Duration(seconds: 1), () {
+          Get.back();
+          Get.back();
+        });
+      } else {
+        var error = jsonDecode(response.error.toString());
+
+        showFailedMessage(Get.context, error['message'] ?? '');
+      }
+    } on Exception catch (e) {
+      showFailedMessage(Get.context, e.toString() ?? '');
+    }
+  }
+
+  void deleteAddress(Addresses address) async {
+    try {
+      user.value.addresses.remove(address);
+
       print(user.toJson());
       var response = await MainApi.create().updateUserProfile(
           AppPreference.token, {"customer": user.value.toJson()});

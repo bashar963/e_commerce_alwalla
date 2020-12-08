@@ -41,6 +41,10 @@ Map<String, Color> _colors = {
   "white": Color(0xFFFFFFFF),
   "black": Color(0xFF000000),
   "yellow": Color(0xFFFFFF00),
+  "dark blue": Color(0xFF33427D),
+  "orange": Color(0xFFFF7A06),
+  "brown": Color(0xFF7D3333),
+  "dark pink": Color(0xFF7D3378),
 };
 Color getColor(String color) {
   Color c = _colors[color.toLowerCase()];

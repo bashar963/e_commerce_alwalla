@@ -10,6 +10,7 @@ import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -45,6 +46,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     Review("4", "Beth Aida", "BA",
         "Wonderful jean, perfect gift for my girl for our anniversary!", 2),
   ];
+  dynamic _total = 0.0;
+  List<dynamic> _options = [];
   @override
   void initState() {
     super.initState();
@@ -70,12 +73,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
       if (element.attributeCode == "description")
         descFull = element.value ?? '';
     });
+    _total = _product.price;
     descTemp = desc;
     buttonText = readMore;
   }
 
   @override
   Widget build(BuildContext context) {
+    dynamic options = 0.0;
+    _options.forEach((element) {
+      options += element;
+    });
     return Scaffold(
       backgroundColor: whiteColor,
       body: GestureDetector(
@@ -99,7 +107,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         fontSize: 14, color: subTextColor),
                   ),
                   Text(
-                    _product.price.toString() + " EGP",
+                    (_total + options).toString() + " EGP",
                     style:
                         mainTextStyle.copyWith(fontSize: 18, color: redColor),
                   ),
@@ -216,12 +224,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           sliver: SliverToBoxAdapter(
-            child: Text(
-              descTemp,
-              style: mainTextStyle.copyWith(
-                  fontSize: 14, fontWeight: FontWeight.w400, height: 2),
+            child: Html(
+              data: descTemp,
             ),
           ),
         ),
@@ -501,9 +507,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         onTap: () {
                           setState(() {
                             e.values.forEach((element) {
+                              if (element.isSelected) {
+                                _options.remove(element.price);
+                              }
                               element.isSelected = false;
                             });
+
                             val.isSelected = true;
+                            if (!_options.contains(val.price))
+                              _options.add(val.price);
                           });
                         },
                         child: Container(
@@ -528,9 +540,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       onTap: () {
                         setState(() {
                           e.values.forEach((element) {
+                            if (element.isSelected) {
+                              _options.remove(element.price);
+                            }
                             element.isSelected = false;
                           });
                           val.isSelected = true;
+                          if (!_options.contains(val.price))
+                            _options.add(val.price);
                         });
                       },
                       child: Container(

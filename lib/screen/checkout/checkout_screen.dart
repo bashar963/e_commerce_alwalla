@@ -122,6 +122,21 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         _selectedIndex++;
                                       });
                                       if (_selectedIndex == 1) {
+                                        if ((street1Controller.text.isEmpty ||
+                                                street2Controller
+                                                    .text.isEmpty ||
+                                                cityController.text.isEmpty ||
+                                                stateController.text.isEmpty ||
+                                                countryController
+                                                    .text.isEmpty ||
+                                                numberController
+                                                    .text.isEmpty) &&
+                                            !isSameBilling) {
+                                          _selectedIndex = 0;
+                                          setState(() {});
+                                          showFailedMessage(context,
+                                              'Please fill billing address');
+                                        }
                                         _checkoutBloc.getShippingMethods(
                                             _addressesController
                                                 .selectedAddress.value);
@@ -195,24 +210,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     return SingleChildScrollView(
       physics: BouncingScrollPhysics(),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
             height: 32,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: CheckboxListTile(
-                value: isSameBilling,
-                title: Text(
-                  "Billing address is the same as delivery address",
-                  style: subTextStyle.copyWith(fontSize: 18),
-                ),
-                onChanged: (v) {
-                  setState(() {
-                    isSameBilling = v;
-                  });
-                }),
-          ),
+          CheckboxListTile(
+              value: isSameBilling,
+              title: Text(
+                "Billing address is the same as delivery address",
+                style: subTextStyle.copyWith(fontSize: 18),
+              ),
+              onChanged: (v) {
+                setState(() {
+                  isSameBilling = v;
+                });
+              }),
+          if (!isSameBilling)
+            const SizedBox(
+              height: 16,
+            ),
+          if (!isSameBilling)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24),
+              child: Text(
+                'Billing address',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
           if (!isSameBilling)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
@@ -370,7 +395,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             height: 16,
           ),
           userAddresses(),
-          Text(S.of(context).or),
+          Center(child: Text(S.of(context).or)),
           const SizedBox(
             height: 32,
           ),
