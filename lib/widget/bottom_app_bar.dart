@@ -23,7 +23,9 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
       _selectedIndex = widget.selectedIndex;
     });
     return Obx(() {
-      bool hasCart = _cartController.carts.value.items.isNotEmpty;
+      bool hasCart = _cartController.carts.value != null
+          ? _cartController.carts.value.items.isNotEmpty
+          : false;
       return Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.only(

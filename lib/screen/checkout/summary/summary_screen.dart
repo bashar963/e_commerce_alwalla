@@ -109,7 +109,7 @@ class _SummaryScreenState extends State<SummaryScreen> {
           if (_cartController.carts.value != null)
             SliverToBoxAdapter(
               child: Container(
-                height: 200,
+                height: 170,
                 child: ListView.builder(
                   itemBuilder: (c, i) =>
                       productItem(_cartController.carts.value.items[i], i == 0),

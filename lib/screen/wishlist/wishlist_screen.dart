@@ -135,12 +135,12 @@ class _WishListScreenState extends State<WishListScreen> {
                     return CachedNetworkImage(
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
-                      fit: BoxFit.fill,
-                      height: 240,
+                      fit: BoxFit.cover,
+                      height: 210,
                     );
                   },
-                  fit: BoxFit.fill,
-                  height: 240,
+                  fit: BoxFit.cover,
+                  height: 210,
                 )),
             const SizedBox(
               height: 12,

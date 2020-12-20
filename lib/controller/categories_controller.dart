@@ -8,8 +8,9 @@ import 'package:http/http.dart';
 
 class CategoriesController extends GetxController {
   var loading = false.obs;
+  var loadingCategory = false.obs;
   RxList<CategoryChild> categoryList = RxList();
-  RxList<HomeResponse> homeList = RxList();
+  RxList<dynamic> homeList = RxList();
   RxList<Product> products = RxList();
   var productsEmpty = false.obs;
   @override
@@ -45,11 +46,11 @@ class CategoriesController extends GetxController {
 
   void getHomePage() async {
     try {
-      loading(true);
+      loadingCategory(true);
       var url =
           "http://mymalleg.com/index.php/rest/V1/categories?rootCategoryId=2&depth=1";
       var response = await get(url);
-      loading(false);
+
       print(response.body);
 
       if (response.statusCode == 200) {
@@ -71,17 +72,23 @@ class CategoriesController extends GetxController {
             print(error['message'] ?? '');
           }
         }
-        List<HomeResponse> data = [];
+        List<dynamic> data = [];
         home.childrenData.forEach((element) {
           if (element.products.isNotEmpty) data.add(element);
         });
+        data.insert(0, Banner2('assets/images/1.jpeg'));
+        if (data.length > 1) data.insert(2, Banner2('assets/images/2.png'));
+        if (data.length > 3) data.insert(4, Banner2('assets/images/3.png'));
+        if (data.length > 4) data.insert(6, Banner2('assets/images/4.png'));
+        if (data.length > 5) data.insert(9, Banner2('assets/images/5.png'));
+        loadingCategory(false);
         homeList.assignAll(data);
       } else {
         var error = jsonDecode(response.body);
         print(error['message'] ?? '');
       }
     } on Exception catch (e) {
-      loading(false);
+      loadingCategory(false);
       print(e.toString());
     }
   }
@@ -113,4 +120,10 @@ class CategoriesController extends GetxController {
       print(e.toString());
     }
   }
+}
+
+class Banner2 {
+  final String image;
+
+  Banner2(this.image);
 }

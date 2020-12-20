@@ -28,40 +28,6 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   final CategoriesController _categoriesController = Get.find();
   final CartController _cartController = Get.find();
 
-  // List<Product> _products = [
-  //   Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  //   Product("2", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
-  //       "455\$"),
-  //   Product("3", "assets/images/image.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  //   Product("4", "assets/images/image_demo.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  //   Product("5", "assets/images/image.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  // ];
-  //
-  // List<Product> _products2 = [
-  //   Product("6", "assets/images/image.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  //   Product("7", "assets/images/image_2.png", "Leather Wristwatch", "Tag Heuer",
-  //       "455\$"),
-  //   Product("8", "assets/images/image_demo.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  //   Product("9", "assets/images/image.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  //   Product("10", "assets/images/image_demo.png", "BeoPlay Speaker",
-  //       "Bang and Olufsen", "755\$"),
-  // ];
-  // List<Brand> _brands = [
-  //   Brand("1", "assets/images/bo.png", "B&o", "5693"),
-  //   Brand("2", "assets/images/beats.png", "beats", "1124"),
-  //   Brand("1", "assets/images/bo.png", "B&o", "5693"),
-  //   Brand("2", "assets/images/beats.png", "beats", "1124"),
-  //   Brand("1", "assets/images/bo.png", "B&o", "5693"),
-  //   Brand("2", "assets/images/beats.png", "beats", "1124"),
-  // ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -293,12 +259,12 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     return CachedNetworkImage(
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
-                      fit: BoxFit.scaleDown,
-                      height: 200,
+                      fit: BoxFit.cover,
+                      height: 210,
                     );
                   },
-                  fit: BoxFit.scaleDown,
-                  height: 200,
+                  fit: BoxFit.cover,
+                  height: 210,
                 )),
             const SizedBox(
               height: 12,
@@ -448,10 +414,25 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   }
 
   homeCategories() {
+    if (_categoriesController.loadingCategory.value) {
+      return Container(
+          height: Get.height / 2,
+          child: Center(child: RefreshProgressIndicator()));
+    }
     return ListView.builder(
       padding: EdgeInsets.zero,
       itemBuilder: (c, i) {
         var item = _categoriesController.homeList[i];
+        if (item is Banner2)
+          return Container(
+            width: Get.width,
+            height: 200,
+            margin: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                image: DecorationImage(
+                    image: AssetImage(item.image), fit: BoxFit.cover)),
+          );
         return Column(
           mainAxisSize: MainAxisSize.min,
           children: [

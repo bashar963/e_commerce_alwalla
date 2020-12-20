@@ -82,17 +82,17 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Row(
                 children: [
-                  Material(
-                    elevation: 1,
-                    shape: CircleBorder(),
-                    child: CircleAvatar(
-                      radius: 60,
-                      backgroundImage: AssetImage("assets/icons/image_.png"),
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 24,
-                  ),
+                  // Material(
+                  //   elevation: 1,
+                  //   shape: CircleBorder(),
+                  //   child: CircleAvatar(
+                  //     radius: 60,
+                  //     backgroundImage: AssetImage("assets/icons/image_.png"),
+                  //   ),
+                  // ),
+                  // const SizedBox(
+                  //   width: 24,
+                  // ),
                   Expanded(
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
