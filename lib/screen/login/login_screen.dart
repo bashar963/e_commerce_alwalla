@@ -323,6 +323,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordError = null;
       _emailError = null;
     });
+    print(_emailController.text);
+    print(_passwordController.text);
     _loginController.login(_emailController.text, _passwordController.text);
   }
 }

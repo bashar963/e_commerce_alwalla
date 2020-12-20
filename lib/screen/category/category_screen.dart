@@ -218,14 +218,14 @@ class _CategoryScreenState extends State<CategoryScreen>
   Widget brandItem(Brand brand, bool isFirst) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (c) => CategoryScreen(
-              brand: brand,
-            ),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (c) => CategoryScreen(
+        //       brand: brand,
+        //     ),
+        //   ),
+        // );
       },
       child: Container(
           decoration: BoxDecoration(

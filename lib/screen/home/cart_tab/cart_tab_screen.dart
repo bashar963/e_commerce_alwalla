@@ -48,6 +48,8 @@ class _CartTabScreenState extends State<CartTabScreen> {
         }),
         bottomNavigationBar: Obx(() {
           if (_cartController.carts.value == null) return SizedBox.shrink();
+          if (_cartController.carts.value.items.isEmpty)
+            return SizedBox.shrink();
           return Container(
             padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
             color: whiteColor,
