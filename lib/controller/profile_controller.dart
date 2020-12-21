@@ -16,19 +16,21 @@ class ProfileController extends GetxController {
   }
 
   void loadCustomer() async {
-    try {
-      var response = await MainApi.create().getUserData(AppPreference.token);
-      print(response.bodyString);
-      print(response.error);
-      if (response.isSuccessful) {
-        user.value = Customer.fromJson(response.body);
-      } else {
-        var error = jsonDecode(response.error.toString());
+    if (AppPreference.token != null) {
+      try {
+        var response = await MainApi.create().getUserData(AppPreference.token);
+        print(response.bodyString);
+        print(response.error);
+        if (response.isSuccessful) {
+          user.value = Customer.fromJson(response.body);
+        } else {
+          var error = jsonDecode(response.error.toString());
 
-        showFailedMessage(Get.context, error['message'] ?? '');
+          showFailedMessage(Get.context, error['message'] ?? '');
+        }
+      } on Exception catch (e) {
+        showFailedMessage(Get.context, e.toString() ?? '');
       }
-    } on Exception catch (e) {
-      showFailedMessage(Get.context, e.toString() ?? '');
     }
   }
 

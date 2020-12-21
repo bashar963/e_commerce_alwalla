@@ -1,7 +1,9 @@
 import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/profile_controller.dart';
+import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/screen/home/account_tab/account_tab_screen.dart';
 import 'package:e_commerce_alwalla/screen/home/cart_tab/cart_tab_screen.dart';
+import 'package:e_commerce_alwalla/screen/login/login_screen.dart';
 import 'package:e_commerce_alwalla/widget/bottom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: AppBottomNavBar(
         selectedIndex: _selectedIndex,
         onTap: (int value) {
+          if (AppPreference.token == null && value == 2) {
+            Get.to(LoginScreen());
+            return;
+          }
+
           setState(() {
             _selectedIndex = value;
           });

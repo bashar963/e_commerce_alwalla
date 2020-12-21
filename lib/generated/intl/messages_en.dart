@@ -59,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sign_in_to_continue" : MessageLookupByLibrary.simpleMessage("Sign in to continue"),
     "sign_up" : MessageLookupByLibrary.simpleMessage("Signup"),
     "sign_up_page" : MessageLookupByLibrary.simpleMessage("Sign Up"),
+    "view_as_guest" : MessageLookupByLibrary.simpleMessage("View as guest"),
     "welcome" : MessageLookupByLibrary.simpleMessage("Welcome")
   };
 }

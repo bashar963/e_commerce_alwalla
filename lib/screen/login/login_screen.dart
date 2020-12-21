@@ -2,6 +2,7 @@ import 'package:e_commerce_alwalla/controller/login_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
 import 'package:e_commerce_alwalla/model/app_language.dart';
+import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
 import 'package:e_commerce_alwalla/screen/password_restore/email_screen.dart';
 import 'package:e_commerce_alwalla/screen/sign_up/sign_up_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
@@ -237,6 +238,34 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(
               height: 42,
+            ),
+            Container(
+              height: 50,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: RaisedButton(
+                elevation: 0,
+                onPressed: () {
+                  print(AppPreference.guestCartId.isNotEmpty);
+                  if (AppPreference.guestCartId.isNotEmpty) {
+                    print('1');
+                    Get.back();
+                  } else {
+                    print('2');
+                    Get.offAll(HomeScreen());
+                  }
+                },
+                color: redColor,
+                child: Text(
+                  S.of(context).view_as_guest,
+                  style: subTextStyle.copyWith(
+                      color: whiteColor,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 24,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16),

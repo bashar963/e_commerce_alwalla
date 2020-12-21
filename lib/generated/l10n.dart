@@ -175,6 +175,16 @@ class S {
     );
   }
 
+  /// `View as guest`
+  String get view_as_guest {
+    return Intl.message(
+      'View as guest',
+      name: 'view_as_guest',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Explore`
   String get explore {
     return Intl.message(

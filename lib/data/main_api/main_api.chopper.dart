@@ -125,6 +125,49 @@ class _$MainApi extends MainApi {
   }
 
   @override
+  Future<Response<dynamic>> getCartGuest(String cartMask) {
+    final $url = 'http://mymalleg.com/index.php/rest/V1/guest-carts/$cartMask';
+    final $request = Request('GET', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> getQuoteIdGuest() {
+    final $url = 'http://mymalleg.com/index.php/rest/V1/guest-carts';
+    final $request = Request('POST', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> deleteItemInCartGuest(
+      String cartId, String itemId) {
+    final $url =
+        'http://mymalleg.com/index.php/rest/V1/guest-carts/$cartId/items/$itemId';
+    final $request = Request('DELETE', $url, client.baseUrl);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> editItemInCartGuest(
+      String cartId, String itemId, Map<String, dynamic> body) {
+    final $url =
+        'http://mymalleg.com/index.php/rest/V1/guest-carts/$cartId/items/$itemId';
+    final $body = body;
+    final $request = Request('PUT', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
+  Future<Response<dynamic>> addItemToCartGuest(
+      String cartId, Map<String, dynamic> body) {
+    final $url =
+        'http://mymalleg.com/index.php/rest/V1/guest-carts/$cartId/items';
+    final $body = body;
+    final $request = Request('POST', $url, client.baseUrl, body: $body);
+    return client.send<dynamic, dynamic>($request);
+  }
+
+  @override
   Future<Response<dynamic>> getProducts() {
     final $url =
         'http://mymalleg.com/index.php/rest/V1/products?searchCriteria';

@@ -25,6 +25,7 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
   @override
   void initState() {
     super.initState();
+    _profileController.loadCustomer();
     _settings = [
       Setting("assets/icons/edit.svg", "Edit Profile", () {
         Get.to(ProfileScreen());
@@ -100,9 +101,11 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
                     children: [
                       AutoSizeText(
                         _profileController.user.value != null
-                            ? (_profileController.user.value.firstname +
+                            ? (_profileController.user.value.firstname
+                                    .toString() +
                                 " " +
-                                _profileController.user.value.lastname)
+                                _profileController.user.value.lastname
+                                    .toString())
                             : '',
                         maxLines: 1,
                         maxFontSize: 26,
@@ -115,7 +118,7 @@ class _AccountTabScreenState extends State<AccountTabScreen> {
                       ),
                       Text(
                         _profileController.user.value != null
-                            ? _profileController.user.value.email
+                            ? _profileController.user.value.email.toString()
                             : '',
                         style: subTextStyle,
                       ),

@@ -65,7 +65,13 @@ class LoginController extends GetxController {
       print(response.error);
       if (response.isSuccessful) {
         user.value = UserResponse.fromJson(response.body);
-        Get.offAll(HomeScreen());
+        if (AppPreference.guestCartId.isNotEmpty) {
+          AppPreference.guestCartId = '';
+          Get.back();
+        } else {
+          AppPreference.guestCartId = '';
+          Get.offAll(HomeScreen());
+        }
       } else {
         var error = jsonDecode(response.error.toString());
 

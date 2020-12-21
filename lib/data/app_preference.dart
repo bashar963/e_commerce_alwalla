@@ -5,6 +5,7 @@ abstract class AppPreference {
 
   static final String _authToken = "TOEKN";
   static final String _customerId = "_customerId";
+  static final String _guestCartId = "_guestCartId";
   static final String _lastSearches = "_lastSearches";
   static final String _firebaseToken = "_firebaseToken";
   static final String _appLanguage = "appLanguage";
@@ -23,6 +24,11 @@ abstract class AppPreference {
       _sharedPreferences.getString(_defAddressID) ?? "";
   static set defAddressID(String val) =>
       _sharedPreferences.setString(_defAddressID, val);
+
+  static String get guestCartId =>
+      _sharedPreferences.getString(_guestCartId) ?? "";
+  static set guestCartId(String val) =>
+      _sharedPreferences.setString(_guestCartId, val);
 
   static String get firebaseToken =>
       _sharedPreferences.getString(_firebaseToken) ?? "";

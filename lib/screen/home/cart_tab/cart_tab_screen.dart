@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:e_commerce_alwalla/controller/cart_controller.dart';
+import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/screen/checkout/checkout_screen.dart';
+import 'package:e_commerce_alwalla/screen/login/login_screen.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
@@ -86,12 +88,10 @@ class _CartTabScreenState extends State<CartTabScreen> {
                     elevation: 0,
                     color: redColor,
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (c) => CheckoutScreen(),
-                        ),
-                      );
+                      if (AppPreference.token == null)
+                        Get.to(LoginScreen());
+                      else
+                        Get.to(CheckoutScreen());
                     },
                     child: Text(
                       "CHECKOUT",

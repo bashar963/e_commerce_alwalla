@@ -59,6 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "sign_in_to_continue" : MessageLookupByLibrary.simpleMessage("قم بتسجيل الدخول"),
     "sign_up" : MessageLookupByLibrary.simpleMessage("تسجيل حساب جديد"),
     "sign_up_page" : MessageLookupByLibrary.simpleMessage("تسجيل حساب جديد"),
+    "view_as_guest" : MessageLookupByLibrary.simpleMessage("تصفح كزائر"),
     "welcome" : MessageLookupByLibrary.simpleMessage("اهلا")
   };
 }
