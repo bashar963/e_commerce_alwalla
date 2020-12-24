@@ -1,13 +1,16 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/view_all_controller.dart';
 import 'package:e_commerce_alwalla/model/products_response.dart';
 import 'package:e_commerce_alwalla/screen/product_details/product_details_screen.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
+import 'package:e_commerce_alwalla/widget/product_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class ViewAllScreen extends StatefulWidget {
@@ -20,7 +23,7 @@ class ViewAllScreen extends StatefulWidget {
 
 class _ViewAllScreenState extends State<ViewAllScreen> {
   final ViewAllController _viewAllController = Get.put(ViewAllController());
-
+  final CartController _cartController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -57,10 +60,7 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
             const SizedBox(
               height: 32,
             ),
-            if (_viewAllController.loading.value)
-              Center(
-                child: RefreshProgressIndicator(),
-              ),
+            if (_viewAllController.loading.value) loadingPage(),
             _viewAllController.productsEmpty.value
                 ? Center(
                     child: Text('No Products found'),
@@ -115,11 +115,11 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.cover,
-                      height: 210,
+                      height: 180,
                     );
                   },
                   fit: BoxFit.cover,
-                  height: 210,
+                  height: 180,
                 )),
             const SizedBox(
               height: 12,
@@ -141,14 +141,33 @@ class _ViewAllScreenState extends State<ViewAllScreen> {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price.toString() + " EGP",
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price.toString() + " EGP",
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(product);
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void openDialog(Product product) {
+    if (product.options.isEmpty) {
+      _cartController.addItemToCar(null, product.sku);
+    } else
+      Get.dialog(ProductDialog(product));
   }
 }

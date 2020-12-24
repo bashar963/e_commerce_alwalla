@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/wish_list_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
@@ -8,8 +9,10 @@ import 'package:e_commerce_alwalla/screen/product_details/product_details_screen
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
+import 'package:e_commerce_alwalla/widget/product_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:e_commerce_alwalla/model/products_response.dart' as p;
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class WishListScreen extends StatefulWidget {
@@ -19,6 +22,7 @@ class WishListScreen extends StatefulWidget {
 
 class _WishListScreenState extends State<WishListScreen> {
   final WishListController _wishListController = Get.put(WishListController());
+  final CartController _cartController = Get.find();
   List<Product> _products = [
     Product("1", "assets/images/image_demo.png", "BeoPlay Speaker",
         "Bang and Olufsen", "755\$"),
@@ -136,11 +140,11 @@ class _WishListScreenState extends State<WishListScreen> {
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.cover,
-                      height: 210,
+                      height: 180,
                     );
                   },
                   fit: BoxFit.cover,
-                  height: 210,
+                  height: 180,
                 )),
             const SizedBox(
               height: 12,
@@ -162,15 +166,34 @@ class _WishListScreenState extends State<WishListScreen> {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price.toString() + " EGP",
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price.toString() + " EGP",
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(product);
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void openDialog(p.Product product) {
+    if (product.options.isEmpty) {
+      _cartController.addItemToCar(null, product.sku);
+    } else
+      Get.dialog(ProductDialog(product));
   }
 
   productItem2(Product product) {

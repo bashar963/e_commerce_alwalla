@@ -260,11 +260,11 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.cover,
-                      height: 210,
+                      height: 180,
                     );
                   },
                   fit: BoxFit.cover,
-                  height: 210,
+                  height: 180,
                 )),
             const SizedBox(
               height: 12,
@@ -415,9 +415,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
 
   homeCategories() {
     if (_categoriesController.loadingCategory.value) {
-      return Container(
-          height: Get.height / 2,
-          child: Center(child: RefreshProgressIndicator()));
+      return loadingPage();
     }
     return ListView.builder(
       padding: EdgeInsets.zero,

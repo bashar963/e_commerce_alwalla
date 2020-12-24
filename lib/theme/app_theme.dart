@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 const colorPrimary = Color(0xFFfafafa);
 const colorPrimaryDark = Color(0xFFfafafa);
-const colorAccent = Color(0xFFE80057);
+const colorAccent = Color(0xFFfd314c);
 const backgroundColor = Color(0xFFfafafa);
 
 const whiteColor = Color(0xFFFFFFFF);
 const blackColor = Color(0xFF000000);
 const greenColor = Color(0xFF00C569);
 const orangeColor = Color(0xFFFFC107);
-const redColor = Color(0xFFFD314C);
+const redColor = Color(0xFFfd314c);
 const lightGrey = Color(0xFFDBDBDB);
 
 const mainTextColor = Color(0xFF1E1E1E);

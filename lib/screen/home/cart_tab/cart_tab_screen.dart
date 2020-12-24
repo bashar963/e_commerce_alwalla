@@ -82,21 +82,19 @@ class _CartTabScreenState extends State<CartTabScreen> {
                   ),
                 ),
                 Expanded(
-                    child: Container(
-                  height: 50,
-                  child: RaisedButton(
-                    elevation: 0,
-                    color: redColor,
-                    onPressed: () {
-                      if (AppPreference.token == null)
-                        Get.to(LoginScreen());
-                      else
-                        Get.to(CheckoutScreen());
-                    },
-                    child: Text(
-                      "CHECKOUT",
-                      style: subTextStyle.copyWith(color: whiteColor),
-                    ),
+                    child: RaisedButton(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                  elevation: 0,
+                  color: redColor,
+                  onPressed: () {
+                    if (AppPreference.token == null)
+                      Get.to(LoginScreen());
+                    else
+                      Get.to(CheckoutScreen());
+                  },
+                  child: Text(
+                    "CHECKOUT",
+                    style: subTextStyle.copyWith(color: whiteColor),
                   ),
                 ))
               ],
@@ -110,36 +108,35 @@ class _CartTabScreenState extends State<CartTabScreen> {
       if (_cartController.carts.value == null) {
         return emptyCart();
       }
+      if (_cartController.carts.value.items.isEmpty) {
+        return emptyCart();
+      }
       return CustomScrollView(
         physics: BouncingScrollPhysics(),
         slivers: [
-          _cartController.carts.value.items.isEmpty
-              ? SliverFillRemaining(
-                  child: emptyCart(),
-                )
-              : SliverToBoxAdapter(
-                  child: SlideConfiguration(
-                    config: SlideConfig(
-                        slideOpenAnimDuration: Duration(milliseconds: 200),
-                        slideCloseAnimDuration: Duration(milliseconds: 400),
-                        deleteStep1AnimDuration: Duration(milliseconds: 250),
-                        deleteStep2AnimDuration: Duration(milliseconds: 300),
-                        supportElasticity: true,
-                        closeOpenedItemOnTouch: true,
-                        slideWidth: 100,
-                        actionOpenCloseThreshold: 0.3,
-                        backgroundColor: whiteColor),
-                    child: ListView.builder(
-                      itemBuilder: (c, i) => Padding(
-                        padding: EdgeInsets.only(top: 16),
-                        child: item(_cartController.carts.value.items[i], i),
-                      ),
-                      itemCount: _cartController.carts.value.items.length,
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                    ),
-                  ),
+          SliverToBoxAdapter(
+            child: SlideConfiguration(
+              config: SlideConfig(
+                  slideOpenAnimDuration: Duration(milliseconds: 200),
+                  slideCloseAnimDuration: Duration(milliseconds: 400),
+                  deleteStep1AnimDuration: Duration(milliseconds: 250),
+                  deleteStep2AnimDuration: Duration(milliseconds: 300),
+                  supportElasticity: true,
+                  closeOpenedItemOnTouch: true,
+                  slideWidth: 100,
+                  actionOpenCloseThreshold: 0.3,
+                  backgroundColor: whiteColor),
+              child: ListView.builder(
+                itemBuilder: (c, i) => Padding(
+                  padding: EdgeInsets.only(top: 16),
+                  child: item(_cartController.carts.value.items[i], i),
                 ),
+                itemCount: _cartController.carts.value.items.length,
+                shrinkWrap: true,
+                physics: NeverScrollableScrollPhysics(),
+              ),
+            ),
+          ),
           space(24),
           SliverToBoxAdapter(
             child: Divider(),
@@ -342,12 +339,12 @@ class _CartTabScreenState extends State<CartTabScreen> {
                         return CachedNetworkImage(
                           imageUrl:
                               'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
-                          fit: BoxFit.contain,
+                          fit: BoxFit.cover,
                           width: 120,
                           height: 120,
                         );
                       },
-                      fit: BoxFit.contain,
+                      fit: BoxFit.cover,
                       width: 120,
                       height: 120,
                     ),
@@ -357,95 +354,101 @@ class _CartTabScreenState extends State<CartTabScreen> {
                   width: 24,
                 ),
                 Expanded(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.title,
-                      style: mainTextStyle.copyWith(
-                          fontSize: 16, fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      item.total + " EGP",
-                      style: mainTextStyle.copyWith(
-                          color: redColor,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(
-                      height: 16,
-                    ),
-                    Container(
-                        width: 95,
-                        height: 30,
-                        decoration: BoxDecoration(
-                            color: Color.fromRGBO(0, 0, 0, 0.06),
-                            borderRadius: BorderRadius.circular(4)),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    item.quantity++;
-                                    _cartController.editItemInCart(item.itemId,
-                                        item.quoteId, item.quantity);
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    FontAwesomeIcons.plus,
-                                    size: 10,
-                                    color: Color(0xBB343434),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(
-                                  item.quantity.toString(),
-                                  style: mainTextStyle.copyWith(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w400,
-                                    color: blackColor,
-                                  ),
-                                ),
-                              ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    if (item.quantity <= 1) {
-                                      removeItem(item);
-                                    } else {
-                                      item.quantity--;
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        item.title,
+                        maxLines: 2,
+                        style: mainTextStyle.copyWith(
+                            fontSize: 16, fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        height: 8,
+                      ),
+                      Text(
+                        item.total + " EGP",
+                        style: mainTextStyle.copyWith(
+                            color: redColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      Container(
+                          width: 95,
+                          // height: 30,
+                          // padding:
+                          //     EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(0, 0, 0, 0.06),
+                              borderRadius: BorderRadius.circular(4)),
+                          child: Material(
+                            color: Colors.transparent,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      item.quantity++;
                                       _cartController.editItemInCart(
                                           item.itemId,
                                           item.quoteId,
                                           item.quantity);
-                                    }
-                                  });
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    FontAwesomeIcons.minus,
-                                    size: 10,
-                                    color: Color(0xBB343434),
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      FontAwesomeIcons.plus,
+                                      size: 10,
+                                      color: Color(0xBB343434),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ))
-                  ],
-                ))
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    item.quantity.toString(),
+                                    style: mainTextStyle.copyWith(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      color: blackColor,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      if (item.quantity <= 1) {
+                                        removeItem(item);
+                                      } else {
+                                        item.quantity--;
+                                        _cartController.editItemInCart(
+                                            item.itemId,
+                                            item.quoteId,
+                                            item.quantity);
+                                      }
+                                    });
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Icon(
+                                      FontAwesomeIcons.minus,
+                                      size: 10,
+                                      color: Color(0xBB343434),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ))
+                    ],
+                  ),
+                )
               ],
             ),
           ),
@@ -464,8 +467,8 @@ class _CartTabScreenState extends State<CartTabScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           SvgPicture.asset(
-            "assets/icons/icon_cart.svg",
-            width: 48,
+            "assets/icons/cart.svg",
+            width: 64,
           ),
           const SizedBox(
             height: 24,

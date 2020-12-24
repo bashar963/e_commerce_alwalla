@@ -2,7 +2,9 @@ import 'package:e_commerce_alwalla/controller/login_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/screen/home/home_screen.dart';
 import 'package:e_commerce_alwalla/screen/login/login_screen.dart';
+import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -30,6 +32,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: Center(
+        child: SvgPicture.asset(
+          'assets/icons/mymall.svg',
+          width: 90,
+          height: 90,
+        ),
+      ),
+    );
   }
 }

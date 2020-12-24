@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/search_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
@@ -8,9 +9,11 @@ import 'package:e_commerce_alwalla/screen/product_details/product_details_screen
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
+import 'package:e_commerce_alwalla/widget/product_dialog.dart';
 import 'package:e_commerce_alwalla/widget/search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -21,6 +24,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final SearchController _searchController = Get.put(SearchController());
   final _searchEditController = TextEditingController();
+  final CartController _cartController = Get.find();
   List<String> _tags = AppPreference.lastSearches;
 
   @override
@@ -88,9 +92,11 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget body(BuildContext context) {
     return Obx(() {
       if (_searchController.loading.value)
-        return Center(
-          child: RefreshProgressIndicator(),
-        );
+        return SingleChildScrollView(
+            child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 24),
+          child: loadingPage(),
+        ));
       if (_searchController.searchedProducts.isNotEmpty)
         return SingleChildScrollView(
           physics: BouncingScrollPhysics(),
@@ -223,11 +229,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.cover,
-                      height: 210,
+                      height: 170,
                     );
                   },
                   fit: BoxFit.cover,
-                  height: 210,
+                  height: 170,
                 )),
             const SizedBox(
               height: 12,
@@ -249,15 +255,34 @@ class _SearchScreenState extends State<SearchScreen> {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price.toString() + " EGP",
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price.toString() + " EGP",
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(product);
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void openDialog(Product product) {
+    if (product.options.isEmpty) {
+      _cartController.addItemToCar(null, product.sku);
+    } else
+      Get.dialog(ProductDialog(product));
   }
 
   Widget productItem(Product product, bool isFirst) {
@@ -293,11 +318,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.cover,
-                      height: 210,
+                      height: 170,
                     );
                   },
                   fit: BoxFit.cover,
-                  height: 210,
+                  height: 170,
                 )),
             const SizedBox(
               height: 12,
@@ -319,10 +344,22 @@ class _SearchScreenState extends State<SearchScreen> {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price.toString() + " EGP",
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price.toString() + " EGP",
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(product);
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),

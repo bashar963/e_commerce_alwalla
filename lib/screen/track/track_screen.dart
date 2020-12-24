@@ -41,22 +41,25 @@ class _TrackOrderScreenState extends State<TrackOrderScreen> {
   }
 
   Widget body(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(
-          height: 32,
-        ),
-        ListView.builder(
-          physics: BouncingScrollPhysics(),
-          itemBuilder: (c, i) =>
-              stepItem(_tracker[i], i == _tracker.length - 1),
-          itemCount: _tracker.length,
-          shrinkWrap: true,
-        ),
-        const SizedBox(
-          height: 32,
-        ),
-      ],
+    return SingleChildScrollView(
+      physics: BouncingScrollPhysics(),
+      child: Column(
+        children: [
+          const SizedBox(
+            height: 32,
+          ),
+          ListView.builder(
+            physics: BouncingScrollPhysics(),
+            itemBuilder: (c, i) =>
+                stepItem(_tracker[i], i == _tracker.length - 1),
+            itemCount: _tracker.length,
+            shrinkWrap: true,
+          ),
+          const SizedBox(
+            height: 32,
+          ),
+        ],
+      ),
     );
   }
 

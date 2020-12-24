@@ -9,8 +9,10 @@ import 'package:e_commerce_alwalla/model/products_response.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
+import 'package:e_commerce_alwalla/widget/product_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -115,17 +117,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
             ),
             Expanded(
-                child: Container(
-              height: 50,
-              child: RaisedButton(
-                elevation: 0,
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                color: redColor,
-                onPressed: addToCart,
-                child: Text(
-                  "ADD",
-                  style: subTextStyle.copyWith(color: whiteColor),
-                ),
+                child: RaisedButton(
+              elevation: 0,
+              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+              color: redColor,
+              onPressed: addToCart,
+              child: Text(
+                "ADD",
+                style: subTextStyle.copyWith(color: whiteColor),
               ),
             ))
           ],
@@ -292,45 +291,47 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ),
         ),
-        space(32),
-        SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          sliver: SliverToBoxAdapter(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Related products',
-                  style: mainTextStyle.copyWith(fontSize: 18),
-                ),
-                InkWell(
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                        left: 8, right: 0, top: 8, bottom: 8),
-                    child: Text(
-                      S.of(context).see_all,
-                      style: mainTextStyle.copyWith(fontSize: 14),
-                    ),
+        if (_relatedProducts.length > 0) space(32),
+        if (_relatedProducts.length > 0)
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Related products',
+                    style: mainTextStyle.copyWith(fontSize: 18),
                   ),
-                )
-              ],
+                  InkWell(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 0, top: 8, bottom: 8),
+                      child: Text(
+                        S.of(context).see_all,
+                        style: mainTextStyle.copyWith(fontSize: 14),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
-        ),
-        space(24),
-        SliverToBoxAdapter(
-          child: Container(
-            height: 370,
-            child: ListView.builder(
-              itemBuilder: (c, i) => productItem(_relatedProducts[i], i == 0),
-              itemCount: _relatedProducts.length,
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              scrollDirection: Axis.horizontal,
+        if (_relatedProducts.length > 0) space(24),
+        if (_relatedProducts.length > 0)
+          SliverToBoxAdapter(
+            child: Container(
+              height: 250,
+              child: ListView.builder(
+                itemBuilder: (c, i) => productItem(_relatedProducts[i], i == 0),
+                itemCount: _relatedProducts.length,
+                shrinkWrap: true,
+                physics: BouncingScrollPhysics(),
+                scrollDirection: Axis.horizontal,
+              ),
             ),
           ),
-        ),
         space(32),
       ],
     );
@@ -370,12 +371,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   return CachedNetworkImage(
                     imageUrl:
                         'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
-                    fit: BoxFit.fill,
-                    height: 240,
+                    fit: BoxFit.cover,
+                    height: 160,
                   );
                 },
-                fit: BoxFit.fill,
-                height: 240,
+                fit: BoxFit.cover,
+                height: 160,
               ),
             ),
             const SizedBox(
@@ -396,15 +397,34 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price.toString() + ' EGP',
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w600, fontSize: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price.toString() + " EGP",
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(product);
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void openDialog(Product product) {
+    if (product.options.isEmpty) {
+      _cartController.addItemToCar(null, product.sku);
+    } else
+      Get.dialog(ProductDialog(product));
   }
 
   space(double size) {

@@ -42,28 +42,35 @@ class _ProductDialogState extends State<ProductDialog> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Container(
-              height: 350,
-              child: Carousel(
-                dotBgColor: Colors.transparent,
-                dotColor: Theme.of(context).accentColor,
-                dotIncreasedColor: Theme.of(context).accentColor,
-                autoplay: false,
-                images: widget.product.mediaGalleryEntries.map((e) {
-                  return CachedNetworkImage(
-                    imageUrl: baseUrlMedia + e.file,
-                    width: MediaQuery.of(context).size.width,
-                    fit: BoxFit.cover,
-                    errorWidget: (c, s, w) {
-                      return CachedNetworkImage(
-                        imageUrl:
-                            'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
-                        fit: BoxFit.cover,
-                      );
-                    },
-                  );
-                }).toList(),
+            ClipRRect(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+              child: Container(
+                height: 320,
+                child: Carousel(
+                  dotBgColor: Colors.transparent,
+                  dotColor: Theme.of(context).accentColor,
+                  dotIncreasedColor: Theme.of(context).accentColor,
+                  autoplay: false,
+                  images: widget.product.mediaGalleryEntries.map((e) {
+                    return CachedNetworkImage(
+                      imageUrl: baseUrlMedia + e.file,
+                      width: MediaQuery.of(context).size.width,
+                      fit: BoxFit.cover,
+                      errorWidget: (c, s, w) {
+                        return CachedNetworkImage(
+                          imageUrl:
+                              'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
+                          fit: BoxFit.cover,
+                        );
+                      },
+                    );
+                  }).toList(),
+                ),
               ),
+            ),
+            SizedBox(
+              height: 16,
             ),
             if (widget.product.options.isNotEmpty)
               Padding(

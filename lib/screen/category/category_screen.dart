@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:e_commerce_alwalla/controller/cart_controller.dart';
 import 'package:e_commerce_alwalla/controller/categories_controller.dart';
 import 'package:e_commerce_alwalla/data/app_preference.dart';
 import 'package:e_commerce_alwalla/generated/l10n.dart';
@@ -11,8 +12,10 @@ import 'package:e_commerce_alwalla/screen/product_details/product_details_screen
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/utils/common.dart';
 import 'package:e_commerce_alwalla/utils/constants.dart';
+import 'package:e_commerce_alwalla/widget/product_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class CategoryScreen extends StatefulWidget {
@@ -27,6 +30,7 @@ class CategoryScreen extends StatefulWidget {
 class _CategoryScreenState extends State<CategoryScreen>
     with SingleTickerProviderStateMixin {
   final CategoriesController _categoriesController = Get.find();
+  final CartController _cartController = Get.find();
   List<Brand> _brands = [
     Brand("1", "assets/images/bo.png", "B&o", "5693"),
     Brand("2", "assets/images/beats.png", "beats", "1124"),
@@ -186,10 +190,7 @@ class _CategoryScreenState extends State<CategoryScreen>
             const SizedBox(
               height: 32,
             ),
-            if (_categoriesController.loading.value)
-              Center(
-                child: RefreshProgressIndicator(),
-              ),
+            if (_categoriesController.loading.value) loadingPage(),
             _categoriesController.productsEmpty.value
                 ? Center(
                     child: Text('No Products found'),
@@ -295,11 +296,11 @@ class _CategoryScreenState extends State<CategoryScreen>
                       imageUrl:
                           'http://mymalleg.com/pub/media/catalog/product/cache/no_image.jpg',
                       fit: BoxFit.cover,
-                      height: 210,
+                      height: 170,
                     );
                   },
                   fit: BoxFit.cover,
-                  height: 210,
+                  height: 170,
                 )),
             const SizedBox(
               height: 12,
@@ -321,14 +322,33 @@ class _CategoryScreenState extends State<CategoryScreen>
             const SizedBox(
               height: 12,
             ),
-            Text(
-              product.price.toString() + " EGP",
-              style: mainTextStyle.copyWith(
-                  color: redColor, fontWeight: FontWeight.w400),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  product.price.toString() + " EGP",
+                  style: mainTextStyle.copyWith(
+                      color: redColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16),
+                ),
+                InkWell(
+                    onTap: () {
+                      openDialog(product);
+                    },
+                    child: SvgPicture.asset("assets/icons/shopping-bag.svg"))
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  void openDialog(p.Product product) {
+    if (product.options.isEmpty) {
+      _cartController.addItemToCar(null, product.sku);
+    } else
+      Get.dialog(ProductDialog(product));
   }
 }

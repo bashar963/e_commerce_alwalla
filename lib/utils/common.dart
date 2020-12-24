@@ -1,7 +1,10 @@
+import 'package:content_placeholder/content_placeholder.dart';
+import 'package:content_placeholder/content_placeholders.dart';
 import 'package:e_commerce_alwalla/model/customer/customer_response.dart';
 import 'package:e_commerce_alwalla/theme/app_theme.dart';
 import 'package:e_commerce_alwalla/widget/message_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void hideKeyboard(BuildContext context) {
   FocusScope.of(context).requestFocus(new FocusNode());
@@ -50,4 +53,61 @@ Color getColor(String color) {
   Color c = _colors[color.toLowerCase()];
   if (c == null) return Color(0xFFFFFFFF);
   return c;
+}
+
+Widget loadingPage() {
+  return Container(
+    child: Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 16),
+          child: ContentPlaceholder(
+            width: Get.width,
+            height: 160,
+          ),
+        ),
+        ListView.builder(
+          itemBuilder: (c, i) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ContentPlaceholder(
+                    width: Get.width,
+                    height: 180,
+                  ),
+                  ContentPlaceholder(
+                    width: 120,
+                    height: 20,
+                  ),
+                  ContentPlaceholder(
+                    width: 60,
+                    height: 20,
+                  ),
+                ],
+              ),
+            );
+          },
+          shrinkWrap: true,
+          itemCount: 3,
+          physics: NeverScrollableScrollPhysics(),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: ContentPlaceholder(
+            width: Get.width,
+            height: 160,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          child: ContentPlaceholder(
+            width: Get.width,
+            height: 160,
+          ),
+        ),
+      ],
+    ),
+  );
 }
