@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:e_commerce_alwalla/model/brands_response.dart';
+import 'package:e_commerce_alwalla/utils/constants.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
 
@@ -15,8 +16,7 @@ class FilterController extends GetxController {
 
   void getBrands() async {
     try {
-      var url =
-          "http://mymalleg.com/rest/V1/products/attributes/manufacturer/options";
+      var url = "$baseUrlApi/products/attributes/manufacturer/options";
       var response = await get(url);
 
       print(response.body);

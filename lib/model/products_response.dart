@@ -64,7 +64,7 @@ class Product {
   List<MediaGalleryEntry> mediaGalleryEntries;
   List<dynamic> tierPrices;
   List<CustomAttribute> customAttributes;
-  int weight;
+  dynamic weight;
 
   factory Product.fromRawJson(String str) => Product.fromJson(json.decode(str));
 

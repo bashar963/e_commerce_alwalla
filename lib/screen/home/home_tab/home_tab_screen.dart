@@ -338,7 +338,8 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 color: whiteColor,
               ),
               child: Center(
-                child: CachedNetworkImage(imageUrl: category.image),
+                child: CachedNetworkImage(
+                    imageUrl: category.image.replaceAll("index.php/", "")),
               ),
             ),
             const SizedBox(

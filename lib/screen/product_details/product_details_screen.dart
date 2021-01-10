@@ -55,29 +55,33 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     super.initState();
 
     _product = _productsController.getProductById(widget.productId);
-    if (_product.productLinks != null)
-      _product.productLinks.forEach((element) {
-        var p = _productsController.getProductById(element.sku);
-        if (p != null) _relatedProducts.add(p);
-      });
-    if (_product.options != null) {
-      _product.options.forEach((element) {
-        element.values.forEach((v) {
-          v.isSelected = false;
+    if (_product != null) {
+      if (_product.productLinks != null)
+        _product.productLinks.forEach((element) {
+          var p = _productsController.getProductById(element.sku);
+          if (p != null) _relatedProducts.add(p);
         });
+      if (_product.options != null) {
+        _product.options.forEach((element) {
+          element.values.forEach((v) {
+            v.isSelected = false;
+          });
+        });
+      }
+      _product.customAttributes.forEach((element) {
+        if (element.attributeCode == "short_description")
+          desc = element.value ?? '';
       });
+      _product.customAttributes.forEach((element) {
+        if (element.attributeCode == "description")
+          descFull = element.value ?? '';
+      });
+      _total = _product.price;
+      descTemp = desc;
+      buttonText = readMore;
+    } else {
+      Get.back();
     }
-    _product.customAttributes.forEach((element) {
-      if (element.attributeCode == "short_description")
-        desc = element.value ?? '';
-    });
-    _product.customAttributes.forEach((element) {
-      if (element.attributeCode == "description")
-        descFull = element.value ?? '';
-    });
-    _total = _product.price;
-    descTemp = desc;
-    buttonText = readMore;
   }
 
   @override
@@ -134,6 +138,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   }
 
   Widget body(BuildContext context) {
+    if (_product == null)
+      return Center(
+        child: RefreshProgressIndicator(),
+      );
     return CustomScrollView(
       physics: BouncingScrollPhysics(),
       slivers: [

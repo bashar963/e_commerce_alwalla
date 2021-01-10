@@ -15,14 +15,10 @@ class ProductsController extends GetxController {
   void getProducts() async {
     try {
       var response = await MainApi.create().getProducts();
-      print('---------all products-------');
-      print(response.bodyString);
-      print(response.error);
-
       if (response.isSuccessful) {
         var productsResponse = ProductsResponse.fromJson(response.body);
-
         products.assignAll(productsResponse.items);
+        print('---------all products ${products.length}-------');
       } else {
         var error = jsonDecode(response.error.toString());
 
@@ -35,15 +31,19 @@ class ProductsController extends GetxController {
 
   Product getProductById(String id) {
     Product p;
-    if (products.isNotEmpty) {
-      for (int i = 0; i < products.length; i++) {
-        print('$id => ${products[i].sku}');
-        if (products[i].sku == id) {
-          p = products[i];
-          break;
-        }
-      }
-    }
+    p = products.firstWhere((element) => element.sku == id, orElse: () {
+      return null;
+    });
+    print('found');
+    // if (products.isNotEmpty) {
+    //   for (int i = 0; i < products.length; i++) {
+    //     print('$id => ${products[i].sku}');
+    //     if (products[i].sku == id) {
+    //       p = products[i];
+    //       break;
+    //     }
+    //   }
+    // }
     return p;
   }
 }
